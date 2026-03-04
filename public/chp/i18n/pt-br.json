@@ -71,6 +71,17 @@
         "link": "Link",
         "use_router": "Usar roteamento interno para o link"
     },
+    "profile": {
+        "title": "Perfil",
+        "description": "Informações da conta conectada.",
+        "name": "Nome",
+        "email": "E-mail",
+        "uid": "ID do usuário",
+        "email_verified": "E-mail verificado",
+        "yes": "Sim",
+        "no": "Não",
+        "not_informed": "Não informado"
+    },
     "toolbar": {
         "settings": "Configurações",
         "edit": "Editar",

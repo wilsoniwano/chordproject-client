@@ -71,6 +71,17 @@
         "link": "Enlace",
         "use_router": "Usar router para el enlace"
     },
+    "profile": {
+        "title": "Perfil",
+        "description": "Información de la cuenta conectada.",
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "uid": "ID del usuario",
+        "email_verified": "Correo verificado",
+        "yes": "Sí",
+        "no": "No",
+        "not_informed": "No informado"
+    },
     "toolbar": {
         "settings": "Configuración",
         "edit": "Editar",

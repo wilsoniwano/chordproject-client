@@ -50,6 +50,10 @@ export const appRoutes: Route[] = [
                 path: 'sign-out',
                 loadChildren: () => import('app/modules/auth/sign-out/sign-out.routes'),
             },
+            {
+                path: 'profile',
+                loadChildren: () => import('app/pages/profile/profile.routes'),
+            },
         ],
     },
 

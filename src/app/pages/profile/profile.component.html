@@ -1,0 +1,64 @@
+<div class="flex flex-auto flex-col p-6 sm:p-10">
+    <div class="mx-auto w-full max-w-3xl">
+        <div class="bg-card rounded-2xl p-6 shadow sm:p-8">
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold">{{ 'profile.title' | transloco }}</h1>
+                <p class="text-secondary mt-1">{{ 'profile.description' | transloco }}</p>
+            </div>
+
+            @if (user$ | async; as user) {
+                <div class="mb-6 flex items-center gap-4">
+                    @if (user.avatar) {
+                        <img class="h-14 w-14 rounded-full" [src]="user.avatar" [alt]="user.name || 'avatar'" />
+                    } @else {
+                        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                            <mat-icon [svgIcon]="'heroicons_outline:user'"></mat-icon>
+                        </div>
+                    }
+                    <div>
+                        <div class="text-lg font-medium">
+                            {{ user.name || ('profile.not_informed' | transloco) }}
+                        </div>
+                        <div class="text-secondary text-sm">
+                            {{ user.email || ('profile.not_informed' | transloco) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                        <div class="text-secondary text-xs uppercase">{{ 'profile.name' | transloco }}</div>
+                        <div class="mt-1 font-medium">
+                            {{ user.name || ('profile.not_informed' | transloco) }}
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                        <div class="text-secondary text-xs uppercase">{{ 'profile.email' | transloco }}</div>
+                        <div class="mt-1 font-medium break-all">
+                            {{ user.email || ('profile.not_informed' | transloco) }}
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700 sm:col-span-2">
+                        <div class="text-secondary text-xs uppercase">{{ 'profile.uid' | transloco }}</div>
+                        <div class="mt-1 font-medium break-all">{{ user.uid }}</div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700 sm:col-span-2">
+                        <div class="text-secondary text-xs uppercase">{{ 'profile.email_verified' | transloco }}</div>
+                        <div class="mt-1 font-medium">
+                            {{ (user.emailVerified ? 'profile.yes' : 'profile.no') | transloco }}
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="mt-6">
+                <a mat-flat-button color="primary" [routerLink]="['/home']">
+                    <span>{{ 'nav.home' | transloco }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

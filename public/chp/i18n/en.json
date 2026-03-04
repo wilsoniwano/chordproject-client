@@ -71,6 +71,17 @@
         "link": "Link",
         "use_router": "Use router for the link"
     },
+    "profile": {
+        "title": "Profile",
+        "description": "Signed-in account information.",
+        "name": "Name",
+        "email": "Email",
+        "uid": "User ID",
+        "email_verified": "Email verified",
+        "yes": "Yes",
+        "no": "No",
+        "not_informed": "Not informed"
+    },
     "toolbar": {
         "settings": "Settings",
         "edit": "Edit",
