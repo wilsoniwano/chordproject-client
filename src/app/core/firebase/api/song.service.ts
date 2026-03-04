@@ -1,6 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { normalizeText } from 'domain/text/normalize-text';
+import {
+    addNormalizedInitial,
+    filterSongsByLyrics,
+    filterSongsByTitle,
+    limitItems,
+    sortSongsByTitle,
+} from 'domain/search/search-index';
 import { UserService } from 'app/core/user/user.service';
 import { PartialSong } from 'app/models/partialsong';
 import { Song } from 'app/models/song';
@@ -90,35 +96,11 @@ export class SongService {
         const q = query(songsRef, orderBy('title'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                let songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
-                if (searchTerm) {
-                    const qNorm = normalizeText(searchTerm);
-                    songs = songs.filter(
-                        (song) => song.title && normalizeText(song.title).includes(qNorm)
-                    );
-                }
-                // Ordenar ignorando acentos
-                songs = songs.sort((a, b) =>
-                    a.title.localeCompare(b.title, 'es', {
-                        sensitivity: 'base',
-                    })
-                );
-                // Agregar campo auxiliar para agrupación por inicial normalizada
-                songs = songs.map((song) => ({
-                    ...song,
-                    normalizedInitial: song.title
-                        ? song.title
-                              .trim()
-                              .charAt(0)
-                              .normalize('NFD')
-                              .replace(/[\u0300-\u036f]/g, '')
-                              .toUpperCase()
-                        : '',
-                }));
-                if (limitResults) {
-                    songs = songs.slice(0, limitResults);
-                }
-                return songs;
+                const songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
+                const filtered = filterSongsByTitle(songs, searchTerm);
+                const sorted = sortSongsByTitle(filtered);
+                const withInitial = addNormalizedInitial(sorted);
+                return limitItems(withInitial, limitResults);
             }),
             catchError((error) => this.handleError(error))
         );
@@ -129,21 +111,10 @@ export class SongService {
         const q = query(songsRef, orderBy('title'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                let songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
-                if (searchTerm) {
-                    const qNorm = normalizeText(searchTerm);
-                    songs = songs.filter((song) => song.lyrics && normalizeText(song.lyrics).includes(qNorm));
-                }
-                // Ordenar ignorando acentos
-                songs = songs.sort((a, b) =>
-                    (a.title || '').localeCompare(b.title || '', 'es', {
-                        sensitivity: 'base',
-                    })
-                );
-                if (limitResults) {
-                    songs = songs.slice(0, limitResults);
-                }
-                return songs;
+                const songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
+                const filtered = filterSongsByLyrics(songs, searchTerm);
+                const sorted = sortSongsByTitle(filtered);
+                return limitItems(sorted, limitResults);
             }),
             catchError((error) => this.handleError(error))
         );

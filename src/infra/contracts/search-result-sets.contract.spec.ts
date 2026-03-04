@@ -15,6 +15,21 @@ describe('search result sets contract', () => {
 
     it('rejects invalid contract payload', () => {
         expect(isValidSearchResultSets({ songs: [] })).toBe(false);
+        expect(isValidSearchResultSets(null)).toBe(false);
+        expect(isValidSearchResultSets('invalid')).toBe(false);
+        expect(
+            isValidSearchResultSets({
+                songs: {},
+                songbooks: [],
+                songsInSongbooks: [],
+            })
+        ).toBe(false);
+        expect(
+            isValidSearchResultSets({
+                songs: [],
+                songbooks: [],
+                songsInSongbooks: {},
+            })
+        ).toBe(false);
     });
 });
-

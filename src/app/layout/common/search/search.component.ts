@@ -28,6 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@jsverse/transloco';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { buildSearchResultSets, shouldRunSearch } from 'application/search/search.usecase';
+import { shouldCloseSearch, shouldCloseSearchOnEscape, shouldOpenSearch } from 'application/search/search-ui.usecase';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
 import { SearchResultSets } from 'app/models/searchResultSets';
@@ -169,7 +170,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         // Escape
         if (event.code === 'Escape') {
             // If the appearance is 'bar' and the mat-autocomplete is not open, close the search
-            if (this.appearance === 'bar' && !this.searchResults?.matAutocomplete?.isOpen) {
+            if (shouldCloseSearchOnEscape(this.appearance, !!this.searchResults?.matAutocomplete?.isOpen)) {
                 this.close();
             }
         }
@@ -178,7 +179,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     open(event: Event): void {
         event.stopPropagation();
         // Return if it's already opened
-        if (this.opened) {
+        if (!shouldOpenSearch(this.opened)) {
             return;
         }
         // Open the search
@@ -187,7 +188,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     close(): void {
         // Return if it's already closed
-        if (!this.opened) {
+        if (!shouldCloseSearch(this.opened)) {
             return;
         }
         // Clear the search input

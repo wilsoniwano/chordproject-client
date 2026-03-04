@@ -16,5 +16,10 @@ describe('transpose-key domain', () => {
     it('returns original when key is unknown', () => {
         expect(transposeMusicalKey('H', 1)).toBe('H');
     });
-});
 
+    it('handles empty input and octave movement', () => {
+        expect(normalizeMusicalKey('')).toBe('');
+        expect(transposeMusicalKey('C', 12)).toBe('C');
+        expect(transposeMusicalKey('F#m', -12)).toBe('F#m');
+    });
+});

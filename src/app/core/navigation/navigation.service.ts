@@ -1,6 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { TranslocoService } from '@jsverse/transloco';
+import {
+    buildAuthenticatedSongbooks,
+    buildBaseNavigation,
+    buildUnauthenticatedSongbooks,
+    NavigationLabels,
+} from 'application/navigation/navigation.usecase';
 import { combineLatest, forkJoin, Observable, of, ReplaySubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { SongbookService } from '../firebase/api/songbook.service';
@@ -14,55 +20,21 @@ export class NavigationService {
     private _songbookService = inject(SongbookService);
     private _translocoService = inject(TranslocoService);
 
-    private get baseNavigation(): FuseNavigationItem[] {
-        return [
-            {
-                id: 'home',
-                title: this._translocoService.translate('nav.home'),
-                tooltip: this._translocoService.translate('nav.home'),
-                type: 'basic',
-                icon: 'heroicons_outline:home',
-                link: '/home',
-            },
-            {
-                id: 'library',
-                title: this._translocoService.translate('nav.library'),
-                tooltip: this._translocoService.translate('nav.library'),
-                type: 'basic',
-                icon: 'heroicons_outline:musical-note',
-                link: '/library',
-            },
-            {
-                id: 'create',
-                title: this._translocoService.translate('nav.create'),
-                tooltip: this._translocoService.translate('nav.create'),
-                type: 'basic',
-                icon: 'heroicons_outline:code-bracket',
-                link: '/songs/create',
-            },
-        ];
+    private get labels(): NavigationLabels {
+        return {
+            home: this._translocoService.translate('nav.home'),
+            library: this._translocoService.translate('nav.library'),
+            create: this._translocoService.translate('nav.create'),
+            songbooks: this._translocoService.translate('nav.songbooks'),
+        };
     }
 
-    private get authenticatedSongbooks(): FuseNavigationItem {
-        return {
-            id: 'songbooks',
-            title: this._translocoService.translate('nav.songbooks'),
-            tooltip: this._translocoService.translate('nav.songbooks'),
-            type: 'aside',
-            icon: 'heroicons_outline:book-open',
-            children: [],
-        };
+    private get baseNavigation(): FuseNavigationItem[] {
+        return buildBaseNavigation(this.labels);
     }
 
     private get unauthenticatedSongbooks(): FuseNavigationItem {
-        return {
-            id: 'songbooks-signin',
-            title: this._translocoService.translate('nav.songbooks'),
-            tooltip: this._translocoService.translate('nav.songbooks'),
-            type: 'basic',
-            icon: 'heroicons_outline:book-open',
-            link: '/sign-in',
-        };
+        return buildUnauthenticatedSongbooks(this.labels);
     }
 
     constructor() {
@@ -110,10 +82,7 @@ export class NavigationService {
             }),
             map((songbookItems) => [
                 ...this.baseNavigation,
-                {
-                    ...this.authenticatedSongbooks,
-                    children: songbookItems,
-                },
+                buildAuthenticatedSongbooks(this.labels, songbookItems),
             ])
         );
     }

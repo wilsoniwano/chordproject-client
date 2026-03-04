@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { normalizeText } from 'domain/text/normalize-text';
+import {
+    finalizeSongbookSearchGroups,
+    limitSongbookSongsGroup,
+    mergeUniqueSongMatchesByUid,
+} from 'application/songbook/songbook-search.usecase';
+import { mapSongsWithRelations, sortSongsByRelationOrder } from 'application/songbook/songbook-content.usecase';
+import { filterSongbooksByName, filterSongsByLyrics, filterSongsByTitle, limitItems, sortSongbooksByName } from 'domain/search/search-index';
 import { PartialSong } from 'app/models/partialsong';
 import { Relation } from 'app/models/relation';
 import { Songbook } from 'app/models/songbook';
@@ -121,29 +127,7 @@ export class SongbookService {
                 const songIds = relations.map((relation) => relation.songId);
 
                 return this._songService.getAll(songIds).pipe(
-                    map((songs) => {
-                        const songsWithOrder = songs.map((song) => {
-                            const relation = relations.find(
-                                (rel) => rel.songId === song.uid
-                            );
-
-                            return {
-                                ...song,
-                                order: relation?.order ?? null,
-                                author_uid: relation?.author_uid,
-                            };
-                        });
-
-                        return songsWithOrder.sort((a, b) => {
-                            if (a.order !== null && b.order !== null) {
-                                return a.order - b.order;
-                            } else if (a.order === null && b.order === null) {
-                                return a.title.localeCompare(b.title);
-                            } else {
-                                return a.order === null ? 1 : -1;
-                            }
-                        });
-                    })
+                    map((songs) => sortSongsByRelationOrder(mapSongsWithRelations(songs, relations)))
                 );
             }),
             catchError((error) => {
@@ -318,28 +302,16 @@ export class SongbookService {
         const q = query(songbooksRef, orderBy('name'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                let songbooks = snapshot.docs.map((doc) => {
+                const songbooks = snapshot.docs.map((doc) => {
                     const data = doc.data() || {};
                     return {
                         uid: data.uid,
                         name: data.name,
                     } as Songbook;
                 });
-                if (searchTerm) {
-                    const qNorm = normalizeText(searchTerm);
-                    songbooks = songbooks.filter((sb) =>
-                        normalizeText(sb.name).includes(qNorm)
-                    );
-                }
-                songbooks = songbooks.sort((a, b) =>
-                    (a.name || '').localeCompare(b.name || '', 'es', {
-                        sensitivity: 'base',
-                    })
-                );
-                if (limitResults) {
-                    songbooks = songbooks.slice(0, limitResults);
-                }
-                return songbooks;
+                const filtered = filterSongbooksByName(songbooks, searchTerm);
+                const sorted = sortSongbooksByName(filtered);
+                return limitItems(sorted, limitResults);
             }),
             catchError((error) => this.handleError(error))
         );
@@ -353,37 +325,25 @@ export class SongbookService {
         return this.getAll().pipe(
             switchMap((songbooks) => {
                 if (!songbooks.length) return of([]);
-                const qNorm = normalizeText(searchTerm);
 
                 // Para cada cancionero, obtener sus canciones y filtrar por el término
                 return combineLatest(
                     songbooks.map((songbook) =>
                         this.getContent(songbook.uid).pipe(
                             map((songs) => {
-                                const filteredSongs = songs.filter(
-                                    (song) =>
-                                        normalizeText(song.title).includes(
-                                            qNorm
-                                        ) ||
-                                        normalizeText(song.lyrics).includes(qNorm)
-                                );
-                                return {
+                                const byTitle = filterSongsByTitle(songs, searchTerm);
+                                const byLyrics = filterSongsByLyrics(songs, searchTerm);
+                                const unique = mergeUniqueSongMatchesByUid(byTitle, byLyrics);
+                                return limitSongbookSongsGroup({
                                     songbook,
-                                    songs: filteredSongs.slice(
-                                        0,
-                                        limitSongsPerSongbook
-                                    ),
-                                };
+                                    songs: unique,
+                                }, limitSongsPerSongbook);
                             })
                         )
                     )
                 );
             }),
-            map((results) =>
-                results
-                    .filter((item) => item.songs.length > 0)
-                    .slice(0, limitSongbooks)
-            )
+            map((results) => finalizeSongbookSearchGroups(results, limitSongbooks))
         );
     }
 
