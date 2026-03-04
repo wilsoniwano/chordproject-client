@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ParserService } from 'app/core/chordpro/parser.service';
 import { ViewSettingsService } from 'app/core/chordpro/viewsettings.service';
@@ -11,7 +10,7 @@ import { Song } from 'chordproject-parser';
     templateUrl: './viewer.component.html',
     styleUrls: ['./viewer.component.scss'],
     standalone: true,
-    imports: [CommonModule, SafeHtmlPipe],
+    imports: [SafeHtmlPipe],
 })
 export class ChpViewerComponent implements AfterViewInit {
     @ViewChild('viewerContent') contentElementRef: ElementRef;

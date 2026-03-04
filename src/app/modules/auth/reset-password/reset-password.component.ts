@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
@@ -8,7 +7,7 @@ import { fuseAnimations } from '@fuse/animations';
     templateUrl: './reset-password.component.html',
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
-    imports: [RouterLink, CommonModule],
+    imports: [RouterLink],
     standalone: true,
 })
 export class AuthResetPasswordComponent {}

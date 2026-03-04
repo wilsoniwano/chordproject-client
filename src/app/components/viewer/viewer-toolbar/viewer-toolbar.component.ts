@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,7 +15,6 @@ import { ZoomToolComponent } from './tools/zoom.component';
     templateUrl: './viewer-toolbar.component.html',
     standalone: true,
     imports: [
-        CommonModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,

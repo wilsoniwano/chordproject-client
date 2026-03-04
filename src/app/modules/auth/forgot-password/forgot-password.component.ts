@@ -1,12 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {
-    FormsModule,
-    ReactiveFormsModule,
-    UntypedFormBuilder,
-    UntypedFormGroup,
-    Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +25,6 @@ import { AuthService } from 'app/core/firebase/auth/auth.service';
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        CommonModule,
     ],
     standalone: true,
 })
@@ -64,26 +56,23 @@ export class AuthForgotPasswordComponent implements OnInit {
         this.forgotPasswordForm.disable();
         this.showAlert = false;
 
-        this._authService
-            .forgotPassword(this.forgotPasswordForm.get('email').value)
-            .subscribe(
-                () => {
-                    this.forgotPasswordForm.enable();
-                    this.showAlert = true;
-                    this.alert = {
-                        type: 'success',
-                        message:
-                            'Please check your email to reset your password.',
-                    };
-                },
-                (error) => {
-                    this.forgotPasswordForm.enable();
-                    this.showAlert = true;
-                    this.alert = {
-                        type: 'error',
-                        message: error.message,
-                    };
-                }
-            );
+        this._authService.forgotPassword(this.forgotPasswordForm.get('email').value).subscribe(
+            () => {
+                this.forgotPasswordForm.enable();
+                this.showAlert = true;
+                this.alert = {
+                    type: 'success',
+                    message: 'Please check your email to reset your password.',
+                };
+            },
+            (error) => {
+                this.forgotPasswordForm.enable();
+                this.showAlert = true;
+                this.alert = {
+                    type: 'error',
+                    message: error.message,
+                };
+            }
+        );
     }
 }

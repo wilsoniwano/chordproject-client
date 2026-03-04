@@ -1,12 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {
-    FormsModule,
-    ReactiveFormsModule,
-    UntypedFormBuilder,
-    UntypedFormGroup,
-    Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,7 +27,6 @@ import { AuthService } from 'app/core/firebase/auth/auth.service';
         MatIconModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
-        CommonModule,
     ],
     standalone: true,
 })
@@ -71,10 +63,7 @@ export class AuthSignUpComponent implements OnInit {
         this.showAlert = false;
 
         this._authService
-            .createUser(
-                this.signUpForm.get('email').value,
-                this.signUpForm.get('password').value
-            )
+            .createUser(this.signUpForm.get('email').value, this.signUpForm.get('password').value)
             .subscribe(
                 () => {
                     this.signUpForm.enable();

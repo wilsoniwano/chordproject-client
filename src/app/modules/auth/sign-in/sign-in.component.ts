@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
     FormsModule,
@@ -37,7 +36,6 @@ import { Subscription } from 'rxjs';
         MatIconModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
-        CommonModule,
     ],
 })
 export class AuthSignInComponent implements OnInit {

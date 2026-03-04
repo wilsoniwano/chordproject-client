@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -9,7 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
     selector: 'auth-sign-out',
     templateUrl: './sign-out.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [CommonModule, MatIconModule],
+    imports: [MatIconModule],
     standalone: true,
 })
 export class AuthSignOutComponent implements OnInit, OnDestroy {
