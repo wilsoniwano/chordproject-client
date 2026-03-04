@@ -6,7 +6,14 @@ import {
     mergeUniqueSongMatchesByUid,
 } from 'application/songbook/songbook-search.usecase';
 import { mapSongsWithRelations, sortSongsByRelationOrder } from 'application/songbook/songbook-content.usecase';
-import { filterSongbooksByName, filterSongsByLyrics, filterSongsByTitle, limitItems, sortSongbooksByName } from 'domain/search/search-index';
+import {
+    filterSongbooksByName,
+    filterSongsByLyrics,
+    filterSongsByTitle,
+    limitItems,
+    sortSongbooksByEventDateDesc,
+    sortSongbooksByName,
+} from 'domain/search/search-index';
 import { ParserService } from 'app/core/chordpro/parser.service';
 import { PartialSong } from 'app/models/partialsong';
 import { Relation } from 'app/models/relation';
@@ -61,19 +68,18 @@ export class SongbookService {
     }
 
     getAll(): Observable<Songbook[]> {
-        const q = query(
-            collection(this._firestore, 'songbooks'),
-            orderBy('name')
-        );
+        const q = query(collection(this._firestore, 'songbooks'));
 
         return from(getDocs(q)).pipe(
             map((snapshot) =>
-                snapshot.docs.map(
-                    (doc) =>
-                        ({
-                            uid: doc.id,
-                            ...doc.data(),
-                        }) as Songbook
+                sortSongbooksByEventDateDesc(
+                    snapshot.docs.map(
+                        (doc) =>
+                            ({
+                                uid: doc.id,
+                                ...doc.data(),
+                            }) as Songbook
+                    )
                 )
             ),
             catchError((error) => this.handleError(error))
@@ -154,6 +160,11 @@ export class SongbookService {
 
         if (!songbook.name) {
             this.showSnackbar('Name is required');
+            return null;
+        }
+
+        if (!songbook.eventDate) {
+            this.showSnackbar('Event date is required');
             return null;
         }
 

@@ -22,6 +22,7 @@ export class AuthService {
     private _snackBar: MatSnackBar;
     private _user = new BehaviorSubject<User>(null);
     private _authenticated = new BehaviorSubject<boolean>(false);
+    private _authReady = new BehaviorSubject<boolean>(false);
     private _mockMode = this._isMockModeEnabled();
 
     constructor() {
@@ -33,6 +34,7 @@ export class AuthService {
             const storedUser = this._getMockUserFromStorage();
             this._user.next(storedUser);
             this._authenticated.next(!!storedUser);
+            this._authReady.next(true);
             return;
         }
 
@@ -44,6 +46,8 @@ export class AuthService {
                 this._user.next(null);
                 this._authenticated.next(false);
             }
+
+            this._authReady.next(true);
         });
     }
 
@@ -53,6 +57,10 @@ export class AuthService {
 
     get authenticated$(): Observable<boolean> {
         return this._authenticated.asObservable();
+    }
+
+    get authReady$(): Observable<boolean> {
+        return this._authReady.asObservable();
     }
 
     signInWithEmail(email: string, password: string): Observable<User> {

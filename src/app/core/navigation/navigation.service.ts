@@ -7,9 +7,8 @@ import {
     buildUnauthenticatedSongbooks,
     NavigationLabels,
 } from 'application/navigation/navigation.usecase';
-import { combineLatest, forkJoin, Observable, of, ReplaySubject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { SongbookService } from '../firebase/api/songbook.service';
+import { combineLatest, Observable, of, ReplaySubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { UserService } from '../user/user.service';
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +16,6 @@ export class NavigationService {
     private _navigation: ReplaySubject<FuseNavigationItem[]> =
         new ReplaySubject<FuseNavigationItem[]>(1);
     private _userService = inject(UserService);
-    private _songbookService = inject(SongbookService);
     private _translocoService = inject(TranslocoService);
 
     private get labels(): NavigationLabels {
@@ -51,64 +49,11 @@ export class NavigationService {
     }
 
     private buildBasicNavigation(): Observable<FuseNavigationItem[]> {
-        return of([...this.baseNavigation, this.unauthenticatedSongbooks]);
+        return of([this.unauthenticatedSongbooks, ...this.baseNavigation]);
     }
 
     private buildSongbooksNavigation(): Observable<FuseNavigationItem[]> {
-        return this._songbookService.getByParent('').pipe(
-            switchMap((rootSongbooks) => {
-                const childrenQueries = rootSongbooks.map((songbook) =>
-                    this._songbookService.getByParent(songbook.uid).pipe(
-                        map((childSongbooks) => {
-                            if (!childSongbooks.length) {
-                                return {
-                                    id: `songbook-${songbook.uid}`,
-                                    title: songbook.name,
-                                    type: 'basic' as const,
-                                    link: `/songbook/${songbook.uid}`,
-                                } as FuseNavigationItem;
-                            }
-
-                            return {
-                                id: `songbook-${songbook.uid}`,
-                                title: songbook.name,
-                                type: 'collapsable' as const,
-                                children: childSongbooks.map((child) => ({
-                                    id: `songbook-${child.uid}`,
-                                    title: child.name,
-                                    type: 'basic' as const,
-                                    link: `/songbook/${child.uid}`,
-                                })),
-                            } as FuseNavigationItem;
-                        })
-                    )
-                );
-
-            return forkJoin(childrenQueries);
-            }),
-            map((songbookItems) => {
-                const listSongbooksItem: FuseNavigationItem = {
-                    id: 'songbook-list',
-                    title: this._translocoService.translate('nav.songbooks'),
-                    type: 'basic',
-                    icon: 'heroicons_outline:list-bullet',
-                    link: '/songbook',
-                };
-
-                const createSongbookItem: FuseNavigationItem = {
-                    id: 'songbook-create',
-                    title: this._translocoService.translate('nav.create_songbook'),
-                    type: 'basic',
-                    icon: 'heroicons_outline:plus',
-                    link: '/songbook/create',
-                };
-
-                return [
-                    ...this.baseNavigation,
-                    buildAuthenticatedSongbooks(this.labels, [listSongbooksItem, createSongbookItem, ...songbookItems]),
-                ];
-            })
-        );
+        return of([buildAuthenticatedSongbooks(this.labels), ...this.baseNavigation]);
     }
 
     get navigation$(): Observable<FuseNavigationItem[]> {

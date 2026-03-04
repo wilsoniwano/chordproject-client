@@ -8,6 +8,5 @@ export function getAuthGuardRedirectUrl(url: string, authenticated: boolean): tr
 }
 
 export function getNoAuthGuardTarget(authenticated: boolean): true | string {
-    return authenticated ? '/library' : true;
+    return authenticated ? '/songbook' : true;
 }
-

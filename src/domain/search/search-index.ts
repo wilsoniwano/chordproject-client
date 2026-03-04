@@ -46,6 +46,23 @@ export function sortSongbooksByName(songbooks: Songbook[]): Songbook[] {
     return [...songbooks].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es', { sensitivity: 'base' }));
 }
 
+export function sortSongbooksByEventDateDesc(songbooks: Songbook[]): Songbook[] {
+    const toTime = (eventDate?: string): number => {
+        if (!eventDate) {
+            return Number.NEGATIVE_INFINITY;
+        }
+
+        const [year, month, day] = eventDate.split('-').map(Number);
+        if (!year || !month || !day) {
+            return Number.NEGATIVE_INFINITY;
+        }
+
+        return Date.UTC(year, month - 1, day);
+    };
+
+    return [...songbooks].sort((a, b) => toTime(b.eventDate) - toTime(a.eventDate));
+}
+
 export function limitItems<T>(items: T[], limit?: number): T[] {
     if (!limit) {
         return items;
@@ -53,4 +70,3 @@ export function limitItems<T>(items: T[], limit?: number): T[] {
 
     return items.slice(0, limit);
 }
-

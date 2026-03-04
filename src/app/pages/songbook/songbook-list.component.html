@@ -5,28 +5,66 @@
                 <h1 class="text-2xl font-semibold">{{ 'songbook_list.title' | transloco }}</h1>
                 <p class="text-secondary mt-1">{{ 'songbook_list.description' | transloco }}</p>
             </div>
-            <a mat-flat-button color="primary" [routerLink]="['/songbook/create']">
+            <button mat-flat-button color="primary" type="button" (click)="openCreateDialog()">
                 {{ 'nav.create_songbook' | transloco }}
-            </a>
+            </button>
         </div>
 
         @if (songbooks$ | async; as songbooks) {
             @if (songbooks.length) {
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="bg-card divide-y overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
                     @for (songbook of songbooks; track songbook.uid) {
-                        <a [routerLink]="['/songbook', songbook.uid]" class="block">
-                            <mat-card class="bg-card h-full rounded-xl p-5 transition hover:shadow-md">
-                                <div class="text-lg font-semibold">{{ songbook.name }}</div>
-                                <div class="text-secondary mt-1 text-sm">{{ songbook.uid }}</div>
-                            </mat-card>
+                        <a
+                            [routerLink]="['/songbook', songbook.uid]"
+                            class="hover:bg-hover flex items-center justify-between gap-4 px-5 py-4 transition"
+                        >
+                            <div class="min-w-0">
+                                <div class="truncate text-base font-medium">{{ songbook.name }}</div>
+                                <div class="text-secondary mt-1 truncate text-sm">
+                                    {{ 'songbook_list.event_date' | transloco }}: {{ formatEventDate(songbook) }}
+                                </div>
+                            </div>
+                            <mat-icon class="text-secondary icon-size-5" [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
                         </a>
                     }
                 </div>
             } @else {
-                <mat-card class="bg-card rounded-xl p-6">
+                <div class="bg-card rounded-xl border border-gray-200 p-6 dark:border-gray-700">
                     <p class="text-secondary">{{ 'songbook_list.empty' | transloco }}</p>
-                </mat-card>
+                </div>
             }
         }
     </div>
 </div>
+
+<ng-template #createSongbookDialog>
+    <h2 mat-dialog-title>{{ 'songbook_create.title' | transloco }}</h2>
+    <mat-dialog-content>
+        <p class="text-secondary mb-4">{{ 'songbook_create.description' | transloco }}</p>
+        <form class="grid gap-3 pt-1" [formGroup]="form">
+            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                <mat-label>{{ 'songbook_create.name' | transloco }}</mat-label>
+                <input matInput formControlName="name" maxlength="80" />
+                @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+                    <mat-error>{{ 'songbook_create.name_required' | transloco }}</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                <mat-label>{{ 'songbook_create.event_date' | transloco }}</mat-label>
+                <input matInput type="date" formControlName="eventDate" />
+                @if (form.controls.eventDate.hasError('required') && form.controls.eventDate.touched) {
+                    <mat-error>{{ 'songbook_create.event_date_required' | transloco }}</mat-error>
+                }
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button type="button" [disabled]="saving" (click)="cancelCreateDialog()">
+            {{ 'common.cancel' | transloco }}
+        </button>
+        <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="saveFromDialog()">
+            {{ 'songbook_create.save' | transloco }}
+        </button>
+    </mat-dialog-actions>
+</ng-template>

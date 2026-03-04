@@ -77,7 +77,7 @@ export class AuthSignUpComponent implements OnInit {
                         type: 'success',
                         message: 'Conta criada com sucesso.',
                     };
-                    this._router.navigate(['/library']);
+                    this._router.navigate(['/songbook']);
                 },
                 (error) => {
                     this.signUpForm.enable();

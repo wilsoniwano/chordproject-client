@@ -88,6 +88,8 @@
         "description": "Create a songbook to organize your songs.",
         "name": "Songbook name",
         "name_required": "Please provide the songbook name",
+        "event_date": "Event date",
+        "event_date_required": "Please provide the event date",
         "parent": "Parent songbook ID (optional)",
         "parent_hint": "Leave blank to create at root level.",
         "reorderable": "Allow drag-and-drop reordering",
@@ -96,10 +98,12 @@
     "songbook_list": {
         "title": "Songbooks",
         "description": "Access and manage your songbooks.",
+        "event_date": "Event date",
         "empty": "No songbooks yet."
     },
     "songbook": {
         "manage": {
+            "edit_details": "Edit details",
             "add_song": "Add song",
             "search_hint": "Type at least 2 letters to search by title."
         },

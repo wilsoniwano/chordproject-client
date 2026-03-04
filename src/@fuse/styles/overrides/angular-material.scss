@@ -325,9 +325,39 @@
 /*  @ Dialog
 /* -------------------------------------------------------------------------- */
 .mat-mdc-dialog-container {
+    .mat-mdc-dialog-title {
+        color: var(--fuse-text-default) !important;
+    }
+
     .mdc-dialog__surface {
         border-radius: 16px !important;
         padding: 24px;
+        background-color: rgba(var(--fuse-bg-dialog-rgb), 1) !important;
+        color: var(--fuse-text-default) !important;
+        border: none !important;
+    }
+
+    .mat-mdc-input-element {
+        color: var(--fuse-text-default) !important;
+        -webkit-text-fill-color: var(--fuse-text-default) !important;
+
+        &::placeholder {
+            color: var(--fuse-text-secondary) !important;
+            opacity: 1 !important;
+        }
+    }
+
+    input[type='date'].mat-mdc-input-element {
+        &::-webkit-datetime-edit,
+        &::-webkit-date-and-time-value {
+            color: var(--fuse-text-default) !important;
+        }
+    }
+
+    .mat-mdc-form-field-error,
+    .mat-mdc-form-field .mat-mdc-form-field-error {
+        color: var(--fuse-warn) !important;
+        opacity: 1 !important;
     }
 }
 
@@ -1014,7 +1044,11 @@
     min-width: 144px !important;
     background-color: rgba(var(--fuse-bg-card-rgb), 1) !important;
     color: var(--fuse-text-default) !important;
-    border: 1px solid rgba(var(--fuse-border-rgb), 0.4);
+    border: 1px solid rgba(var(--fuse-border-rgb), 0.3);
+
+    .dark & {
+        border-color: rgba(var(--fuse-border-rgb), 0.14) !important;
+    }
 
     .mat-mdc-menu-content {
         .mat-mdc-menu-item {
@@ -1033,7 +1067,11 @@
         /* Divider within mat-menu */
         mat-divider {
             margin: 8px 0;
-            border-top-color: rgba(var(--fuse-border-rgb), 0.5) !important;
+            border-top-color: rgba(var(--fuse-border-rgb), 0.3) !important;
+
+            .dark & {
+                border-top-color: rgba(var(--fuse-border-rgb), 0.16) !important;
+            }
         }
     }
 }

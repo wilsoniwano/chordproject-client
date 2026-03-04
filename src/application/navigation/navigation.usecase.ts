@@ -29,16 +29,13 @@ export function buildUnauthenticatedSongbooks(labels: NavigationLabels): FuseNav
     };
 }
 
-export function buildAuthenticatedSongbooks(
-    labels: NavigationLabels,
-    children: FuseNavigationItem[]
-): FuseNavigationItem {
+export function buildAuthenticatedSongbooks(labels: NavigationLabels): FuseNavigationItem {
     return {
         id: 'songbooks',
         title: labels.songbooks,
         tooltip: labels.songbooks,
-        type: 'aside',
+        type: 'basic',
         icon: 'heroicons_outline:book-open',
-        children,
+        link: '/songbook',
     };
 }

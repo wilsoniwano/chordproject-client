@@ -3,6 +3,7 @@ import {
     addNormalizedInitial,
     filterSongbooksByName,
     filterSongsByLyrics,
+    sortSongbooksByEventDateDesc,
     filterSongsByTitle,
     limitItems,
     sortSongbooksByName,
@@ -97,6 +98,28 @@ describe('search-index domain', () => {
         const songbooks = [{ uid: '1' }, { uid: '2', name: 'B' }, { uid: '3' }] as any;
         const sorted = sortSongbooksByName(songbooks);
         expect(sorted.map((s) => s.uid)).toEqual(['1', '3', '2']);
+    });
+
+    it('sorts songbooks by event date descending', () => {
+        const songbooks = [
+            { uid: '1', name: 'A', eventDate: '2026-03-01' },
+            { uid: '2', name: 'B', eventDate: '2026-05-10' },
+            { uid: '3', name: 'C', eventDate: '2025-12-31' },
+        ] as any;
+
+        const sorted = sortSongbooksByEventDateDesc(songbooks);
+        expect(sorted.map((s) => s.uid)).toEqual(['2', '1', '3']);
+    });
+
+    it('keeps songbooks without event date at the end', () => {
+        const songbooks = [
+            { uid: '1', name: 'A' },
+            { uid: '2', name: 'B', eventDate: '2026-01-01' },
+            { uid: '3', name: 'C', eventDate: '' },
+        ] as any;
+
+        const sorted = sortSongbooksByEventDateDesc(songbooks);
+        expect(sorted.map((s) => s.uid)).toEqual(['2', '1', '3']);
     });
 
     it('limits arrays when limit is provided', () => {

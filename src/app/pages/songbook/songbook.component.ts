@@ -1,8 +1,9 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, UntypedFormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +30,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        MatDialogModule,
         MatIconModule,
         TranslocoModule,
         RouterLink,
@@ -43,14 +45,25 @@ export class SongbookComponent implements OnInit, OnDestroy {
     addSongControl: UntypedFormControl = new UntypedFormControl('');
     songSearchResults: PartialSong[] = [];
     addingSong = false;
+    savingHeader = false;
+    currentSongbook: Songbook | null = null;
+    private _editDialogRef: MatDialogRef<unknown> | null = null;
+
+    readonly headerForm = this._formBuilder.group({
+        name: ['', [Validators.required, Validators.maxLength(80)]],
+        eventDate: ['', [Validators.required]],
+    });
 
     @ViewChild(ChpSplitLayoutComponent) splitLayout: ChpSplitLayoutComponent;
+    @ViewChild('editSongbookDialog') editSongbookDialog: TemplateRef<unknown>;
 
     songbook$: Observable<Songbook>;
     songs$: Observable<PartialSong[]>;
     songsList: PartialSong[] = [];
 
     constructor(
+        private _formBuilder: FormBuilder,
+        private _dialog: MatDialog,
         private _route: ActivatedRoute,
         private _router: Router,
         private _songService: SongService,
@@ -68,6 +81,14 @@ export class SongbookComponent implements OnInit, OnDestroy {
             takeUntil(this._unsubscribeAll),
             switchMap((params) => this._songbookService.get(params.get('uid')))
         );
+
+        this.songbook$.pipe(takeUntil(this._unsubscribeAll)).subscribe((songbook) => {
+            this.currentSongbook = songbook;
+            this.headerForm.patchValue({
+                name: songbook.name || '',
+                eventDate: songbook.eventDate || '',
+            });
+        });
     }
 
     private loadSongs(): void {
@@ -185,6 +206,66 @@ export class SongbookComponent implements OnInit, OnDestroy {
 
     trackByFn(index: number, item: any): any {
         return item.uid || index;
+    }
+
+    openEditHeader(songbook: Songbook): void {
+        this.currentSongbook = songbook;
+        this.headerForm.patchValue({
+            name: songbook.name || '',
+            eventDate: songbook.eventDate || '',
+        });
+        this._editDialogRef = this._dialog.open(this.editSongbookDialog, {
+            width: '520px',
+            maxWidth: '95vw',
+        });
+    }
+
+    cancelEditHeader(): void {
+        if (this.currentSongbook) {
+            this.headerForm.patchValue({
+                name: this.currentSongbook.name || '',
+                eventDate: this.currentSongbook.eventDate || '',
+            });
+        }
+        this._editDialogRef?.close();
+    }
+
+    async saveHeader(songbook: Songbook): Promise<void> {
+        if (this.headerForm.invalid || this.savingHeader) {
+            this.headerForm.markAllAsTouched();
+            return;
+        }
+
+        const value = this.headerForm.getRawValue();
+        const payload = {
+            ...songbook,
+            name: (value.name || '').trim(),
+            eventDate: value.eventDate || '',
+        } as Songbook;
+
+        this.savingHeader = true;
+        const uid = await this._songbookService.save(payload);
+        this.savingHeader = false;
+
+        if (uid) {
+            songbook.name = payload.name;
+            songbook.eventDate = payload.eventDate;
+            this.currentSongbook = { ...songbook };
+            this._editDialogRef?.close();
+        }
+    }
+
+    formatEventDate(eventDate?: string): string {
+        if (!eventDate) {
+            return '-';
+        }
+
+        const [year, month, day] = eventDate.split('-');
+        if (!year || !month || !day) {
+            return '-';
+        }
+
+        return `${day}/${month}/${year}`;
     }
 
     private async refreshSongs(songbookId: string, selectedSongId?: string): Promise<void> {

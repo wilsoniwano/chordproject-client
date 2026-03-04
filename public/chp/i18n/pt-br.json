@@ -88,6 +88,8 @@
         "description": "Cadastre uma lista de reprodução para organizar suas músicas.",
         "name": "Nome da lista",
         "name_required": "Informe o nome da lista",
+        "event_date": "Data do evento",
+        "event_date_required": "Informe a data do evento",
         "parent": "ID da lista pai (opcional)",
         "parent_hint": "Deixe em branco para criar na raiz.",
         "reorderable": "Permitir reordenação por arrastar e soltar",
@@ -96,10 +98,12 @@
     "songbook_list": {
         "title": "Listas de reprodução",
         "description": "Acesse e gerencie suas listas de reprodução.",
+        "event_date": "Data do evento",
         "empty": "Nenhuma lista de reprodução cadastrada."
     },
     "songbook": {
         "manage": {
+            "edit_details": "Editar dados",
             "add_song": "Adicionar música",
             "search_hint": "Digite ao menos 2 letras para buscar por título."
         },

@@ -12,7 +12,7 @@ describe('guard use case', () => {
     });
 
     it('redirects authenticated users away from guest routes', () => {
-        expect(getNoAuthGuardTarget(true)).toBe('/library');
+        expect(getNoAuthGuardTarget(true)).toBe('/songbook');
         expect(getNoAuthGuardTarget(false)).toBe(true);
     });
 });

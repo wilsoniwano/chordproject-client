@@ -24,6 +24,7 @@ describe('guards integration', () => {
 
     it('redirects unauthenticated users away from protected route', async () => {
         const authenticated$ = new BehaviorSubject(false);
+        const authReady$ = new BehaviorSubject(true);
 
         TestBed.configureTestingModule({
             providers: [
@@ -31,7 +32,7 @@ describe('guards integration', () => {
                     { path: 'sign-in', component: TestPageComponent },
                     { path: 'protected', component: TestPageComponent, canActivate: [AuthGuard] },
                 ]),
-                { provide: AuthService, useValue: { authenticated$ } },
+                { provide: AuthService, useValue: { authenticated$, authReady$ } },
             ],
         });
 
@@ -42,18 +43,19 @@ describe('guards integration', () => {
 
     it('redirects authenticated users away from guest route', async () => {
         const authenticated$ = new BehaviorSubject(true);
+        const authReady$ = new BehaviorSubject(true);
 
         TestBed.configureTestingModule({
             providers: [
                 provideRouter([
-                    { path: 'library', component: TestPageComponent },
+                    { path: 'songbook', component: TestPageComponent },
                     { path: 'sign-in', component: TestPageComponent, canActivate: [NoAuthGuard] },
                 ]),
-                { provide: AuthService, useValue: { authenticated$ } },
+                { provide: AuthService, useValue: { authenticated$, authReady$ } },
             ],
         });
 
         await RouterTestingHarness.create('/sign-in');
-        expect(TestBed.inject(Router).url).toContain('/library');
+        expect(TestBed.inject(Router).url).toContain('/songbook');
     });
 });

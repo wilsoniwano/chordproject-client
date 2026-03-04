@@ -88,6 +88,8 @@
         "description": "Créez un carnet de chansons pour organiser vos morceaux.",
         "name": "Nom du carnet",
         "name_required": "Veuillez renseigner le nom du carnet",
+        "event_date": "Date de l'événement",
+        "event_date_required": "Veuillez renseigner la date de l'événement",
         "parent": "ID du carnet parent (optionnel)",
         "parent_hint": "Laissez vide pour créer à la racine.",
         "reorderable": "Autoriser la réorganisation par glisser-déposer",
@@ -96,10 +98,12 @@
     "songbook_list": {
         "title": "Carnets de chansons",
         "description": "Accédez et gérez vos carnets de chansons.",
+        "event_date": "Date de l'événement",
         "empty": "Aucun carnet pour le moment."
     },
     "songbook": {
         "manage": {
+            "edit_details": "Modifier les données",
             "add_song": "Ajouter une chanson",
             "search_hint": "Saisissez au moins 2 lettres pour rechercher par titre."
         },

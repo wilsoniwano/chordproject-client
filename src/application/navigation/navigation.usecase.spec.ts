@@ -25,13 +25,11 @@ describe('navigation use case', () => {
         expect(item.title).toBe('Listas de reprodução');
     });
 
-    it('builds authenticated songbooks item with children', () => {
-        const children = [{ id: 'songbook-1', title: 'Louvor', type: 'basic', link: '/songbook/1' }] as any;
-        const item = buildAuthenticatedSongbooks(labels, children);
+    it('builds authenticated songbooks item as direct link', () => {
+        const item = buildAuthenticatedSongbooks(labels);
 
         expect(item.id).toBe('songbooks');
-        expect(item.type).toBe('aside');
-        expect(item.children).toHaveLength(1);
-        expect(item.children?.[0].title).toBe('Louvor');
+        expect(item.type).toBe('basic');
+        expect(item.link).toBe('/songbook');
     });
 });

@@ -8,12 +8,24 @@
             <div
                 class="flex items-center justify-between border-b border-gray-200 bg-accent-50 p-6 dark:border-[#334155] dark:bg-[#273549]"
             >
-                <h1 class="page-title truncate">
-                    {{ songbook.name }}
-                </h1>
-                <a mat-stroked-button [routerLink]="['/songbook', songbook.uid, 'view']">
-                    {{ 'songbook.viewer.open' | transloco }}
-                </a>
+                <div class="min-w-0 flex-1">
+                    <div>
+                        <h1 class="page-title truncate">
+                            {{ songbook.name }}
+                        </h1>
+                        <p class="text-secondary mt-1 text-sm">
+                            {{ 'songbook_list.event_date' | transloco }}: {{ formatEventDate(songbook.eventDate) }}
+                        </p>
+                    </div>
+                </div>
+                <div class="ml-4 flex items-center gap-2">
+                    <button mat-stroked-button type="button" (click)="openEditHeader(songbook)">
+                        {{ 'songbook.manage.edit_details' | transloco }}
+                    </button>
+                    <a mat-stroked-button [routerLink]="['/songbook', songbook.uid, 'view']">
+                        {{ 'songbook.viewer.open' | transloco }}
+                    </a>
+                </div>
             </div>
             <div class="border-b border-gray-200 bg-card p-4 dark:border-[#334155]">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
@@ -69,6 +81,38 @@
                 }
             </div>
         </div>
+    }
+</ng-template>
+
+<ng-template #editSongbookDialog>
+    @if (currentSongbook) {
+        <h2 mat-dialog-title>{{ 'songbook.manage.edit_details' | transloco }}</h2>
+        <mat-dialog-content>
+            <form class="grid gap-3 pt-1" [formGroup]="headerForm">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'songbook_create.name' | transloco }}</mat-label>
+                    <input matInput formControlName="name" maxlength="80" />
+                    @if (headerForm.controls.name.hasError('required') && headerForm.controls.name.touched) {
+                        <mat-error>{{ 'songbook_create.name_required' | transloco }}</mat-error>
+                    }
+                </mat-form-field>
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'songbook_create.event_date' | transloco }}</mat-label>
+                    <input matInput type="date" formControlName="eventDate" />
+                    @if (headerForm.controls.eventDate.hasError('required') && headerForm.controls.eventDate.touched) {
+                        <mat-error>{{ 'songbook_create.event_date_required' | transloco }}</mat-error>
+                    }
+                </mat-form-field>
+            </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-stroked-button type="button" [disabled]="savingHeader" (click)="cancelEditHeader()">
+                {{ 'common.cancel' | transloco }}
+            </button>
+            <button mat-flat-button color="primary" type="button" [disabled]="savingHeader" (click)="saveHeader(currentSongbook)">
+                {{ 'common.update' | transloco }}
+            </button>
+        </mat-dialog-actions>
     }
 </ng-template>
 

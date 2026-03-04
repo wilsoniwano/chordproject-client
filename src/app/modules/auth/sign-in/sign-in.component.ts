@@ -77,7 +77,7 @@ export class AuthSignInComponent implements OnInit {
                 next: () => {
                     this.signInForm.enable();
                     this.showAlert = false;
-                    const redirectURL = '/library';
+                    const redirectURL = '/songbook';
                     this._router.navigateByUrl(redirectURL);
                 },
                 error: (error) => {
