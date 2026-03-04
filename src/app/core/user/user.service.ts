@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { mapFirebaseUserToUser } from 'application/auth/user-mapper.usecase';
 import { User } from 'app/core/user/user.types';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthService } from '../firebase/auth/auth.service';
@@ -27,18 +28,6 @@ export class UserService {
     }
 
     get user$(): Observable<User> {
-        return this._authService.user$.pipe(
-            map((firebaseUser) =>
-                firebaseUser
-                    ? {
-                          uid: firebaseUser.uid,
-                          name: firebaseUser.displayName ?? '',
-                          email: firebaseUser.email ?? '',
-                          emailVerified: firebaseUser.emailVerified ?? false,
-                          avatar: firebaseUser.photoURL ?? '',
-                      }
-                    : null
-            )
-        );
+        return this._authService.user$.pipe(map((firebaseUser) => mapFirebaseUserToUser(firebaseUser)));
     }
 }
