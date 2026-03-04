@@ -52,3 +52,18 @@ Thumbs.db
 .firebase/
 firebase-debug.log
 serviceAccountKey.json
+
+# Secrets / credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*_secret.*
+*secret*.json
+*credentials*.json
+secrets/
