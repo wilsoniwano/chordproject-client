@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "homenajesus-app"
+    "default": "cifrapro-9d5b2"
   },
   "targets": {
-    "homenajesus-app": {
+    "cifrapro-9d5b2": {
       "hosting": {
         "angular": [
-          "homenajesus-ng"
+          "cifrapro-9d5b2"
         ]
       }
     }

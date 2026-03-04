@@ -2,11 +2,12 @@ export const environment = {
     production: false,
     source: 'chp',
     firebase: {
-        apiKey: 'AIzaSyApw72WL43CM9thOf71QEaUIL1CVl2M-gg',
-        authDomain: 'gochord-1.firebaseapp.com',
-        projectId: 'gochord-1',
-        storageBucket: 'gochord-1.appspot.com',
-        messagingSenderId: '877298403628',
-        appId: '1:877298403628:web:49c06ead01c01b0dcbc489'
+        apiKey: 'AIzaSyAS7zMDsps_zGiywX7l8OaezgUSBoetAAg',
+        authDomain: 'cifrapro-9d5b2.firebaseapp.com',
+        projectId: 'cifrapro-9d5b2',
+        storageBucket: 'cifrapro-9d5b2.firebasestorage.app',
+        messagingSenderId: '291201903502',
+        appId: '1:291201903502:web:74cbf7d8e4eee7bcf452df',
+        measurementId: 'G-JHKRV7GFY0'
     },
 };
