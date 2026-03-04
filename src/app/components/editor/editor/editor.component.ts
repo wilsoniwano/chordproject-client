@@ -161,10 +161,15 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
 
     @Input()
     set content(content: string) {
-        this._content = content ?? '';
-        // Si el editor ya está inicializado, actualiza el contenido
+        const normalizedContent = content ?? '';
+        this._content = normalizedContent;
+
+        // Evita resetar o cursor quando o conteúdo veio do próprio editor
         if (this._editor) {
-            this.setEditorContent(this._content);
+            const currentEditorContent = this._editor.getValue?.() ?? '';
+            if (currentEditorContent !== normalizedContent) {
+                this.setEditorContent(normalizedContent);
+            }
         }
         // Si no, el contenido se aplicará en ngAfterViewInit
     }
@@ -189,7 +194,14 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
         }
 
         try {
-            this._editor.setValue(value || '');
+            const nextContent = value || '';
+            const currentEditorContent = this._editor.getValue?.() ?? '';
+
+            if (currentEditorContent === nextContent) {
+                return;
+            }
+
+            this._editor.setValue(nextContent);
             this._editor.clearSelection();
             this._editor.resize(true);
         } catch (error) {
