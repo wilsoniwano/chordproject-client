@@ -203,6 +203,7 @@ export class SongService {
 
             this._writeMockSongs(songs);
             this._song.next(nextSong);
+            this.showSnackbar('Song saved successfully');
             return uid;
         }
 
@@ -258,7 +259,11 @@ export class SongService {
             }
 
             const user = window.localStorage.getItem('e2e.mockAuth.user');
-            return !!user;
+            const isAuthenticated = !!user;
+            if (!isAuthenticated) {
+                this.showSnackbar('Authentication required', 3000, 'warning');
+            }
+            return isAuthenticated;
         }
 
         const isAuthenticated = await firstValueFrom(this._userService.isAuthenticated());

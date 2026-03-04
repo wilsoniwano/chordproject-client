@@ -19,6 +19,7 @@ describe('SongService (mock mode)', () => {
         service._mockMode = true;
         service._song = new BehaviorSubject(null);
         service._songsChanged = new Subject<void>();
+        service._snackBar = { open: vi.fn() };
         return service;
     }
 
@@ -34,6 +35,7 @@ describe('SongService (mock mode)', () => {
         const service = createService();
         const result = await service.save({ title: 'Song', content: '{title: Song}' });
         expect(result).toBeNull();
+        expect(service._snackBar.open).toHaveBeenCalled();
     });
 
     it('creates and updates songs when authenticated', async () => {
@@ -49,6 +51,7 @@ describe('SongService (mock mode)', () => {
             uniqueChords: ['C'],
         });
         expect(createdId).toBeTruthy();
+        expect(service._snackBar.open).toHaveBeenCalled();
 
         let stored = JSON.parse(window.localStorage.getItem('e2e.mockSongs') || '[]');
         expect(stored).toHaveLength(1);
