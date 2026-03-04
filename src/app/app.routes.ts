@@ -5,7 +5,7 @@ import { LayoutComponent } from 'app/layout/layout.component';
 import { initialDataResolver } from './app.resolvers';
 
 export const appRoutes: Route[] = [
-    { path: '', pathMatch: 'full', redirectTo: 'home' },
+    { path: '', pathMatch: 'full', redirectTo: 'sign-in' },
 
     // Auth routes for guests
     {
@@ -20,6 +20,9 @@ export const appRoutes: Route[] = [
             {
                 path: 'sign-in',
                 loadChildren: () => import('app/modules/auth/sign-in/sign-in.routes'),
+                data: {
+                    hideNavigationDrawer: true,
+                },
             },
             {
                 path: 'sign-up',
@@ -60,6 +63,8 @@ export const appRoutes: Route[] = [
     // Pages routes
     {
         path: '',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
         component: LayoutComponent,
         data: {
             layout: 'thin',
@@ -68,10 +73,6 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver,
         },
         children: [
-            {
-                path: 'home',
-                loadChildren: () => import('app/pages/home/home.routes'),
-            },
             {
                 path: 'library',
                 loadChildren: () => import('app/pages/library/library.routes'),

@@ -7,7 +7,6 @@ import {
 } from './navigation.usecase';
 
 const labels: NavigationLabels = {
-    home: 'Início',
     library: 'Biblioteca',
     create: 'Criar',
     songbooks: 'Listas de reprodução',
@@ -16,10 +15,9 @@ const labels: NavigationLabels = {
 describe('navigation use case', () => {
     it('builds base navigation with localized labels', () => {
         const nav = buildBaseNavigation(labels);
-        expect(nav).toHaveLength(3);
-        expect(nav[0].title).toBe('Início');
-        expect(nav[1].title).toBe('Biblioteca');
-        expect(nav[2].title).toBe('Criar');
+        expect(nav).toHaveLength(2);
+        expect(nav[0].title).toBe('Biblioteca');
+        expect(nav[1].title).toBe('Criar');
     });
 
     it('builds unauthenticated songbooks item', () => {

@@ -151,6 +151,18 @@
     border-radius: 9999px !important;
 }
 
+/* Default flat-button appearance as primary */
+.mat-mdc-unelevated-button {
+    &:not([disabled='true']) {
+        @apply bg-primary border border-primary #{'!important'};
+        color: white !important;
+
+        .mat-icon {
+            color: currentColor !important;
+        }
+    }
+}
+
 /* Fix the alignment of icons when used within buttons */
 .mat-mdc-button,
 .mat-mdc-raised-button,

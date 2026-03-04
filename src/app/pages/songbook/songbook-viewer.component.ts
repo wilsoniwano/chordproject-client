@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuseDrawerComponent } from '@fuse/components/drawer';
 import { TranslocoModule } from '@jsverse/transloco';
 import { transposeMusicalKey } from 'domain/music/transpose-key';
@@ -22,7 +22,6 @@ type SongbookViewerMode = 'normal' | 'paged';
     templateUrl: './songbook-viewer.component.html',
     imports: [
         CommonModule,
-        RouterLink,
         MatButtonModule,
         MatIconModule,
         TranslocoModule,

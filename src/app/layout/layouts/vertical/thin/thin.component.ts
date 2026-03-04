@@ -44,6 +44,7 @@ export class ThinLayoutComponent implements OnInit, OnDestroy {
     isScreenSmall: boolean;
     navigation: FuseNavigationItem[];
     hideLayoutChrome = false;
+    hideNavigationDrawer = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     @ViewChild('settingsDrawer') settingsDrawer: FuseDrawerComponent;
@@ -115,5 +116,6 @@ export class ThinLayoutComponent implements OnInit, OnDestroy {
         }
 
         this.hideLayoutChrome = !!route.snapshot.data['hideLayoutChrome'];
+        this.hideNavigationDrawer = !!route.snapshot.data['hideNavigationDrawer'];
     }
 }

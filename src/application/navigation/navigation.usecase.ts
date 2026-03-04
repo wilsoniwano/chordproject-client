@@ -1,7 +1,6 @@
 import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export interface NavigationLabels {
-    home: string;
     library: string;
     create: string;
     songbooks: string;
@@ -9,14 +8,6 @@ export interface NavigationLabels {
 
 export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationItem[] {
     return [
-        {
-            id: 'home',
-            title: labels.home,
-            tooltip: labels.home,
-            type: 'basic',
-            icon: 'heroicons_outline:home',
-            link: '/home',
-        },
         {
             id: 'library',
             title: labels.library,

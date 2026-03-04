@@ -22,7 +22,6 @@ export class NavigationService {
 
     private get labels(): NavigationLabels {
         return {
-            home: this._translocoService.translate('nav.home'),
             library: this._translocoService.translate('nav.library'),
             create: this._translocoService.translate('nav.create'),
             songbooks: this._translocoService.translate('nav.songbooks'),

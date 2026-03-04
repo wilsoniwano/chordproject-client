@@ -46,7 +46,7 @@ describe('guards integration', () => {
         TestBed.configureTestingModule({
             providers: [
                 provideRouter([
-                    { path: 'home', component: TestPageComponent },
+                    { path: 'library', component: TestPageComponent },
                     { path: 'sign-in', component: TestPageComponent, canActivate: [NoAuthGuard] },
                 ]),
                 { provide: AuthService, useValue: { authenticated$ } },
@@ -54,6 +54,6 @@ describe('guards integration', () => {
         });
 
         await RouterTestingHarness.create('/sign-in');
-        expect(TestBed.inject(Router).url).toContain('/home');
+        expect(TestBed.inject(Router).url).toContain('/library');
     });
 });
