@@ -25,6 +25,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoModule } from '@jsverse/transloco';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
@@ -48,6 +49,7 @@ import { SearchResultsComponent } from './search-results.component';
         MatAutocompleteModule,
         MatFormFieldModule,
         MatInputModule,
+        TranslocoModule,
         SearchResultsComponent,
     ],
     providers: [

@@ -17,7 +17,7 @@ import {
     Theme,
     Themes,
 } from '@fuse/services/config';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 import { Subject, takeUntil } from 'rxjs';
 
@@ -25,7 +25,7 @@ import { Subject, takeUntil } from 'rxjs';
     selector: 'settings',
     templateUrl: './settings.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [MatIconModule, MatButtonModule, NgClass, MatTooltipModule],
+    imports: [MatIconModule, MatButtonModule, NgClass, MatTooltipModule, TranslocoModule],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @Output() closeSettings = new EventEmitter<void>();

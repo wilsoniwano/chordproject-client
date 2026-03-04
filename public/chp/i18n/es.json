@@ -14,5 +14,71 @@
             "Permite organizar canciones en <strong>cancioneros</strong> personalizables."
         ],
         "platform_description": "ChordProject tiene un sitio hermano, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente a la <strong>música cristiana</strong>, mientras que ChordProject es para uso general."
+    },
+    "common": {
+        "settings": "Configuración",
+        "theme": "TEMA",
+        "language": "IDIOMA",
+        "scheme": "ESQUEMA",
+        "auto": "Automático",
+        "dark": "Oscuro",
+        "light": "Claro",
+        "auto_scheme_tooltip": "Configura automáticamente el esquema según la preferencia del sistema operativo usando la media query 'prefers-color-scheme'.",
+        "signed_in_as": "Has iniciado sesión como",
+        "profile": "Perfil",
+        "sign_out": "Cerrar sesión",
+        "search_songs": "Buscar canciones",
+        "add": "Agregar",
+        "update": "Actualizar",
+        "cancel": "Cancelar",
+        "recently_added": "Agregadas recientemente",
+        "error_loading_songs": "Ocurrió un error al cargar las canciones",
+        "refresh_to_try_again": "Actualiza la página para volver a intentarlo"
+    },
+    "nav": {
+        "home": "Inicio",
+        "library": "Biblioteca",
+        "create": "Crear",
+        "songbooks": "Cancioneros"
+    },
+    "search": {
+        "placeholder": "Buscar por título, letra o cancionero",
+        "placeholder_bar": "Buscar por título, letra o cancionero...",
+        "no_results": "¡No se encontraron resultados!",
+        "songs": "CANCIONES",
+        "songs_content": "CONTENIDO DE CANCIONES",
+        "songbooks": "CANCIONEROS",
+        "songbooks_content": "CONTENIDO DE CANCIONEROS"
+    },
+    "library": {
+        "title": "Biblioteca de canciones",
+        "no_songs": "Sin canciones",
+        "song": "canción",
+        "songs": "canciones"
+    },
+    "shortcuts": {
+        "title": "Atajos",
+        "add_new": "Agregar nuevo",
+        "editing": "Editando",
+        "enter_edit_mode": "Entrar en modo edición",
+        "add_shortcut": "Agregar atajo",
+        "exit_edit_mode": "Salir del modo edición",
+        "no_shortcuts": "Sin atajos",
+        "no_shortcuts_description": "Cuando tengas atajos, aparecerán aquí.",
+        "label": "Etiqueta",
+        "description": "Descripción",
+        "icon": "Ícono",
+        "link": "Enlace",
+        "use_router": "Usar router para el enlace"
+    },
+    "toolbar": {
+        "settings": "Configuración",
+        "edit": "Editar",
+        "full_screen": "Pantalla completa",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "open_full_editor": "Abrir en editor completo",
+        "help": "Ayuda",
+        "close": "Cerrar"
     }
 }

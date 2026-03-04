@@ -1,4 +1,4 @@
-import { AsyncPipe, I18nPluralPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 import { ChpSongItemComponent } from 'app/components/song-item/song-item.component';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { PartialSong } from 'app/models/partialsong';
@@ -33,7 +34,7 @@ import { LibraryComponent } from '../library.component';
         ReactiveFormsModule,
         RouterLink,
         AsyncPipe,
-        I18nPluralPipe,
+        TranslocoModule,
         ChpSongItemComponent,
     ],
 })

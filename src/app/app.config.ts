@@ -36,6 +36,10 @@ export const appConfig: ApplicationConfig = {
                         label: 'Español',
                     },
                     {
+                        id: 'pt-br',
+                        label: 'Português (Brasil)',
+                    },
+                    {
                         id: 'en',
                         label: 'English',
                     },
@@ -44,7 +48,7 @@ export const appConfig: ApplicationConfig = {
                         label: 'Français',
                     },
                 ],
-                defaultLang: 'es',
+                defaultLang: 'pt-br',
                 fallbackLang: 'en',
                 reRenderOnLangChange: true,
                 prodMode: !isDevMode(),

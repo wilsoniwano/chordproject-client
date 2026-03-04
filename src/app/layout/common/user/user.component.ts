@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
@@ -28,6 +29,7 @@ import { ThinLayoutComponent } from '../../layouts/vertical/thin/thin.component'
         MatIconModule,
         MatDividerModule,
         RouterLink,
+        TranslocoModule,
     ],
 })
 export class UserComponent implements OnInit, OnDestroy {

@@ -1,0 +1,84 @@
+{
+    "home": {
+        "about_title": "Sobre este projeto",
+        "about_description": "<strong>ChordProject</strong> é uma lista de reprodução digital que permite a entusiastas da música criar, editar, organizar e descobrir novas músicas usando o formato <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Você também pode compartilhar suas próprias músicas com outros usuários e usar a plataforma como uma ferramenta ideal para ensaios ou apresentações ao vivo. Diferente de uma lista de reprodução impressa, esta plataforma é dinâmica, evolui e cresce com você.",
+        "overview_title": "Visão geral",
+        "overview_description": "Este aplicativo foi projetado para gerenciar <strong>músicas</strong> (com <strong>acordes</strong>) e <strong>listas de reprodução</strong>.",
+        "features": [
+            "Permite escrever e visualizar músicas com acordes de forma clara e organizada usando o formato ChordPro.",
+            "Permite ler, editar ou imprimir músicas com diagramas de acordes.",
+            "Garante que os acordes estejam sempre posicionados corretamente, independentemente do tamanho da fonte ou da tela.",
+            "Armazena músicas online, com atualizações refletidas instantaneamente em todos os dispositivos.",
+            "Inclui um visualizador com ferramentas para apresentações ao vivo, como rolagem automática, ajuste de tamanho da fonte e mais.",
+            "A transposição segue regras musicais, não apenas deslocamentos matemáticos.",
+            "Permite organizar músicas em <strong>listas de reprodução</strong> personalizáveis."
+        ],
+        "platform_description": "ChordProject tem um site irmão, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente à <strong>música cristã</strong>, enquanto o ChordProject é para uso geral."
+    },
+    "common": {
+        "settings": "Configurações",
+        "theme": "TEMA",
+        "language": "IDIOMA",
+        "scheme": "ESQUEMA",
+        "auto": "Automático",
+        "dark": "Escuro",
+        "light": "Claro",
+        "auto_scheme_tooltip": "Define automaticamente o esquema com base na preferência do sistema operacional usando a media query 'prefers-color-scheme'.",
+        "signed_in_as": "Conectado como",
+        "profile": "Perfil",
+        "sign_out": "Sair",
+        "search_songs": "Buscar músicas",
+        "add": "Adicionar",
+        "update": "Atualizar",
+        "cancel": "Cancelar",
+        "recently_added": "Adicionadas recentemente",
+        "error_loading_songs": "Algo deu errado ao carregar as músicas",
+        "refresh_to_try_again": "Atualize a página para tentar novamente"
+    },
+    "nav": {
+        "home": "Início",
+        "library": "Biblioteca",
+        "create": "Criar",
+        "songbooks": "Listas de reprodução"
+    },
+    "search": {
+        "placeholder": "Pesquisar por título, letra ou lista de reprodução",
+        "placeholder_bar": "Pesquisar por título, letra ou lista de reprodução...",
+        "no_results": "Nenhum resultado encontrado!",
+        "songs": "MÚSICAS",
+        "songs_content": "CONTEÚDO DAS MÚSICAS",
+        "songbooks": "LISTAS DE REPRODUÇÃO",
+        "songbooks_content": "CONTEÚDO DAS LISTAS DE REPRODUÇÃO"
+    },
+    "library": {
+        "title": "Biblioteca de músicas",
+        "no_songs": "Nenhuma música",
+        "song": "música",
+        "songs": "músicas"
+    },
+    "shortcuts": {
+        "title": "Atalhos",
+        "add_new": "Adicionar novo",
+        "editing": "Editando",
+        "enter_edit_mode": "Entrar no modo de edição",
+        "add_shortcut": "Adicionar atalho",
+        "exit_edit_mode": "Sair do modo de edição",
+        "no_shortcuts": "Sem atalhos",
+        "no_shortcuts_description": "Quando você tiver atalhos, eles aparecerão aqui.",
+        "label": "Rótulo",
+        "description": "Descrição",
+        "icon": "Ícone",
+        "link": "Link",
+        "use_router": "Usar roteamento interno para o link"
+    },
+    "toolbar": {
+        "settings": "Configurações",
+        "edit": "Editar",
+        "full_screen": "Tela cheia",
+        "save": "Salvar",
+        "delete": "Excluir",
+        "open_full_editor": "Abrir no editor completo",
+        "help": "Ajuda",
+        "close": "Fechar"
+    }
+}

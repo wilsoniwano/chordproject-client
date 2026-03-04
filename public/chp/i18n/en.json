@@ -14,5 +14,71 @@
             "Lets you organize songs into customizable <strong>songbooks</strong>."
         ],
         "platform_description": "ChordProject has a sister site, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicated exclusively to <strong>Christian music</strong>, while ChordProject is for general use."
+    },
+    "common": {
+        "settings": "Settings",
+        "theme": "THEME",
+        "language": "LANGUAGE",
+        "scheme": "SCHEME",
+        "auto": "Auto",
+        "dark": "Dark",
+        "light": "Light",
+        "auto_scheme_tooltip": "Automatically sets the scheme based on your operating system preference using the 'prefers-color-scheme' media query.",
+        "signed_in_as": "Signed in as",
+        "profile": "Profile",
+        "sign_out": "Sign out",
+        "search_songs": "Search songs",
+        "add": "Add",
+        "update": "Update",
+        "cancel": "Cancel",
+        "recently_added": "Recently Added",
+        "error_loading_songs": "Something went wrong while loading songs",
+        "refresh_to_try_again": "Please refresh the page to try again"
+    },
+    "nav": {
+        "home": "Home",
+        "library": "Library",
+        "create": "Create",
+        "songbooks": "Songbooks"
+    },
+    "search": {
+        "placeholder": "Search by title, lyrics or songbook",
+        "placeholder_bar": "Search by title, lyrics or songbook...",
+        "no_results": "No results found!",
+        "songs": "SONGS",
+        "songs_content": "SONGS CONTENT",
+        "songbooks": "SONGBOOKS",
+        "songbooks_content": "SONGBOOKS CONTENT"
+    },
+    "library": {
+        "title": "Song Library",
+        "no_songs": "No songs",
+        "song": "song",
+        "songs": "songs"
+    },
+    "shortcuts": {
+        "title": "Shortcuts",
+        "add_new": "Add new",
+        "editing": "Editing",
+        "enter_edit_mode": "Enter edit mode",
+        "add_shortcut": "Add shortcut",
+        "exit_edit_mode": "Exit edit mode",
+        "no_shortcuts": "No shortcuts",
+        "no_shortcuts_description": "When you have shortcuts, they will appear here.",
+        "label": "Label",
+        "description": "Description",
+        "icon": "Icon",
+        "link": "Link",
+        "use_router": "Use router for the link"
+    },
+    "toolbar": {
+        "settings": "Settings",
+        "edit": "Edit",
+        "full_screen": "Full Screen",
+        "save": "Save",
+        "delete": "Delete",
+        "open_full_editor": "Open in full editor",
+        "help": "Help",
+        "close": "Close"
     }
 }

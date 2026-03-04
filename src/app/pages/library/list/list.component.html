@@ -3,20 +3,20 @@
     <div class="flex flex-auto flex-col justify-between border-b px-6 py-8 sm:flex-row md:flex-col md:px-8">
         <!-- Title -->
         <div>
-            <div class="text-4xl font-extrabold leading-none tracking-tight">Song Library</div>
+            <div class="text-4xl font-extrabold leading-none tracking-tight">{{ 'library.title' | transloco }}</div>
             <div class="text-secondary ml-0.5 font-medium">
                 @if (songsCount > 0) {
                     {{ songsCount }}
                 }
-                {{
-                    songsCount
-                        | i18nPlural
-                            : {
-                                  '=0': 'No songs',
-                                  '=1': 'song',
-                                  other: 'songs',
-                              }
-                }}
+                @if (songsCount === 0) {
+                    {{ 'library.no_songs' | transloco }}
+                }
+                @if (songsCount === 1) {
+                    {{ 'library.song' | transloco }}
+                }
+                @if (songsCount > 1) {
+                    {{ 'library.songs' | transloco }}
+                }
             </div>
         </div>
 
@@ -29,14 +29,14 @@
                         matInput
                         [formControl]="searchInputControl"
                         [autocomplete]="'off'"
-                        [placeholder]="'Search songs'"
+                        [placeholder]="'common.search_songs' | transloco"
                     />
                 </mat-form-field>
             </div>
             <!-- Add song button -->
             <button class="ml-4" mat-flat-button [color]="'primary'" [routerLink]="['/songs/create']">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                <span class="ml-2 mr-1">Add</span>
+                <span class="ml-2 mr-1">{{ 'common.add' | transloco }}</span>
             </button>
         </div>
     </div>
@@ -68,8 +68,8 @@
                         class="mb-4 text-warn-500 icon-size-12"
                         [svgIcon]="'heroicons_outline:exclamation-circle'"
                     ></mat-icon>
-                    <p class="text-lg font-medium">Something went wrong while loading songs</p>
-                    <p class="text-secondary mt-2">Please refresh the page to try again</p>
+                    <p class="text-lg font-medium">{{ 'common.error_loading_songs' | transloco }}</p>
+                    <p class="text-secondary mt-2">{{ 'common.refresh_to_try_again' | transloco }}</p>
                 </div>
             }
         }

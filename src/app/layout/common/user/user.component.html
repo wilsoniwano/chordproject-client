@@ -12,8 +12,8 @@
 
     <mat-menu [xPosition]="'before'" #userActions="matMenu">
         <button mat-menu-item>
-            <span class="flex flex-col leading-none">
-                <span>Signed in as</span>
+                <span class="flex flex-col leading-none">
+                <span>{{ 'common.signed_in_as' | transloco }}</span>
                 <span class="mt-1.5 text-md font-medium">{{
                     user?.email
                 }}</span>
@@ -22,18 +22,18 @@
         <mat-divider class="my-2"></mat-divider>
         <button mat-menu-item>
             <mat-icon [svgIcon]="'heroicons_outline:user'"></mat-icon>
-            <span>Profile</span>
+            <span>{{ 'common.profile' | transloco }}</span>
         </button>
         <button mat-menu-item (click)="settings()">
             <mat-icon [svgIcon]="'heroicons_outline:cog-8-tooth'"></mat-icon>
-            <span>Settings</span>
+            <span>{{ 'common.settings' | transloco }}</span>
         </button>
         <mat-divider class="my-2"></mat-divider>
         <button mat-menu-item (click)="signOut()">
             <mat-icon
                 [svgIcon]="'heroicons_outline:arrow-right-on-rectangle'"
             ></mat-icon>
-            <span>Sign out</span>
+            <span>{{ 'common.sign_out' | transloco }}</span>
         </button>
     </mat-menu>
 } @else {

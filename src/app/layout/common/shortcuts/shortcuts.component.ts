@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 import { ShortcutsService } from 'app/layout/common/shortcuts/shortcuts.service';
 import { Shortcut } from 'app/layout/common/shortcuts/shortcuts.types';
 import { Subject, takeUntil } from 'rxjs';
@@ -48,6 +49,7 @@ import { Subject, takeUntil } from 'rxjs';
         MatFormFieldModule,
         MatInputModule,
         MatSlideToggleModule,
+        TranslocoModule,
     ],
 })
 export class ShortcutsComponent implements OnInit, OnDestroy {

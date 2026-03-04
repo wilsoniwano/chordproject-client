@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FuseNavigationItem } from '@fuse/components/navigation';
-import { forkJoin, Observable, of, ReplaySubject } from 'rxjs';
+import { TranslocoService } from '@jsverse/transloco';
+import { combineLatest, forkJoin, Observable, of, ReplaySubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { SongbookService } from '../firebase/api/songbook.service';
 import { UserService } from '../user/user.service';
@@ -11,57 +12,66 @@ export class NavigationService {
         new ReplaySubject<FuseNavigationItem[]>(1);
     private _userService = inject(UserService);
     private _songbookService = inject(SongbookService);
+    private _translocoService = inject(TranslocoService);
 
-    private readonly baseNavigation: FuseNavigationItem[] = [
-        {
-            id: 'home',
-            title: 'Home',
-            tooltip: 'Home',
-            type: 'basic',
-            icon: 'heroicons_outline:home',
-            link: '/home',
-        },
-        {
-            id: 'library',
-            title: 'Library',
-            tooltip: 'Library',
-            type: 'basic',
-            icon: 'heroicons_outline:musical-note',
-            link: '/library',
-        },
-        {
-            id: 'create',
-            title: 'Create',
-            tooltip: 'Create',
-            type: 'basic',
-            icon: 'heroicons_outline:code-bracket',
-            link: '/songs/create',
-        },
-    ];
+    private get baseNavigation(): FuseNavigationItem[] {
+        return [
+            {
+                id: 'home',
+                title: this._translocoService.translate('nav.home'),
+                tooltip: this._translocoService.translate('nav.home'),
+                type: 'basic',
+                icon: 'heroicons_outline:home',
+                link: '/home',
+            },
+            {
+                id: 'library',
+                title: this._translocoService.translate('nav.library'),
+                tooltip: this._translocoService.translate('nav.library'),
+                type: 'basic',
+                icon: 'heroicons_outline:musical-note',
+                link: '/library',
+            },
+            {
+                id: 'create',
+                title: this._translocoService.translate('nav.create'),
+                tooltip: this._translocoService.translate('nav.create'),
+                type: 'basic',
+                icon: 'heroicons_outline:code-bracket',
+                link: '/songs/create',
+            },
+        ];
+    }
 
-    private readonly authenticatedSongbooks: FuseNavigationItem = {
-        id: 'songbooks',
-        title: 'Songbooks',
-        tooltip: 'Songbooks',
-        type: 'aside',
-        icon: 'heroicons_outline:book-open',
-        children: [],
-    };
+    private get authenticatedSongbooks(): FuseNavigationItem {
+        return {
+            id: 'songbooks',
+            title: this._translocoService.translate('nav.songbooks'),
+            tooltip: this._translocoService.translate('nav.songbooks'),
+            type: 'aside',
+            icon: 'heroicons_outline:book-open',
+            children: [],
+        };
+    }
 
-    private readonly unauthenticatedSongbooks: FuseNavigationItem = {
-        id: 'songbooks-signin',
-        title: 'Songbooks',
-        tooltip: 'Songbooks',
-        type: 'basic',
-        icon: 'heroicons_outline:book-open',
-        link: '/sign-in',
-    };
+    private get unauthenticatedSongbooks(): FuseNavigationItem {
+        return {
+            id: 'songbooks-signin',
+            title: this._translocoService.translate('nav.songbooks'),
+            tooltip: this._translocoService.translate('nav.songbooks'),
+            type: 'basic',
+            icon: 'heroicons_outline:book-open',
+            link: '/sign-in',
+        };
+    }
 
     constructor() {
-        this._userService
-            .isAuthenticated()
+        combineLatest([
+            this._userService.isAuthenticated(),
+            this._translocoService.langChanges$,
+        ])
             .pipe(
-                switchMap((isAuthenticated) =>
+                switchMap(([isAuthenticated]) =>
                     isAuthenticated
                         ? this.buildSongbooksNavigation()
                         : this.buildBasicNavigation()

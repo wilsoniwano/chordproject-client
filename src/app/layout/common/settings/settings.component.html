@@ -6,7 +6,7 @@
             class="text-current icon-size-7"
             [svgIcon]="'heroicons_solid:cog-8-tooth'"
         ></mat-icon>
-        <div class="ml-3 text-2xl font-semibold tracking-tight">Settings</div>
+        <div class="ml-3 text-2xl font-semibold tracking-tight">{{ 'common.settings' | transloco }}</div>
         <button class="ml-auto" mat-icon-button (click)="closeSettings.emit()">
             <mat-icon
                 class="text-current"
@@ -17,7 +17,7 @@
 
     <div class="flex flex-col p-6">
         <!-- Theme -->
-        <div class="text-secondary text-md font-semibold">THEME</div>
+        <div class="text-secondary text-md font-semibold">{{ 'common.theme' | transloco }}</div>
         <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             @for (theme of config.themes; track theme) {
                 <div
@@ -40,8 +40,8 @@
         <hr class="my-8" />
 
         <!-- Language -->
-        <div class="text-secondary text-md font-semibold">LANGUAGE</div>
-        <div class="mt-6 grid grid-cols-3 justify-items-start gap-3">
+        <div class="text-secondary text-md font-semibold">{{ 'common.language' | transloco }}</div>
+        <div class="mt-6 grid grid-cols-4 justify-items-start gap-3">
             <!-- ES -->
             <div
                 class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 ring-inset ring-primary"
@@ -53,6 +53,19 @@
                     [class.text-secondary]="activeLang !== 'es'"
                 >
                     Español
+                </div>
+            </div>
+            <!-- PT-BR -->
+            <div
+                class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 ring-inset ring-primary"
+                [class.ring-2]="activeLang === 'pt-br'"
+                (click)="setActiveLang('pt-br')"
+            >
+                <div
+                    class="ml-2 flex items-center font-medium leading-5"
+                    [class.text-secondary]="activeLang !== 'pt-br'"
+                >
+                    Português (BR)
                 </div>
             </div>
             <!-- FR -->
@@ -86,13 +99,13 @@
         <hr class="my-8" />
 
         <!-- Scheme -->
-        <div class="text-secondary text-md font-semibold">SCHEME</div>
+        <div class="text-secondary text-md font-semibold">{{ 'common.scheme' | transloco }}</div>
         <div class="mt-6 grid grid-cols-3 justify-items-start gap-3">
             <!-- Auto -->
             <div
                 class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 ring-inset ring-primary"
                 [class.ring-2]="config.scheme === 'auto'"
-                matTooltip="Automatically sets the scheme based on user's operating system's color scheme preference using 'prefer-color-scheme' media query."
+                [matTooltip]="'common.auto_scheme_tooltip' | transloco"
                 (click)="setScheme('auto')"
             >
                 <div class="flex items-center overflow-hidden rounded-full">
@@ -105,7 +118,7 @@
                     class="ml-2 flex items-center font-medium leading-5"
                     [class.text-secondary]="config.scheme !== 'auto'"
                 >
-                    Auto
+                    {{ 'common.auto' | transloco }}
                 </div>
             </div>
             <!-- Dark -->
@@ -124,7 +137,7 @@
                     class="ml-2 flex items-center font-medium leading-5"
                     [class.text-secondary]="config.scheme !== 'dark'"
                 >
-                    Dark
+                    {{ 'common.dark' | transloco }}
                 </div>
             </div>
             <!-- Light -->
@@ -143,7 +156,7 @@
                     class="ml-2 flex items-center font-medium leading-5"
                     [class.text-secondary]="config.scheme !== 'light'"
                 >
-                    Light
+                    {{ 'common.light' | transloco }}
                 </div>
             </div>
         </div>
