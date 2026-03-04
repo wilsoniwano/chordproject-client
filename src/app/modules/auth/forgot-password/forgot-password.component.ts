@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/firebase/auth/auth.service';
@@ -38,8 +38,7 @@ export class AuthForgotPasswordComponent implements OnInit {
 
     constructor(
         private _formBuilder: UntypedFormBuilder,
-        private _authService: AuthService,
-        private _router: Router
+        private _authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -62,7 +61,7 @@ export class AuthForgotPasswordComponent implements OnInit {
                 this.showAlert = true;
                 this.alert = {
                     type: 'success',
-                    message: 'Please check your email to reset your password.',
+                    message: 'Se o e-mail existir, você receberá um link para redefinir sua senha.',
                 };
             },
             (error) => {

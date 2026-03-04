@@ -53,12 +53,18 @@
                 </mat-form-field>
 
                 <!-- Remember me -->
-                <mat-checkbox
-                    class="mat-mdc-form-field-no-label ml-1 mt-1"
-                    [formControl]="signInForm.controls.rememberMe"
-                >
-                    Lembrar de mim
-                </mat-checkbox>
+                <div class="mt-1 flex items-center justify-between gap-4">
+                    <mat-checkbox
+                        class="mat-mdc-form-field-no-label ml-1"
+                        [formControl]="signInForm.controls.rememberMe"
+                    >
+                        Lembrar de mim
+                    </mat-checkbox>
+
+                    <a class="text-sm font-medium text-primary-500" [routerLink]="['/forgot-password']">
+                        Esqueci minha senha
+                    </a>
+                </div>
 
                 <!-- Submit button -->
                 <button
