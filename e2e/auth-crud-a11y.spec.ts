@@ -49,14 +49,14 @@ test('valid login and logout flow', async ({ page }) => {
 test('sign-up flow succeeds in mock mode', async ({ page }) => {
     await enableMockMode(page);
     await page.goto('/sign-up');
-    await page.getByLabel('Name').fill('E2E User');
+    await page.getByLabel(/name|nome/i).fill('E2E User');
     await page.getByLabel('Email').fill('new@local.test');
-    await page.getByLabel('Password').fill('E2Epass123!');
-    await page.getByLabel('Company').fill('E2E Co');
-    const agreeCheckbox = page.getByRole('checkbox', { name: /i agree to the/i });
+    await page.getByLabel(/password|senha/i).fill('E2Epass123!');
+    await page.getByLabel(/company|empresa/i).fill('E2E Co');
+    const agreeCheckbox = page.getByRole('checkbox', { name: /i agree to the|concordo com os/i });
     await agreeCheckbox.check();
     await expect(agreeCheckbox).toBeChecked();
-    await page.getByRole('button', { name: /create an account/i }).click();
+    await page.getByRole('button', { name: /create an account|criar conta/i }).click();
     await expect.poll(async () =>
         page.evaluate(() => window.localStorage.getItem('e2e.mockAuth.user'))
     ).not.toBeNull();

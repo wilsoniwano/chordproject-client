@@ -56,6 +56,12 @@ export class AuthSignUpComponent implements OnInit {
 
     signUp(): void {
         if (this.signUpForm.invalid) {
+            this.signUpForm.markAllAsTouched();
+            this.showAlert = true;
+            this.alert = {
+                type: 'error',
+                message: 'Preencha todos os campos obrigatórios corretamente.',
+            };
             return;
         }
 
@@ -67,16 +73,19 @@ export class AuthSignUpComponent implements OnInit {
             .subscribe(
                 () => {
                     this.signUpForm.enable();
-                    this.showAlert = false;
-                    this._router.navigate(['/verify-email']);
+                    this.showAlert = true;
+                    this.alert = {
+                        type: 'success',
+                        message: 'Conta criada com sucesso.',
+                    };
+                    this._router.navigate(['/home']);
                 },
                 (error) => {
                     this.signUpForm.enable();
-                    this.signUpForm.reset();
                     this.showAlert = true;
                     this.alert = {
                         type: 'error',
-                        message: error.message,
+                        message: error?.message ?? 'Não foi possível criar a conta.',
                     };
                 }
             );

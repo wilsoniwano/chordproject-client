@@ -2,11 +2,11 @@
     <div class="flex w-full max-w-400 overflow-hidden sm:rounded-md sm:shadow">
         <div class="bg-card relative flex flex-auto flex-col p-6 sm:p-10">
             <div class="mt-8 w-full">
-                <div class="text-3xl font-semibold leading-tight">Sign up</div>
+                <div class="text-3xl font-semibold leading-tight">Criar conta</div>
             </div>
 
             <div class="text-secondary mt-2">
-                Enter your email and password to create a free account
+                Informe seu e-mail e senha para criar uma conta gratuita
             </div>
 
             @if (showAlert) {
@@ -22,10 +22,10 @@
             }
 
             <!-- Sign Up form -->
-            <form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm">
+            <form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm" (ngSubmit)="signUp()">
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Name</mat-label>
+                    <mat-label>Nome</mat-label>
                     <input
                         matInput
                         [formControl]="signUpForm.controls.name"
@@ -33,7 +33,7 @@
                         autocomplete="name"
                     />
                     @if (signUpForm.get('name').hasError('required')) {
-                        <mat-error>Name is required</mat-error>
+                        <mat-error>Nome é obrigatório</mat-error>
                     }
                 </mat-form-field>
 
@@ -47,36 +47,34 @@
                         autocomplete="email"
                     />
                     @if (signUpForm.get('email').hasError('required')) {
-                        <mat-error>Email is required</mat-error>
+                        <mat-error>E-mail é obrigatório</mat-error>
                     }
                     @if (signUpForm.get('email').hasError('email')) {
-                        <mat-error
-                            >Please enter a valid email address</mat-error
-                        >
+                        <mat-error>Informe um e-mail válido</mat-error>
                     }
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Senha</mat-label>
                     <input
                         matInput
                         [formControl]="signUpForm.controls.password"
                         type="password"
                         autocomplete="new-password"
                     />
-                    <mat-error> Password is required </mat-error>
+                    <mat-error>Senha é obrigatória</mat-error>
                 </mat-form-field>
 
                 <!-- Company field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
+                    <mat-label>Empresa</mat-label>
                     <input
                         matInput
                         [formControl]="signUpForm.controls.company"
                         type="text"
                     />
-                    <mat-error> Company is required </mat-error>
+                    <mat-error>Empresa é obrigatória</mat-error>
                 </mat-form-field>
 
                 <!-- Terms and conditions -->
@@ -84,22 +82,25 @@
                     class="mat-mdc-form-field-no-label ml-1 mt-2"
                     [formControl]="signUpForm.controls.agree"
                 >
-                    I agree to the
+                    Concordo com os
                     <a href="javascript:void(0)" class="underline"
-                        >Terms and Conditions</a
+                        >Termos e Condições</a
                     >
                 </mat-checkbox>
+                @if (signUpForm.get('agree').touched && signUpForm.get('agree').invalid) {
+                    <div class="mt-1 text-sm text-warn-600">Você deve aceitar os termos e condições.</div>
+                }
 
                 <!-- Submit button -->
                 <button
                     class="fuse-mat-button-large mt-8 w-full"
                     mat-flat-button
+                    type="submit"
                     color="primary"
                     [disabled]="signUpForm.disabled"
-                    (click)="signUp()"
                 >
                     @if (!signUpForm.disabled) {
-                        <span> Create an account </span>
+                        <span>Criar conta</span>
                     }
                     @if (signUpForm.disabled) {
                         <mat-spinner [diameter]="24"></mat-spinner>
@@ -108,9 +109,9 @@
 
                 <!-- Sign in link -->
                 <div class="text-secondary mt-8 text-md font-medium">
-                    <span>Already have an account?</span>
+                    <span>Já tem uma conta?</span>
                     <a class="ml-1 text-primary-500" [routerLink]="['/sign-in']"
-                        >>Sign in</a
+                        >Entrar</a
                     >
                 </div>
             </form>
