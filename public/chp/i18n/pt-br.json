@@ -39,7 +39,8 @@
         "home": "Início",
         "library": "Biblioteca",
         "create": "Criar",
-        "songbooks": "Listas de reprodução"
+        "songbooks": "Listas de reprodução",
+        "create_songbook": "Nova lista de reprodução"
     },
     "search": {
         "placeholder": "Pesquisar por título, letra ou lista de reprodução",
@@ -81,6 +82,43 @@
         "yes": "Sim",
         "no": "Não",
         "not_informed": "Não informado"
+    },
+    "songbook_create": {
+        "title": "Nova lista de reprodução",
+        "description": "Cadastre uma lista de reprodução para organizar suas músicas.",
+        "name": "Nome da lista",
+        "name_required": "Informe o nome da lista",
+        "parent": "ID da lista pai (opcional)",
+        "parent_hint": "Deixe em branco para criar na raiz.",
+        "reorderable": "Permitir reordenação por arrastar e soltar",
+        "save": "Salvar lista"
+    },
+    "songbook_list": {
+        "title": "Listas de reprodução",
+        "description": "Acesse e gerencie suas listas de reprodução.",
+        "empty": "Nenhuma lista de reprodução cadastrada."
+    },
+    "songbook": {
+        "manage": {
+            "add_song": "Adicionar música",
+            "search_hint": "Digite ao menos 2 letras para buscar por título."
+        },
+        "viewer": {
+            "open": "Modo visualização",
+            "back": "Voltar ao songbook",
+            "reset_key": "Resetar tom",
+            "reset_font": "Resetar fonte",
+            "reset_column_width": "Resetar largura",
+            "options": "Opções",
+            "transpose": "Transposição",
+            "font_size": "Tamanho da fonte",
+            "column_width": "Largura da coluna",
+            "columns_per_page": "Colunas por página",
+            "view_mode": "Modo de visualização",
+            "normal_mode": "Normal",
+            "paged_columns": "Colunas paginadas",
+            "vertical_pages": "Páginas verticais"
+        }
     },
     "toolbar": {
         "settings": "Configurações",

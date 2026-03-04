@@ -6,11 +6,39 @@
         <div class="flex h-full flex-col dark:border-[#334155]">
             <!-- Sección superior -->
             <div
-                class="flex items-center border-b border-gray-200 bg-accent-50 p-6 dark:border-[#334155] dark:bg-[#273549]"
+                class="flex items-center justify-between border-b border-gray-200 bg-accent-50 p-6 dark:border-[#334155] dark:bg-[#273549]"
             >
                 <h1 class="truncate text-3xl font-bold">
                     {{ songbook.name }}
                 </h1>
+                <a mat-stroked-button [routerLink]="['/songbook', songbook.uid, 'view']">
+                    {{ 'songbook.viewer.open' | transloco }}
+                </a>
+            </div>
+            <div class="border-b border-gray-200 bg-card p-4 dark:border-[#334155]">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'songbook.manage.add_song' | transloco }}</mat-label>
+                    <input matInput [formControl]="addSongControl" />
+                    <mat-hint>{{ 'songbook.manage.search_hint' | transloco }}</mat-hint>
+                </mat-form-field>
+
+                @if (songSearchResults.length) {
+                    <div class="max-h-52 space-y-1 overflow-auto">
+                        @for (song of songSearchResults; track song.uid) {
+                            <div class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 dark:border-gray-700">
+                                <div class="min-w-0">
+                                    <div class="truncate font-medium">{{ song.title }}</div>
+                                    @if (song.artists?.length) {
+                                        <div class="text-secondary truncate text-xs">{{ song.artists.join(' - ') }}</div>
+                                    }
+                                </div>
+                                <button mat-icon-button [disabled]="addingSong" (click)="addSong(song)">
+                                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
             <!-- Sección inferior -->
             <div class="bg-card flex-1">
@@ -23,14 +51,16 @@
                         class="w-full space-y-0 overflow-hidden"
                     >
                         @for (song of songs; track trackByFn($index, song)) {
-                            <div class="w-full">
+                            <div class="w-full" cdkDrag [cdkDragData]="song" cdkDragLockAxis="y">
                                 <chp-song-item
                                     [song]="song"
                                     (click)="selectSong(song)"
                                     (dblclick)="onDblClick(song)"
+                                    (keyChange)="onSongKeyChange(song, $event)"
                                     class="w-full min-w-0 flex-1"
                                     [selected]="selectedSong?.uid === song.uid"
                                     [showDragHandle]="songbook.isReorderable"
+                                    [showToneControls]="true"
                                 >
                                 </chp-song-item>
                             </div>

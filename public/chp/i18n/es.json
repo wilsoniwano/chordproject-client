@@ -39,7 +39,8 @@
         "home": "Inicio",
         "library": "Biblioteca",
         "create": "Crear",
-        "songbooks": "Cancioneros"
+        "songbooks": "Cancioneros",
+        "create_songbook": "Nuevo cancionero"
     },
     "search": {
         "placeholder": "Buscar por título, letra o cancionero",
@@ -81,6 +82,43 @@
         "yes": "Sí",
         "no": "No",
         "not_informed": "No informado"
+    },
+    "songbook_create": {
+        "title": "Nuevo cancionero",
+        "description": "Crea un cancionero para organizar tus canciones.",
+        "name": "Nombre del cancionero",
+        "name_required": "Ingresa el nombre del cancionero",
+        "parent": "ID del cancionero padre (opcional)",
+        "parent_hint": "Déjalo en blanco para crearlo en la raíz.",
+        "reorderable": "Permitir reordenar arrastrando y soltando",
+        "save": "Guardar cancionero"
+    },
+    "songbook_list": {
+        "title": "Cancioneros",
+        "description": "Accede y administra tus cancioneros.",
+        "empty": "Aún no hay cancioneros."
+    },
+    "songbook": {
+        "manage": {
+            "add_song": "Agregar canción",
+            "search_hint": "Escribe al menos 2 letras para buscar por título."
+        },
+        "viewer": {
+            "open": "Modo presentación",
+            "back": "Volver al cancionero",
+            "reset_key": "Restablecer tono",
+            "reset_font": "Restablecer fuente",
+            "reset_column_width": "Restablecer ancho",
+            "options": "Opciones",
+            "transpose": "Transposición",
+            "font_size": "Tamaño de fuente",
+            "column_width": "Ancho de columna",
+            "columns_per_page": "Columnas por página",
+            "view_mode": "Modo de visualización",
+            "normal_mode": "Normal",
+            "paged_columns": "Columnas paginadas",
+            "vertical_pages": "Páginas verticales"
+        }
     },
     "toolbar": {
         "settings": "Configuración",

@@ -25,7 +25,7 @@ describe('navigation use case', () => {
     it('builds unauthenticated songbooks item', () => {
         const item = buildUnauthenticatedSongbooks(labels);
         expect(item.id).toBe('songbooks-signin');
-        expect(item.link).toBe('/sign-in');
+        expect(item.link).toBe('/songbook');
         expect(item.title).toBe('Listas de reprodução');
     });
 
@@ -39,4 +39,3 @@ describe('navigation use case', () => {
         expect(item.children?.[0].title).toBe('Louvor');
     });
 });
-

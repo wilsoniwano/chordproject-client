@@ -39,7 +39,8 @@
         "home": "Accueil",
         "library": "Bibliothèque",
         "create": "Créer",
-        "songbooks": "Carnets de chansons"
+        "songbooks": "Carnets de chansons",
+        "create_songbook": "Nouveau carnet"
     },
     "search": {
         "placeholder": "Rechercher par titre, paroles ou carnet de chansons",
@@ -81,6 +82,43 @@
         "yes": "Oui",
         "no": "Non",
         "not_informed": "Non renseigné"
+    },
+    "songbook_create": {
+        "title": "Nouveau carnet",
+        "description": "Créez un carnet de chansons pour organiser vos morceaux.",
+        "name": "Nom du carnet",
+        "name_required": "Veuillez renseigner le nom du carnet",
+        "parent": "ID du carnet parent (optionnel)",
+        "parent_hint": "Laissez vide pour créer à la racine.",
+        "reorderable": "Autoriser la réorganisation par glisser-déposer",
+        "save": "Enregistrer le carnet"
+    },
+    "songbook_list": {
+        "title": "Carnets de chansons",
+        "description": "Accédez et gérez vos carnets de chansons.",
+        "empty": "Aucun carnet pour le moment."
+    },
+    "songbook": {
+        "manage": {
+            "add_song": "Ajouter une chanson",
+            "search_hint": "Saisissez au moins 2 lettres pour rechercher par titre."
+        },
+        "viewer": {
+            "open": "Mode présentation",
+            "back": "Retour au carnet",
+            "reset_key": "Réinitialiser la tonalité",
+            "reset_font": "Réinitialiser la taille",
+            "reset_column_width": "Réinitialiser la largeur",
+            "options": "Options",
+            "transpose": "Transposition",
+            "font_size": "Taille de police",
+            "column_width": "Largeur de colonne",
+            "columns_per_page": "Colonnes par page",
+            "view_mode": "Mode d'affichage",
+            "normal_mode": "Normal",
+            "paged_columns": "Colonnes paginées",
+            "vertical_pages": "Pages verticales"
+        }
     },
     "toolbar": {
         "settings": "Paramètres",

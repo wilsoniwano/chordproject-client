@@ -61,29 +61,55 @@ export class NavigationService {
             switchMap((rootSongbooks) => {
                 const childrenQueries = rootSongbooks.map((songbook) =>
                     this._songbookService.getByParent(songbook.uid).pipe(
-                        map(
-                            (childSongbooks) =>
-                                ({
+                        map((childSongbooks) => {
+                            if (!childSongbooks.length) {
+                                return {
                                     id: `songbook-${songbook.uid}`,
                                     title: songbook.name,
-                                    type: 'collapsable' as const,
-                                    children: childSongbooks.map((child) => ({
-                                        id: `songbook-${child.uid}`,
-                                        title: child.name,
-                                        type: 'basic' as const,
-                                        link: `/songbook/${child.uid}`,
-                                    })),
-                                }) as FuseNavigationItem
-                        )
+                                    type: 'basic' as const,
+                                    link: `/songbook/${songbook.uid}`,
+                                } as FuseNavigationItem;
+                            }
+
+                            return {
+                                id: `songbook-${songbook.uid}`,
+                                title: songbook.name,
+                                type: 'collapsable' as const,
+                                children: childSongbooks.map((child) => ({
+                                    id: `songbook-${child.uid}`,
+                                    title: child.name,
+                                    type: 'basic' as const,
+                                    link: `/songbook/${child.uid}`,
+                                })),
+                            } as FuseNavigationItem;
+                        })
                     )
                 );
 
-                return forkJoin(childrenQueries);
+            return forkJoin(childrenQueries);
             }),
-            map((songbookItems) => [
-                ...this.baseNavigation,
-                buildAuthenticatedSongbooks(this.labels, songbookItems),
-            ])
+            map((songbookItems) => {
+                const listSongbooksItem: FuseNavigationItem = {
+                    id: 'songbook-list',
+                    title: this._translocoService.translate('nav.songbooks'),
+                    type: 'basic',
+                    icon: 'heroicons_outline:list-bullet',
+                    link: '/songbook',
+                };
+
+                const createSongbookItem: FuseNavigationItem = {
+                    id: 'songbook-create',
+                    title: this._translocoService.translate('nav.create_songbook'),
+                    type: 'basic',
+                    icon: 'heroicons_outline:plus',
+                    link: '/songbook/create',
+                };
+
+                return [
+                    ...this.baseNavigation,
+                    buildAuthenticatedSongbooks(this.labels, [listSongbooksItem, createSongbookItem, ...songbookItems]),
+                ];
+            })
         );
     }
 

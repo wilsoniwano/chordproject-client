@@ -5,4 +5,5 @@ export class Relation {
     ) {}
     author_uid: string;
     order?: number;
+    customKey?: string | null;
 }

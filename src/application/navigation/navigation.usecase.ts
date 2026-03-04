@@ -43,7 +43,7 @@ export function buildUnauthenticatedSongbooks(labels: NavigationLabels): FuseNav
         tooltip: labels.songbooks,
         type: 'basic',
         icon: 'heroicons_outline:book-open',
-        link: '/sign-in',
+        link: '/songbook',
     };
 }
 
@@ -60,4 +60,3 @@ export function buildAuthenticatedSongbooks(
         children,
     };
 }
-

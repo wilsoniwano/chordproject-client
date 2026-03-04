@@ -4,6 +4,7 @@ import { Relation } from 'app/models/relation';
 export type SongWithRelation = PartialSong & {
     order?: number | null;
     author_uid?: string;
+    customKey?: string | null;
 };
 
 export function mapSongsWithRelations(songs: PartialSong[], relations: Relation[]): SongWithRelation[] {
@@ -14,6 +15,7 @@ export function mapSongsWithRelations(songs: PartialSong[], relations: Relation[
             ...song,
             order: relation?.order ?? null,
             author_uid: relation?.author_uid,
+            customKey: relation?.customKey ?? null,
         };
     });
 }
@@ -31,4 +33,3 @@ export function sortSongsByRelationOrder(songs: SongWithRelation[]): SongWithRel
         return a.order === null || a.order === undefined ? 1 : -1;
     });
 }
-

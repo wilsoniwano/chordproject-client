@@ -1,0 +1,185 @@
+<div class="bg-default flex h-screen w-full flex-col overflow-hidden">
+    <header class="bg-card grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 py-3 sm:px-6">
+        <div>
+            <button mat-icon-button type="button" (click)="backToSongbook()">
+                <mat-icon [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+            </button>
+        </div>
+
+        <div class="min-w-0">
+            <div class="text-secondary truncate text-xs font-medium uppercase tracking-wide">
+                {{ songbook?.name }}
+            </div>
+            @if (currentSong) {
+                <div class="truncate text-lg font-semibold">{{ currentSong.title }}</div>
+            }
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button mat-stroked-button type="button" (click)="toggleOptionsDrawer()">
+                {{ 'songbook.viewer.options' | transloco }}
+            </button>
+            <button mat-icon-button type="button" [disabled]="currentIndex <= 0" (click)="goPrevious()">
+                <mat-icon [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+            </button>
+            <span class="text-sm font-medium">
+                {{ currentIndex + 1 }} / {{ songs.length || 1 }}
+            </span>
+            <button mat-icon-button type="button" [disabled]="currentIndex >= songs.length - 1" (click)="goNext()">
+                <mat-icon [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+            </button>
+        </div>
+    </header>
+
+    <div class="min-h-0 flex-1 overflow-hidden">
+        <chp-viewer
+            #songbookViewer
+            class="h-full"
+            [content]="renderedContent"
+            [viewMode]="viewMode"
+            [pagedColumnWidth]="columnWidth"
+            [normalColumnCount]="columnsPerPage"
+            (pageInfoChange)="onViewerPageInfoChange($event)"
+        ></chp-viewer>
+    </div>
+</div>
+
+<fuse-drawer
+    class="z-999 h-screen max-h-screen w-[min(92vw,24rem)] min-w-[min(92vw,24rem)]"
+    fixed
+    [position]="'right'"
+    [name]="'songbook-viewer-options'"
+    [mode]="'over'"
+    #optionsDrawer
+>
+    <div class="bg-card flex h-full w-full flex-col overflow-hidden">
+        <div class="flex items-center justify-between border-b px-4 py-3">
+            <div class="text-lg font-semibold">{{ 'songbook.viewer.options' | transloco }}</div>
+            <button mat-icon-button type="button" (click)="closeOptionsDrawer()">
+                <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+            </button>
+        </div>
+
+        <div class="flex-1 space-y-6 overflow-y-auto p-4">
+            <div>
+                <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
+                    {{ 'songbook.viewer.view_mode' | transloco }}
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        type="button"
+                        mat-stroked-button
+                        [class.!bg-primary]="viewMode === 'normal'"
+                        [class.!text-primary-contrast]="viewMode === 'normal'"
+                        [class.!border-primary]="viewMode === 'normal'"
+                        (click)="setViewMode('normal')"
+                    >
+                        {{ 'songbook.viewer.normal_mode' | transloco }}
+                    </button>
+                    <button
+                        type="button"
+                        mat-stroked-button
+                        [class.!bg-primary]="viewMode === 'paged'"
+                        [class.!text-primary-contrast]="viewMode === 'paged'"
+                        [class.!border-primary]="viewMode === 'paged'"
+                        (click)="setViewMode('paged')"
+                    >
+                        {{ 'songbook.viewer.paged_columns' | transloco }}
+                    </button>
+                </div>
+            </div>
+
+            @if (viewMode === 'normal') {
+                <div>
+                    <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
+                        {{ 'songbook.viewer.columns_per_page' | transloco }}
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            [class.!bg-primary]="columnsPerPage === 1"
+                            [class.!text-primary-contrast]="columnsPerPage === 1"
+                            [class.!border-primary]="columnsPerPage === 1"
+                            (click)="setColumnsPerPage(1)"
+                        >
+                            1
+                        </button>
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            [class.!bg-primary]="columnsPerPage === 2"
+                            [class.!text-primary-contrast]="columnsPerPage === 2"
+                            [class.!border-primary]="columnsPerPage === 2"
+                            (click)="setColumnsPerPage(2)"
+                        >
+                            2
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <div>
+                <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
+                    {{ 'songbook.viewer.transpose' | transloco }}
+                </div>
+                <div class="flex items-center gap-2">
+                    <button mat-icon-button type="button" (click)="transpose(-1)">
+                        <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
+                    </button>
+                    <span class="inline-flex w-16 justify-center rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">
+                        {{ renderedKey || '-' }}
+                    </span>
+                    <button mat-icon-button type="button" (click)="transpose(1)">
+                        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button" (click)="resetTranspose()">
+                        {{ 'songbook.viewer.reset_key' | transloco }}
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
+                    {{ 'songbook.viewer.font_size' | transloco }}
+                </div>
+                <div class="flex items-center gap-2">
+                    <button mat-icon-button type="button" (click)="decreaseFont()">
+                        <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
+                    </button>
+                    <span class="inline-flex w-16 justify-center rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">
+                        {{ fontSize }}px
+                    </span>
+                    <button mat-icon-button type="button" (click)="increaseFont()">
+                        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button" (click)="resetFont()">
+                        {{ 'songbook.viewer.reset_font' | transloco }}
+                    </button>
+                </div>
+            </div>
+
+            @if (viewMode === 'paged') {
+                <div>
+                    <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
+                        {{ 'songbook.viewer.column_width' | transloco }}
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button mat-icon-button type="button" (click)="decreaseColumnWidth()">
+                            <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
+                        </button>
+                        <span class="rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">
+                            {{ columnWidth }}px
+                        </span>
+                        <button mat-icon-button type="button" (click)="increaseColumnWidth()">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" (click)="resetColumnWidth()">
+                            {{ 'songbook.viewer.reset_column_width' | transloco }}
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</fuse-drawer>

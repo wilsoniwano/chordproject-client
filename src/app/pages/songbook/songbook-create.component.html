@@ -1,0 +1,29 @@
+<div class="flex flex-auto flex-col p-6 sm:p-10">
+    <div class="mx-auto w-full max-w-3xl">
+        <mat-card class="bg-card rounded-2xl p-6 shadow sm:p-8">
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold">{{ 'songbook_create.title' | transloco }}</h1>
+                <p class="text-secondary mt-1">{{ 'songbook_create.description' | transloco }}</p>
+            </div>
+
+            <form class="grid gap-4" [formGroup]="form" (ngSubmit)="save()">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'songbook_create.name' | transloco }}</mat-label>
+                    <input matInput formControlName="name" maxlength="80" />
+                    @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+                        <mat-error>{{ 'songbook_create.name_required' | transloco }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <div class="mt-2 flex flex-wrap gap-3">
+                    <button mat-flat-button color="primary" type="submit" [disabled]="saving">
+                        {{ 'songbook_create.save' | transloco }}
+                    </button>
+                    <a mat-stroked-button [routerLink]="['/home']">
+                        {{ 'common.cancel' | transloco }}
+                    </a>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>

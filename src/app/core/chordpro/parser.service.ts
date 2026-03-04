@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+    ChordProFormatter,
     ChordProParser,
     HtmlFormatter,
     MusicNote,
@@ -36,6 +37,11 @@ export class ParserService {
         formatter.settings.showChords = showChords;
         formatter.settings.showTabs = showTabs;
         return formatter.format(song).join('');
+    }
+
+    formatToChordPro(song: Song): string {
+        const formatter = new ChordProFormatter();
+        return formatter.format(song).join('\n');
     }
 
     transposeSong(song: Song, newKey: string): Song {

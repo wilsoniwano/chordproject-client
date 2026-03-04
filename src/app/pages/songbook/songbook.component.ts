@@ -1,25 +1,48 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 import { ChpSongItemComponent } from 'app/components/song-item/song-item.component';
 import { ChpSplitLayoutComponent } from 'app/components/split-layout/split-layout.component';
 import { ChpViewerComponent } from 'app/components/viewer/viewer/viewer.component';
+import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
 import { PartialSong } from 'app/models/partialsong';
 import { Songbook } from 'app/models/songbook';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, Subject, firstValueFrom, of, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
     selector: 'chp-songbook',
     standalone: true,
     templateUrl: './songbook.component.html',
-    imports: [CommonModule, DragDropModule, ChpViewerComponent, ChpSongItemComponent, ChpSplitLayoutComponent],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        DragDropModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        TranslocoModule,
+        RouterLink,
+        ChpViewerComponent,
+        ChpSongItemComponent,
+        ChpSplitLayoutComponent,
+    ],
 })
 export class SongbookComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     selectedSong: PartialSong | null = null;
+    addSongControl: UntypedFormControl = new UntypedFormControl('');
+    songSearchResults: PartialSong[] = [];
+    addingSong = false;
 
     @ViewChild(ChpSplitLayoutComponent) splitLayout: ChpSplitLayoutComponent;
 
@@ -30,12 +53,14 @@ export class SongbookComponent implements OnInit, OnDestroy {
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
+        private _songService: SongService,
         private _songbookService: SongbookService
     ) {}
 
     ngOnInit(): void {
         this.loadSongbook();
         this.loadSongs();
+        this.initSongSearch();
     }
 
     private loadSongbook(): void {
@@ -57,7 +82,56 @@ export class SongbookComponent implements OnInit, OnDestroy {
 
         this.songs$.pipe(takeUntil(this._unsubscribeAll)).subscribe((songs) => {
             this.songsList = [...songs];
+            this.filterOutAlreadyAddedSongs();
         });
+    }
+
+    private initSongSearch(): void {
+        this.addSongControl.valueChanges
+            .pipe(
+                debounceTime(250),
+                distinctUntilChanged(),
+                switchMap((value) => {
+                    const searchTerm = (value || '').trim();
+                    if (searchTerm.length < 2) {
+                        return of([]);
+                    }
+
+                    return this._songService.searchByTitle(searchTerm, 8);
+                }),
+                takeUntil(this._unsubscribeAll)
+            )
+            .subscribe((songs) => {
+                this.songSearchResults = songs;
+                this.filterOutAlreadyAddedSongs();
+            });
+    }
+
+    async addSong(song: PartialSong): Promise<void> {
+        if (this.addingSong) {
+            return;
+        }
+
+        const songbookId = this._route.snapshot.paramMap.get('uid');
+        if (!songbookId) {
+            return;
+        }
+
+        this.addingSong = true;
+        const relationId = await this._songbookService.addSong(songbookId, song.uid, this.songsList.length);
+
+        if (relationId) {
+            await this.refreshSongs(songbookId);
+            this.addSongControl.setValue('');
+            this.songSearchResults = [];
+        }
+
+        this.addingSong = false;
+    }
+
+    private filterOutAlreadyAddedSongs(): void {
+        const currentSongIds = new Set(this.songsList.map((song) => song.uid));
+        this.songSearchResults = this.songSearchResults.filter((song) => !currentSongIds.has(song.uid));
     }
 
     ngOnDestroy(): void {
@@ -84,6 +158,18 @@ export class SongbookComponent implements OnInit, OnDestroy {
         this._songbookService.updateSongOrder(songbookId, songOrders).pipe(takeUntil(this._unsubscribeAll)).subscribe();
     }
 
+    async onSongKeyChange(song: PartialSong, key: string): Promise<void> {
+        const songbookId = this._route.snapshot.paramMap.get('uid');
+        if (!songbookId) {
+            return;
+        }
+
+        const success = await this._songbookService.updateSongCustomKey(songbookId, song.uid, key);
+        if (success) {
+            await this.refreshSongs(songbookId, song.uid);
+        }
+    }
+
     selectSong(song: PartialSong): void {
         this.selectedSong = song;
 
@@ -99,5 +185,16 @@ export class SongbookComponent implements OnInit, OnDestroy {
 
     trackByFn(index: number, item: any): any {
         return item.uid || index;
+    }
+
+    private async refreshSongs(songbookId: string, selectedSongId?: string): Promise<void> {
+        const currentSelectedId = selectedSongId || this.selectedSong?.uid;
+        const songs = await firstValueFrom(this._songbookService.getContent(songbookId));
+        this.songsList = [...songs];
+        this.filterOutAlreadyAddedSongs();
+
+        if (currentSelectedId) {
+            this.selectedSong = this.songsList.find((song) => song.uid === currentSelectedId) || null;
+        }
     }
 }

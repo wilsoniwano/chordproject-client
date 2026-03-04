@@ -39,7 +39,8 @@
         "home": "Home",
         "library": "Library",
         "create": "Create",
-        "songbooks": "Songbooks"
+        "songbooks": "Songbooks",
+        "create_songbook": "New songbook"
     },
     "search": {
         "placeholder": "Search by title, lyrics or songbook",
@@ -81,6 +82,43 @@
         "yes": "Yes",
         "no": "No",
         "not_informed": "Not informed"
+    },
+    "songbook_create": {
+        "title": "New songbook",
+        "description": "Create a songbook to organize your songs.",
+        "name": "Songbook name",
+        "name_required": "Please provide the songbook name",
+        "parent": "Parent songbook ID (optional)",
+        "parent_hint": "Leave blank to create at root level.",
+        "reorderable": "Allow drag-and-drop reordering",
+        "save": "Save songbook"
+    },
+    "songbook_list": {
+        "title": "Songbooks",
+        "description": "Access and manage your songbooks.",
+        "empty": "No songbooks yet."
+    },
+    "songbook": {
+        "manage": {
+            "add_song": "Add song",
+            "search_hint": "Type at least 2 letters to search by title."
+        },
+        "viewer": {
+            "open": "Presentation mode",
+            "back": "Back to songbook",
+            "reset_key": "Reset key",
+            "reset_font": "Reset font",
+            "reset_column_width": "Reset width",
+            "options": "Options",
+            "transpose": "Transpose",
+            "font_size": "Font size",
+            "column_width": "Column width",
+            "columns_per_page": "Columns per page",
+            "view_mode": "View mode",
+            "normal_mode": "Normal",
+            "paged_columns": "Paged columns",
+            "vertical_pages": "Vertical pages"
+        }
     },
     "toolbar": {
         "settings": "Settings",

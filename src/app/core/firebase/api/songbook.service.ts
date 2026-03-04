@@ -7,6 +7,7 @@ import {
 } from 'application/songbook/songbook-search.usecase';
 import { mapSongsWithRelations, sortSongsByRelationOrder } from 'application/songbook/songbook-content.usecase';
 import { filterSongbooksByName, filterSongsByLyrics, filterSongsByTitle, limitItems, sortSongbooksByName } from 'domain/search/search-index';
+import { ParserService } from 'app/core/chordpro/parser.service';
 import { PartialSong } from 'app/models/partialsong';
 import { Relation } from 'app/models/relation';
 import { Songbook } from 'app/models/songbook';
@@ -39,7 +40,8 @@ export class SongbookService {
     constructor(
         private _firebase: FirebaseService,
         private _snackBar: MatSnackBar,
-        private _songService: SongService
+        private _songService: SongService,
+        private _parserService: ParserService
     ) {
         this._firestore = this._firebase.firestore;
         this._auth = this._firebase.auth;
@@ -120,6 +122,9 @@ export class SongbookService {
                     if (data.order !== undefined) {
                         relation.order = data.order;
                     }
+                    if (data.customKey !== undefined) {
+                        relation.customKey = data.customKey;
+                    }
 
                     return relation;
                 });
@@ -127,7 +132,11 @@ export class SongbookService {
                 const songIds = relations.map((relation) => relation.songId);
 
                 return this._songService.getAll(songIds).pipe(
-                    map((songs) => sortSongsByRelationOrder(mapSongsWithRelations(songs, relations)))
+                    map((songs) => {
+                        const songsWithRelations = mapSongsWithRelations(songs, relations);
+                        const adjustedSongs = songsWithRelations.map((song) => this.applySongbookCustomKey(song));
+                        return sortSongsByRelationOrder(adjustedSongs);
+                    })
                 );
             }),
             catchError((error) => {
@@ -193,9 +202,17 @@ export class SongbookService {
                 relation.author_uid = this._auth.currentUser.uid;
             }
 
+            const relationData = {
+                songbookId: relation.songbookId,
+                songId: relation.songId,
+                author_uid: relation.author_uid,
+                order: relation.order,
+                customKey: relation.customKey ?? null,
+            };
+
             await setDoc(
                 doc(this._firestore, 'songbook_songs', relationId),
-                relation
+                relationData
             );
             this.showSnackbar('Song added to songbook');
             return relationId;
@@ -235,6 +252,37 @@ export class SongbookService {
             );
 
             this.showSnackbar('Song removed from songbook');
+            return true;
+        } catch (error) {
+            this.handleError(error);
+            return false;
+        }
+    }
+
+    async updateSongCustomKey(songbookId: string, songId: string, customKey: string | null): Promise<boolean> {
+        if (!this.verifyAuthentication()) {
+            return false;
+        }
+
+        try {
+            const q = query(
+                collection(this._firestore, 'songbook_songs'),
+                where('songbookId', '==', songbookId),
+                where('songId', '==', songId)
+            );
+
+            const snapshot = await getDocs(q);
+            if (snapshot.empty) {
+                this.showSnackbar('Song not found in songbook');
+                return false;
+            }
+
+            await setDoc(
+                doc(this._firestore, 'songbook_songs', snapshot.docs[0].id),
+                { customKey: customKey ?? null },
+                { merge: true }
+            );
+
             return true;
         } catch (error) {
             this.handleError(error);
@@ -345,6 +393,32 @@ export class SongbookService {
             }),
             map((results) => finalizeSongbookSearchGroups(results, limitSongbooks))
         );
+    }
+
+    private applySongbookCustomKey(song: PartialSong): PartialSong {
+        const customKey = song.customKey;
+        const originalKey = song.songKey;
+        const canTranspose = !!customKey && !!song.content && !!originalKey && customKey !== originalKey;
+
+        if (!canTranspose) {
+            return song;
+        }
+
+        try {
+            const parsed = this._parserService.parseSong(song.content!);
+            const transposed = this._parserService.transposeSong(parsed, customKey!);
+            const content = this._parserService.formatToChordPro(transposed);
+            const uniqueChords = transposed.getUniqueChords().map((chord) => chord.toString());
+
+            return {
+                ...song,
+                content,
+                songKey: customKey!,
+                uniqueChords,
+            };
+        } catch {
+            return song;
+        }
     }
 
     private verifyAuthentication(): boolean {
