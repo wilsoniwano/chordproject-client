@@ -89,7 +89,7 @@ test('library CRUD baseline (read/update/delete on seeded song)', async ({ page 
 
     await page.goto('/songs/create/song-e2e-1');
     await page.getByLabel('Delete song').click();
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: 'Delete', exact: true }).click();
     await page.goto('/library');
     await expect(page.getByText('E2E Song One')).not.toBeVisible();
 });
