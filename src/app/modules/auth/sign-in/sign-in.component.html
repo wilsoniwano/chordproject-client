@@ -2,11 +2,11 @@
     <div class="flex w-full max-w-400 overflow-hidden sm:rounded-md sm:shadow">
         <div class="bg-card relative flex flex-auto flex-col p-6 sm:p-10">
             <div class="mt-8 w-full">
-                <div class="text-3xl font-semibold leading-tight">Sign in</div>
+                <div class="text-3xl font-semibold leading-tight">Entrar</div>
             </div>
 
             <div class="text-secondary mt-2">
-                Enter your email and password to sign in
+                Informe seu e-mail e senha para entrar
             </div>
 
             @if (showAlert) {
@@ -25,7 +25,7 @@
             <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Email</mat-label>
+                    <mat-label>E-mail</mat-label>
                     <input
                         matInput
                         [formControl]="signInForm.controls.email"
@@ -33,25 +33,23 @@
                         autocomplete="email"
                     />
                     @if (signInForm.get('email').hasError('required')) {
-                        <mat-error>Email is required</mat-error>
+                        <mat-error>E-mail é obrigatório</mat-error>
                     }
                     @if (signInForm.get('email').hasError('email')) {
-                        <mat-error
-                            >Please enter a valid email address</mat-error
-                        >
+                        <mat-error>Informe um e-mail válido</mat-error>
                     }
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Senha</mat-label>
                     <input
                         matInput
                         [formControl]="signInForm.controls.password"
                         [type]="'password'"
                         autocomplete="current-password"
                     />
-                    <mat-error> Password is required </mat-error>
+                    <mat-error>Senha é obrigatória</mat-error>
                 </mat-form-field>
 
                 <!-- Remember me -->
@@ -59,7 +57,7 @@
                     class="mat-mdc-form-field-no-label ml-1 mt-1"
                     [formControl]="signInForm.controls.rememberMe"
                 >
-                    Remember me
+                    Lembrar de mim
                 </mat-checkbox>
 
                 <!-- Submit button -->
@@ -71,7 +69,7 @@
                     (click)="signIn()"
                 >
                     @if (!signInForm.disabled) {
-                        <span> Sign in </span>
+                        <span>Entrar</span>
                     }
                     @if (signInForm.disabled) {
                         <mat-spinner [diameter]="24"></mat-spinner>
@@ -80,9 +78,9 @@
 
                 <!-- Sign up link -->
                 <div class="text-secondary mt-8 text-md font-medium">
-                    <span>Don't have an account?</span>
+                    <span>Ainda não tem conta?</span>
                     <a class="ml-1 text-primary-500" [routerLink]="['/sign-up']"
-                        >Sign up</a
+                        >Criar conta</a
                     >
                 </div>
             </form>

@@ -28,18 +28,18 @@ test('auth guard redirects unauthenticated /sign-out to sign-in', async ({ page 
 test('invalid login shows error message', async ({ page }) => {
     await enableMockMode(page);
     await page.goto('/sign-in');
-    await page.getByLabel('Email').fill('wrong@local.test');
-    await page.getByLabel('Password').fill('bad-password');
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.getByLabel(/email|e-mail/i).fill('wrong@local.test');
+    await page.getByLabel(/password|senha/i).fill('bad-password');
+    await page.getByRole('button', { name: /sign in|entrar/i }).click();
     await expect(page.getByText('Invalid credentials', { exact: true })).toBeVisible();
 });
 
 test('valid login and logout flow', async ({ page }) => {
     await enableMockMode(page);
     await page.goto('/sign-in');
-    await page.getByLabel('Email').fill('e2e@local.test');
-    await page.getByLabel('Password').fill('E2Epass123!');
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.getByLabel(/email|e-mail/i).fill('e2e@local.test');
+    await page.getByLabel(/password|senha/i).fill('E2Epass123!');
+    await page.getByRole('button', { name: /sign in|entrar/i }).click();
     await expect(page).toHaveURL(/\/home/);
 
     await page.goto('/sign-out');
@@ -52,7 +52,6 @@ test('sign-up flow succeeds in mock mode', async ({ page }) => {
     await page.getByLabel(/name|nome/i).fill('E2E User');
     await page.getByLabel('Email').fill('new@local.test');
     await page.getByLabel(/password|senha/i).fill('E2Epass123!');
-    await page.getByLabel(/company|empresa/i).fill('E2E Co');
     const agreeCheckbox = page.getByRole('checkbox', { name: /i agree to the|concordo com os/i });
     await agreeCheckbox.check();
     await expect(agreeCheckbox).toBeChecked();
