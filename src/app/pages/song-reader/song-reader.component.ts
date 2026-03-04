@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -18,6 +18,8 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
     imports: [MatCardModule, MatSidenavModule, RouterOutlet, JoinPipe, ChpViewerToolbarComponent, ChpViewerComponent],
 })
 export class SongReaderComponent implements OnInit, OnDestroy {
+    @ViewChild('viewer') viewer?: ChpViewerComponent;
+
     song: Song = null;
     drawerMode: 'side' | 'over';
     deviceType: 'phone' | 'tablet' | 'desktop';
@@ -72,6 +74,14 @@ export class SongReaderComponent implements OnInit, OnDestroy {
         if (this.song?.uid) {
             this._router.navigate(['/songs/create', this.song.uid]);
         }
+    }
+
+    onTranspose(value: string): void {
+        this.viewer?.transpose(value);
+    }
+
+    onZoom(value: number): void {
+        this.viewer?.zoom(value);
     }
 
     toggleFullScreen(): void {}

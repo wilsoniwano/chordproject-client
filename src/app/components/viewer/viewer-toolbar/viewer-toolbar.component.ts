@@ -36,4 +36,8 @@ export class ChpViewerToolbarComponent {
     @Output() zoomEvent = new EventEmitter<number>();
     @Output() fullScreenEvent = new EventEmitter<void>();
     @Output() settingsEvent = new EventEmitter<void>();
+
+    onZoomEvent(size: number): void {
+        this.zoomEvent.emit(size);
+    }
 }

@@ -13,6 +13,9 @@ import { Song } from 'chordproject-parser';
     imports: [SafeHtmlPipe],
 })
 export class ChpViewerComponent implements AfterViewInit {
+    private static readonly ZOOM_STORAGE_KEY = 'chp.viewer.fontSize';
+    private static readonly MIN_ZOOM = 8;
+    private static readonly MAX_ZOOM = 24;
     @ViewChild('viewerContent') contentElementRef: ElementRef;
 
     @Input() isPreview = false;
@@ -41,7 +44,7 @@ export class ChpViewerComponent implements AfterViewInit {
         chords: 20,
     };
     songHtml: string;
-    fontSize: number;
+    fontSize = 16;
     isLoading = true;
     contentElement: HTMLElement;
     viewSettings: ViewSettings;
@@ -50,11 +53,13 @@ export class ChpViewerComponent implements AfterViewInit {
         private parserService: ParserService,
         private viewSettingsService: ViewSettingsService
     ) {
+        this.fontSize = this.loadSavedZoom();
         this.viewSettingsService.getViewSettings().subscribe((settings) => this.setViewSettings(settings));
     }
 
     ngAfterViewInit(): void {
         this.contentElement = this.contentElementRef.nativeElement;
+        this.applyZoomToSongContent();
     }
 
     private parseSong() {
@@ -69,6 +74,7 @@ export class ChpViewerComponent implements AfterViewInit {
     private setSongHtml(value: string): void {
         this.songHtml = value;
         this.isLoading = false;
+        setTimeout(() => this.applyZoomToSongContent());
     }
 
     private formatSong() {
@@ -86,7 +92,12 @@ export class ChpViewerComponent implements AfterViewInit {
     }
 
     zoom(value: number): void {
-        this.fontSize = value;
+        if (!value) {
+            return;
+        }
+        this.fontSize = this.clampZoom(value);
+        this.saveZoom(this.fontSize);
+        this.applyZoomToSongContent();
     }
 
     transpose(letter: string): void {
@@ -107,5 +118,48 @@ export class ChpViewerComponent implements AfterViewInit {
         if (oldSettings.showChords != newSettings.showChords || oldSettings.showTabs != newSettings.showTabs) {
             this.formatSong();
         }
+    }
+
+    private applyZoomToSongContent(): void {
+        if (!this.contentElement) {
+            return;
+        }
+
+        const songContent = this.contentElement.querySelector('.song-content') as HTMLElement | null;
+        if (!songContent) {
+            return;
+        }
+
+        songContent.style.fontSize = `${this.fontSize}px`;
+    }
+
+    private loadSavedZoom(): number {
+        if (typeof window === 'undefined') {
+            return 16;
+        }
+
+        const raw = window.localStorage.getItem(ChpViewerComponent.ZOOM_STORAGE_KEY);
+        if (!raw) {
+            return 16;
+        }
+
+        const parsed = Number(raw);
+        if (Number.isNaN(parsed)) {
+            return 16;
+        }
+
+        return this.clampZoom(parsed);
+    }
+
+    private saveZoom(value: number): void {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        window.localStorage.setItem(ChpViewerComponent.ZOOM_STORAGE_KEY, String(value));
+    }
+
+    private clampZoom(value: number): number {
+        return Math.min(ChpViewerComponent.MAX_ZOOM, Math.max(ChpViewerComponent.MIN_ZOOM, value));
     }
 }

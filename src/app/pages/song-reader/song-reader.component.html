@@ -31,8 +31,8 @@
                             [song]="song"
                             [deviceType]="deviceType"
                             (editSongEvent)="editSong()"
-                            (transposeEvent)="viewer.transpose($event)"
-                            (zoomEvent)="viewer.zoom($event)"
+                            (transposeEvent)="onTranspose($event)"
+                            (zoomEvent)="onZoom($event)"
                             (fullScreenEvent)="toggleFullScreen()"
                             (settingsEvent)="toggleSettings()"
                         >
