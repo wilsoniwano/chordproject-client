@@ -23,7 +23,6 @@ export class NavigationService {
     private get labels(): NavigationLabels {
         return {
             library: this._translocoService.translate('nav.library'),
-            create: this._translocoService.translate('nav.create'),
             songbooks: this._translocoService.translate('nav.songbooks'),
         };
     }

@@ -2,7 +2,6 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export interface NavigationLabels {
     library: string;
-    create: string;
     songbooks: string;
 }
 
@@ -15,14 +14,6 @@ export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationIte
             type: 'basic',
             icon: 'heroicons_outline:musical-note',
             link: '/library',
-        },
-        {
-            id: 'create',
-            title: labels.create,
-            tooltip: labels.create,
-            type: 'basic',
-            icon: 'heroicons_outline:code-bracket',
-            link: '/songs/create',
         },
     ];
 }

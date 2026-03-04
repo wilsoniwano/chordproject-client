@@ -5,7 +5,7 @@
     <!-- Navigation -->
     <fuse-vertical-navigation
         class="bg-card dark:bg-gray-900 print:hidden"
-        [appearance]="'thin'"
+        [appearance]="'default'"
         [mode]="isScreenSmall ? 'over' : 'side'"
         [name]="'mainNavigation'"
         [navigation]="navigation"
@@ -13,19 +13,9 @@
     >
         <!-- Navigation header hook -->
         <ng-container fuseVerticalNavigationContentHeader>
-            <!-- Logo -->
-            <div class="flex h-20 items-center justify-center">
-                <img class="w-8" src="chp/logo/logo.svg" alt="Logo image" />
-            </div>
+            <div class="h-6"></div>
         </ng-container>
 
-        <!-- Navigation footer hook -->
-        <ng-container fuseVerticalNavigationFooter>
-            <!-- User -->
-            <div class="flex w-full items-center border-t px-6 py-8">
-                <user></user>
-            </div>
-        </ng-container>
     </fuse-vertical-navigation>
 }
 
@@ -55,6 +45,7 @@
             <div class="ml-auto flex items-center space-x-0.5 pl-2 sm:space-x-2">
                 <search [appearance]="'bar'"></search>
                 <theme-selector></theme-selector>
+                <user></user>
             </div>
         </div>
     }

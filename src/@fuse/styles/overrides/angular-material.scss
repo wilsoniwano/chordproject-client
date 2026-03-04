@@ -1012,6 +1012,9 @@
 /* -------------------------------------------------------------------------- */
 .mat-mdc-menu-panel {
     min-width: 144px !important;
+    background-color: rgba(var(--fuse-bg-card-rgb), 1) !important;
+    color: var(--fuse-text-default) !important;
+    border: 1px solid rgba(var(--fuse-border-rgb), 0.4);
 
     .mat-mdc-menu-content {
         .mat-mdc-menu-item {
@@ -1030,6 +1033,7 @@
         /* Divider within mat-menu */
         mat-divider {
             margin: 8px 0;
+            border-top-color: rgba(var(--fuse-border-rgb), 0.5) !important;
         }
     }
 }
