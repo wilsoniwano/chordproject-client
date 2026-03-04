@@ -20,3 +20,7 @@ as-split-area {
         border-radius: 20px;
     }
 }
+
+.page-title {
+    @apply text-2xl font-semibold leading-tight tracking-normal;
+}
