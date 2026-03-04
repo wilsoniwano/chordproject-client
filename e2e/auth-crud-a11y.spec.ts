@@ -91,7 +91,16 @@ test('library CRUD baseline (read/update/delete on seeded song)', async ({ page 
     await page.goto('/songs/create/song-e2e-1');
     await page.getByLabel('Delete song').click();
     await page.getByRole('button', { name: 'Delete', exact: true }).click();
-    await page.goto('/library');
+    await expect(page).toHaveURL(/\/library/);
+    await expect
+        .poll(async () =>
+            page.evaluate(() => {
+                const raw = localStorage.getItem('e2e.mockSongs');
+                const songs = raw ? JSON.parse(raw) : [];
+                return songs.length;
+            })
+        )
+        .toBe(0);
     await expect(page.locator('chp-song-item')).toHaveCount(0);
 });
 
