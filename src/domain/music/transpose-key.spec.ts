@@ -1,0 +1,20 @@
+import { describe, expect, it } from 'vitest';
+import { normalizeMusicalKey, transposeMusicalKey } from './transpose-key';
+
+describe('transpose-key domain', () => {
+    it('normalizes valid keys and keeps minor flag', () => {
+        expect(normalizeMusicalKey('C#m')).toBe('C#m');
+        expect(normalizeMusicalKey('Eb')).toBe('Eb');
+    });
+
+    it('transposes upward and downward', () => {
+        expect(transposeMusicalKey('C', 1)).toBe('C#');
+        expect(transposeMusicalKey('C', -1)).toBe('B');
+        expect(transposeMusicalKey('Am', 2)).toBe('Bm');
+    });
+
+    it('returns original when key is unknown', () => {
+        expect(transposeMusicalKey('H', 1)).toBe('H');
+    });
+});
+

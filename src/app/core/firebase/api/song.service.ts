@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { normalizeText } from 'domain/text/normalize-text';
 import { UserService } from 'app/core/user/user.service';
 import { PartialSong } from 'app/models/partialsong';
 import { Song } from 'app/models/song';
@@ -89,16 +90,11 @@ export class SongService {
         const q = query(songsRef, orderBy('title'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                const normalizar = (str: string) =>
-                    (str || '')
-                        .toLocaleLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
                 let songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
                 if (searchTerm) {
-                    const qNorm = normalizar(searchTerm);
+                    const qNorm = normalizeText(searchTerm);
                     songs = songs.filter(
-                        (song) => song.title && normalizar(song.title).includes(qNorm)
+                        (song) => song.title && normalizeText(song.title).includes(qNorm)
                     );
                 }
                 // Ordenar ignorando acentos
@@ -133,15 +129,10 @@ export class SongService {
         const q = query(songsRef, orderBy('title'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                const normalizar = (str: string) =>
-                    (str || '')
-                        .toLocaleLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
                 let songs = snapshot.docs.map((doc) => doc.data() as PartialSong);
                 if (searchTerm) {
-                    const qNorm = normalizar(searchTerm);
-                    songs = songs.filter((song) => song.lyrics && normalizar(song.lyrics).includes(qNorm));
+                    const qNorm = normalizeText(searchTerm);
+                    songs = songs.filter((song) => song.lyrics && normalizeText(song.lyrics).includes(qNorm));
                 }
                 // Ordenar ignorando acentos
                 songs = songs.sort((a, b) =>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { normalizeText } from 'domain/text/normalize-text';
 import { PartialSong } from 'app/models/partialsong';
 import { Relation } from 'app/models/relation';
 import { Songbook } from 'app/models/songbook';
@@ -317,11 +318,6 @@ export class SongbookService {
         const q = query(songbooksRef, orderBy('name'));
         return from(getDocs(q)).pipe(
             map((snapshot) => {
-                const normalizar = (str: string) =>
-                    (str || '')
-                        .toLocaleLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
                 let songbooks = snapshot.docs.map((doc) => {
                     const data = doc.data() || {};
                     return {
@@ -330,9 +326,9 @@ export class SongbookService {
                     } as Songbook;
                 });
                 if (searchTerm) {
-                    const qNorm = normalizar(searchTerm);
+                    const qNorm = normalizeText(searchTerm);
                     songbooks = songbooks.filter((sb) =>
-                        normalizar(sb.name).includes(qNorm)
+                        normalizeText(sb.name).includes(qNorm)
                     );
                 }
                 songbooks = songbooks.sort((a, b) =>
@@ -357,12 +353,7 @@ export class SongbookService {
         return this.getAll().pipe(
             switchMap((songbooks) => {
                 if (!songbooks.length) return of([]);
-                const normalizar = (str: string) =>
-                    (str || '')
-                        .toLocaleLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
-                const qNorm = normalizar(searchTerm);
+                const qNorm = normalizeText(searchTerm);
 
                 // Para cada cancionero, obtener sus canciones y filtrar por el término
                 return combineLatest(
@@ -371,10 +362,10 @@ export class SongbookService {
                             map((songs) => {
                                 const filteredSongs = songs.filter(
                                     (song) =>
-                                        normalizar(song.title).includes(
+                                        normalizeText(song.title).includes(
                                             qNorm
                                         ) ||
-                                        normalizar(song.lyrics).includes(qNorm)
+                                        normalizeText(song.lyrics).includes(qNorm)
                                 );
                                 return {
                                     songbook,

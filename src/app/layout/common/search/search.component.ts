@@ -27,9 +27,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@jsverse/transloco';
 import { fuseAnimations } from '@fuse/animations/public-api';
+import { buildSearchResultSets, shouldRunSearch } from 'application/search/search.usecase';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
 import { SearchResultSets } from 'app/models/searchResultSets';
+import { isValidSearchResultSets } from 'infra/contracts/search-result-sets.contract';
 import { Subject, debounceTime, filter, forkJoin, map, takeUntil } from 'rxjs';
 import { SearchResultsComponent } from './search-results.component';
 
@@ -126,14 +128,14 @@ export class SearchComponent implements OnInit, OnDestroy {
                     // Set the resultSets to null if there is no value or
                     // the length of the value is smaller than the minLength
                     // so the autocomplete panel can be closed
-                    if (!value || value.length < this.minLength) {
+                    if (!shouldRunSearch(value, this.minLength)) {
                         this.resultSets = null;
                     }
                     return value;
                 }),
                 // Filter out undefined/null/false statements and also
                 // filter out the values that are smaller than minLength
-                filter((value) => value && value.length >= this.minLength)
+                filter((value) => shouldRunSearch(value, this.minLength))
             )
             .subscribe((value) => {
                 const searchTerm = value;
@@ -143,14 +145,17 @@ export class SearchComponent implements OnInit, OnDestroy {
                     songbooks: this._songbookService.searchSongbooks(searchTerm, 3),
                     songsInSongbooks: this._songbookService.searchSongsInSongbooks(searchTerm, 3, 3),
                 }).subscribe((resultSets) => {
-                    // Filtrar duplicados: quitar de songsContent los que ya están en songs
-                    const songUids = new Set(resultSets.songs.map((song) => song.uid));
-                    resultSets.songsContent = resultSets.songsContent.filter((song) => !songUids.has(song.uid));
+                    const normalizedResultSets = buildSearchResultSets(resultSets);
+                    if (!isValidSearchResultSets(normalizedResultSets)) {
+                        this.resultSets = null;
+                        return;
+                    }
+
                     // Store the result sets
-                    this.resultSets = resultSets;
+                    this.resultSets = normalizedResultSets;
 
                     // Execute the event
-                    this.search.next(resultSets);
+                    this.search.next(this.resultSets);
                 });
             });
     }
