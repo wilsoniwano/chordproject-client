@@ -30,6 +30,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
     scheme: 'dark' | 'light';
     theme: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    private readonly _schemeStorageKey = 'chp.scheme';
+    private readonly _themeStorageKey = 'chp.theme';
 
     /**
      * Constructor
@@ -52,6 +54,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        this._restorePersistedThemeConfig();
+
         // Set the theme and scheme based on the configuration
         combineLatest([
             this._fuseConfigService.config$,
@@ -64,8 +68,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
                 takeUntil(this._unsubscribeAll),
                 map(([config, mql]) => {
                     const options = {
+                        configuredScheme: config.scheme,
                         scheme: config.scheme,
                         theme: config.theme,
+                        config,
                     };
 
                     // If the scheme is set to 'auto'...
@@ -82,9 +88,12 @@ export class LayoutComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe((options) => {
+                this.config = options.config;
+
                 // Store the options
                 this.scheme = options.scheme;
                 this.theme = options.theme;
+                this._persistThemeConfig(configurePersistedScheme(options.configuredScheme), options.theme);
 
                 // Update the scheme and theme
                 this._updateScheme();
@@ -172,4 +181,50 @@ export class LayoutComponent implements OnInit, OnDestroy {
         // Add class name for the currently selected theme
         this._document.body.classList.add(this.theme);
     }
+
+    private _restorePersistedThemeConfig(): void {
+        const storage = this._document?.defaultView?.localStorage;
+        if (!storage) {
+            return;
+        }
+
+        const scheme = storage.getItem(this._schemeStorageKey);
+        const theme = storage.getItem(this._themeStorageKey);
+        const schemeValue = configurePersistedScheme(scheme);
+
+        const configPatch: Partial<FuseConfig> = {};
+        if (schemeValue) {
+            configPatch.scheme = schemeValue;
+        }
+        if (theme) {
+            configPatch.theme = theme;
+        }
+
+        if (Object.keys(configPatch).length > 0) {
+            this._fuseConfigService.config = configPatch;
+        }
+    }
+
+    private _persistThemeConfig(scheme: 'auto' | 'dark' | 'light' | null, theme: string | null): void {
+        const storage = this._document?.defaultView?.localStorage;
+        if (!storage) {
+            return;
+        }
+
+        if (scheme) {
+            storage.setItem(this._schemeStorageKey, scheme);
+        }
+
+        if (theme) {
+            storage.setItem(this._themeStorageKey, theme);
+        }
+    }
+}
+
+function configurePersistedScheme(value: string | null): 'auto' | 'dark' | 'light' | null {
+    if (value === 'auto' || value === 'dark' || value === 'light') {
+        return value;
+    }
+
+    return null;
 }

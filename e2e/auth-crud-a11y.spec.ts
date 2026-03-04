@@ -40,7 +40,7 @@ test('valid login and logout flow', async ({ page }) => {
     await page.getByLabel(/email|e-mail/i).fill('e2e@local.test');
     await page.getByLabel(/password|senha/i).fill('E2Epass123!');
     await page.getByRole('button', { name: /sign in|entrar/i }).click();
-    await expect(page).toHaveURL(/\/home/);
+    await expect(page).toHaveURL(/\/songbook/);
 
     await page.goto('/sign-out');
     await expect(page).toHaveURL(/\/sign-in/);
@@ -64,9 +64,11 @@ test('sign-up flow succeeds in mock mode', async ({ page }) => {
 test('forgot-password flow shows success alert', async ({ page }) => {
     await enableMockMode(page);
     await page.goto('/forgot-password');
-    await page.getByLabel('Email').fill('e2e@local.test');
-    await page.getByRole('button', { name: /send reset link/i }).click();
-    await expect(page.getByText('Please check your email to reset your password.')).toBeVisible();
+    await page.getByLabel(/email|e-mail/i).fill('e2e@local.test');
+    await page.getByRole('button', { name: /send reset link|enviar link de redefinição/i }).click();
+    await expect(
+        page.getByText(/Se o e-mail existir, você receberá um link para redefinir sua senha\./i)
+    ).toBeVisible();
 });
 
 test('library CRUD baseline (read/update/delete on seeded song)', async ({ page }) => {
@@ -90,10 +92,17 @@ test('library CRUD baseline (read/update/delete on seeded song)', async ({ page 
     await page.getByLabel('Delete song').click();
     await page.getByRole('button', { name: 'Delete', exact: true }).click();
     await page.goto('/library');
-    await expect(page.getByText('E2E Song One')).not.toBeVisible();
+    await expect(page.locator('chp-song-item')).toHaveCount(0);
 });
 
 test('language persistence from localStorage', async ({ page }) => {
+    await page.addInitScript(() => {
+        localStorage.setItem('e2e.mockAuth', '1');
+        localStorage.setItem(
+            'e2e.mockAuth.user',
+            JSON.stringify({ uid: 'e2e-user-1', email: 'e2e@local.test' })
+        );
+    });
     await page.addInitScript(() => {
         if (!localStorage.getItem('chp.lang')) {
             localStorage.setItem('chp.lang', 'en');
@@ -109,15 +118,26 @@ test('language persistence from localStorage', async ({ page }) => {
 
 test('home empty state is rendered when there are no mock songs', async ({ page }) => {
     await page.addInitScript(() => {
+        localStorage.setItem('e2e.mockAuth', '1');
+        localStorage.setItem(
+            'e2e.mockAuth.user',
+            JSON.stringify({ uid: 'e2e-user-1', email: 'e2e@local.test' })
+        );
         localStorage.setItem('e2e.mockData', '1');
         localStorage.setItem('e2e.mockSongs', JSON.stringify([]));
     });
-    await page.goto('/home');
+    await page.goto('/library');
     await expect(page.getByText('Algo deu errado ao carregar as músicas')).toBeVisible();
 });
 
 test('keyboard accessibility for search and nav toggle', async ({ page }) => {
     await enableMockMode(page);
+    await page.addInitScript(() => {
+        localStorage.setItem(
+            'e2e.mockAuth.user',
+            JSON.stringify({ uid: 'e2e-user-1', email: 'e2e@local.test' })
+        );
+    });
     await page.goto('/');
 
     const navToggle = page.getByLabel('Toggle navigation');
