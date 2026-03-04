@@ -2,7 +2,7 @@
     "hosting": [
         {
             "target": "angular",
-            "public": "dist",
+            "public": "dist/browser",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
             "rewrites": [
                 {
