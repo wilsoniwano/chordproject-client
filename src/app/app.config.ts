@@ -57,10 +57,23 @@ export const appConfig: ApplicationConfig = {
         }),
         provideAppInitializer(() => {
             const translocoService = inject(TranslocoService);
-            const defaultLang = translocoService.getDefaultLang();
-            translocoService.setActiveLang(defaultLang);
+            const availableLangs = (translocoService.getAvailableLangs() as { id: string }[]).map((lang) => lang.id);
+            const storedLang =
+                typeof window !== 'undefined' ? window.localStorage.getItem('chp.lang') : null;
+            const selectedLang =
+                storedLang && availableLangs.includes(storedLang)
+                    ? storedLang
+                    : translocoService.getDefaultLang();
 
-            return firstValueFrom(translocoService.load(defaultLang));
+            translocoService.setActiveLang(selectedLang);
+
+            if (typeof window !== 'undefined') {
+                translocoService.langChanges$.subscribe((lang) => {
+                    window.localStorage.setItem('chp.lang', lang);
+                });
+            }
+
+            return firstValueFrom(translocoService.load(selectedLang));
         }),
 
         // Firebase

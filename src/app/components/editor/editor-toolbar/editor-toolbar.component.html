@@ -1,9 +1,20 @@
 <div class="flex flex-0 items-center justify-between border-b bg-gray-50 px-4 py-3 dark:bg-transparent">
     <div class="flex items-center gap-2">
-        <button mat-icon-button [matTooltip]="'toolbar.save' | transloco" (click)="saveSongEvent.emit()">
+        <button
+            mat-icon-button
+            aria-label="Save song"
+            [matTooltip]="'toolbar.save' | transloco"
+            (click)="saveSongEvent.emit()"
+        >
             <mat-icon [svgIcon]="'heroicons_outline:document-arrow-down'"></mat-icon>
         </button>
-        <button mat-icon-button [color]="'warn'" [matTooltip]="'toolbar.delete' | transloco" (click)="removeSongEvent.emit()">
+        <button
+            mat-icon-button
+            aria-label="Delete song"
+            [color]="'warn'"
+            [matTooltip]="'toolbar.delete' | transloco"
+            (click)="removeSongEvent.emit()"
+        >
             <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
         </button>
         @if (mode === 'quick') {

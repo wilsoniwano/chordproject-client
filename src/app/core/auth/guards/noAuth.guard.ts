@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { getNoAuthGuardTarget } from 'application/auth/guard.usecase';
 import { AuthService } from 'app/core/firebase/auth/auth.service';
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +10,9 @@ export const NoAuthGuard: CanActivateFn = (): Observable<boolean | UrlTree> => {
 
     return authService.authenticated$.pipe(
         map((authenticated) => {
-            if (authenticated) {
-                return router.parseUrl('/home');
+            const target = getNoAuthGuardTarget(authenticated);
+            if (target !== true) {
+                return router.parseUrl(target);
             }
             return true;
         })

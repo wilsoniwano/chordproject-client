@@ -1,7 +1,7 @@
 @if (appearance === 'bar') {
     <!-- Bar search -->
     @if (!opened) {
-        <button mat-icon-button (click)="open($event)">
+        <button mat-icon-button aria-label="Open search" (click)="open($event)">
             <mat-icon [svgIcon]="'heroicons_outline:magnifying-glass'"></mat-icon>
         </button>
     }
@@ -22,6 +22,7 @@
             <button
                 class="absolute right-5 top-1/2 -mt-5 h-10 w-10 shrink-0 sm:right-7"
                 mat-icon-button
+                aria-label="Close search"
                 (click)="close()"
             >
                 <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>

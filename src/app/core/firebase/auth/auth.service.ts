@@ -22,11 +22,19 @@ export class AuthService {
     private _snackBar: MatSnackBar;
     private _user = new BehaviorSubject<User>(null);
     private _authenticated = new BehaviorSubject<boolean>(false);
+    private _mockMode = this._isMockModeEnabled();
 
     constructor() {
         const firebase = inject(FirebaseService);
         this._auth = firebase.auth;
         this._snackBar = inject(MatSnackBar);
+
+        if (this._mockMode) {
+            const storedUser = this._getMockUserFromStorage();
+            this._user.next(storedUser);
+            this._authenticated.next(!!storedUser);
+            return;
+        }
 
         onAuthStateChanged(this._auth, (user) => {
             if (user) {
@@ -48,6 +56,10 @@ export class AuthService {
     }
 
     signInWithEmail(email: string, password: string): Observable<User> {
+        if (this._mockMode) {
+            return from(this._signInWithEmailMock(email, password));
+        }
+
         return from(
             signInWithEmailAndPassword(this._auth, email, password)
                 .then((result) => {
@@ -61,6 +73,12 @@ export class AuthService {
     }
 
     signInWithGoogle(): Observable<User> {
+        if (this._mockMode) {
+            return from(
+                Promise.reject(new Error('Google sign in is not supported in e2e mock mode'))
+            );
+        }
+
         const provider = new GoogleAuthProvider();
         return from(
             signInWithPopup(this._auth, provider)
@@ -77,6 +95,10 @@ export class AuthService {
     }
 
     createUser(email: string, password: string): Observable<User> {
+        if (this._mockMode) {
+            return from(this._createUserMock(email, password));
+        }
+
         return from(
             createUserWithEmailAndPassword(this._auth, email, password)
                 .then((result) => {
@@ -90,6 +112,10 @@ export class AuthService {
     }
 
     forgotPassword(email: string): Observable<void> {
+        if (this._mockMode) {
+            return from(Promise.resolve());
+        }
+
         return from(
             sendPasswordResetEmail(this._auth, email)
                 .then(() => {
@@ -105,6 +131,10 @@ export class AuthService {
     }
 
     signOut(): Observable<void> {
+        if (this._mockMode) {
+            return from(this._signOutMock());
+        }
+
         return from(
             signOut(this._auth)
                 .then(() => {})
@@ -121,5 +151,72 @@ export class AuthService {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
         });
+    }
+
+    private _isMockModeEnabled(): boolean {
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
+        return window.localStorage.getItem('e2e.mockAuth') === '1';
+    }
+
+    private _getMockUserFromStorage(): User | null {
+        if (typeof window === 'undefined') {
+            return null;
+        }
+
+        const raw = window.localStorage.getItem('e2e.mockAuth.user');
+        if (!raw) {
+            return null;
+        }
+
+        return JSON.parse(raw) as User;
+    }
+
+    private _setMockUser(user: User | null): void {
+        this._user.next(user);
+        this._authenticated.next(!!user);
+
+        if (typeof window !== 'undefined') {
+            if (user) {
+                window.localStorage.setItem('e2e.mockAuth.user', JSON.stringify(user));
+            } else {
+                window.localStorage.removeItem('e2e.mockAuth.user');
+            }
+        }
+    }
+
+    private _buildMockUser(email: string): User {
+        return {
+            uid: 'e2e-user-1',
+            email,
+            displayName: 'E2E User',
+            emailVerified: true,
+            photoURL: '',
+        } as User;
+    }
+
+    private _signInWithEmailMock(email: string, password: string): Promise<User> {
+        if (email === 'e2e@local.test' && password === 'E2Epass123!') {
+            const user = this._buildMockUser(email);
+            this._setMockUser(user);
+            return Promise.resolve(user);
+        }
+
+        const error = new Error('Invalid credentials');
+        this.showSnackbar(`Sign in failed: ${error.message}`);
+        return Promise.reject(error);
+    }
+
+    private _createUserMock(email: string, _password: string): Promise<User> {
+        const user = this._buildMockUser(email);
+        this._setMockUser(user);
+        return Promise.resolve(user);
+    }
+
+    private _signOutMock(): Promise<void> {
+        this._setMockUser(null);
+        return Promise.resolve();
     }
 }

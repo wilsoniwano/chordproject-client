@@ -5,6 +5,8 @@ export default defineConfig({
     resolve: {
         alias: {
             app: fileURLToPath(new URL('./src/app', import.meta.url)),
+            '@fuse': fileURLToPath(new URL('./src/@fuse', import.meta.url)),
+            environments: fileURLToPath(new URL('./src/environments', import.meta.url)),
             domain: fileURLToPath(new URL('./src/domain', import.meta.url)),
             application: fileURLToPath(new URL('./src/application', import.meta.url)),
             infra: fileURLToPath(new URL('./src/infra', import.meta.url)),
