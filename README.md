@@ -32,8 +32,9 @@ ChordProject caters to a broad audience. Its sister site, [homenajesus.com](http
 ## Contribute
 
 1. Clone the repository.
-2. Install dependencies using npm.
-3. Run the development server with `ng serve`.
+2. Use Node `20.19+` (`nvm install 20.19.0 && nvm use 20.19.0`).
+3. Install dependencies using npm.
+4. Run the development server with `ng serve`.
 
 ## Inspiration
 

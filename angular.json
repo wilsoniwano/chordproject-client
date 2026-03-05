@@ -53,7 +53,8 @@
                             "src/styles/styles.scss",
                             "src/styles/tailwind.scss"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "serviceWorker": "ngsw-config.json"
                     },
                     "configurations": {
                         "production": {

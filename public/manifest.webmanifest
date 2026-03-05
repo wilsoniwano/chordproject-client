@@ -1,0 +1,26 @@
+{
+  "name": "CifraPro",
+  "short_name": "CifraPro",
+  "description": "Gerencie músicas e listas de reprodução com acordes em ChordPro.",
+  "lang": "pt-BR",
+  "start_url": "/songbook",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "chp/logo/cifrapro-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "chp/logo/cifrapro-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

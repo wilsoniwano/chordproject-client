@@ -10,7 +10,12 @@
   ],
   "homepage": "https://chordproject.com",
   "private": false,
+  "engines": {
+    "node": ">=20.19.0 <21",
+    "npm": ">=10"
+  },
   "scripts": {
+    "preinstall": "node ./scripts/check-node-version.cjs",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -34,6 +39,7 @@
     "@angular/platform-browser": "^21.2.0",
     "@angular/platform-browser-dynamic": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@angular/service-worker": "^21.2.0",
     "@jsverse/transloco": "7.5.1",
     "angular-split": "^19.0.0",
     "chordproject-editor": "^0.1.11",
