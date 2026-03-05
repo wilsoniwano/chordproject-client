@@ -30,6 +30,8 @@ import { ZoomToolComponent } from './tools/zoom.component';
 export class ChpViewerToolbarComponent {
     @Input() deviceType: string = 'phone';
     @Input() song: Song;
+    @Input() showFullscreen = true;
+    @Input() showSettings = true;
 
     @Output() editSongEvent = new EventEmitter<void>();
     @Output() transposeEvent = new EventEmitter<string>();

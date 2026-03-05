@@ -5,6 +5,7 @@ export class PartialSong {
     title?: string;
     content?: string;
     songKey?: string;
+    tempo?: number;
     customKey?: string | null;
     uniqueChords: string[];
 }

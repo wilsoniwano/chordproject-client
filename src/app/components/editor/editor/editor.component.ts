@@ -43,6 +43,8 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
     _editor: any;
     _durationBeforeCallback = 0;
     _content = '';
+    songTitle = '';
+    songArtist = '';
     oldContent: any;
     timeoutSaving: any;
     isDarkMode: boolean = false;
@@ -138,6 +140,7 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
         if (newVal === this.oldContent) {
             return;
         }
+        this.updateSongHeaderFromContent(newVal);
         if (!this._durationBeforeCallback) {
             this._content = newVal;
             this.contentChange.emit(newVal);
@@ -163,6 +166,7 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
     set content(content: string) {
         const normalizedContent = content ?? '';
         this._content = normalizedContent;
+        this.updateSongHeaderFromContent(normalizedContent);
 
         // Evita resetar o cursor quando o conteúdo veio do próprio editor
         if (this._editor) {
@@ -180,6 +184,7 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
         }
         if (this._editor && this._content !== content && this._autoUpdateContent === true) {
             this._content = content;
+            this.updateSongHeaderFromContent(content);
             this._editor.setValue(content);
             this._editor.clearSelection();
             this._editor.resize(true);
@@ -201,6 +206,7 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
                 return;
             }
 
+            this.updateSongHeaderFromContent(nextContent);
             this._editor.setValue(nextContent);
             this._editor.clearSelection();
             this._editor.resize(true);
@@ -258,5 +264,26 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
     }
     onHelp() {
         this.help.emit();
+    }
+
+    private updateSongHeaderFromContent(content: string): void {
+        this.songTitle = this.extractChordProTag(content, ['title', 't']);
+        this.songArtist = this.extractChordProTag(content, ['artist']);
+    }
+
+    private extractChordProTag(content: string, tags: string[]): string {
+        if (!content) {
+            return '';
+        }
+
+        for (const tag of tags) {
+            const regex = new RegExp(`\\{\\s*${tag}\\s*:\\s*([^}]+)\\}`, 'i');
+            const match = regex.exec(content);
+            if (match?.[1]) {
+                return match[1].trim();
+            }
+        }
+
+        return '';
     }
 }

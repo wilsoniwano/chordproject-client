@@ -28,19 +28,26 @@ const songResolver = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
     );
 };
 
-const canDeactivateSongsDetails = (
+export const canDeactivateSongsDetails = (
     component: SongsDetailsComponent,
     _currentRoute: ActivatedRouteSnapshot,
     _currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot
 ) => {
-    // Get the next route
-    let nextRoute: ActivatedRouteSnapshot = nextState.root;
-    while (nextRoute.firstChild) {
-        nextRoute = nextRoute.firstChild;
-    }
+    const hasUidInAnyOutlet = (route: ActivatedRouteSnapshot | null): boolean => {
+        if (!route) {
+            return false;
+        }
 
-    if (nextRoute.paramMap.get('uid')) {
+        if (route.paramMap.get('uid')) {
+            return true;
+        }
+
+        return route.children?.some((child) => hasUidInAnyOutlet(child)) ?? false;
+    };
+
+    // Keep drawer open when navigating between songs in the drawer outlet.
+    if (hasUidInAnyOutlet(nextState.root)) {
         return true;
     }
 

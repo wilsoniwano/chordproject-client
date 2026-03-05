@@ -3,6 +3,9 @@
     (scroll)="onContentScroll()"
     [class.show-columns]="shouldShowColumns"
     [class.paged-columns]="isPagedColumnsMode"
+    [class.preview-mode]="isPreview"
+    [class.read-mode]="!isPreview"
+    [class.force-dark-header-background]="forceDarkHeaderBackground"
     [class.overflow-auto]="!isPagedColumnsMode"
     [class.overflow-x-auto]="isPagedColumnsMode"
     [class.overflow-y-hidden]="isPagedColumnsMode"
@@ -37,8 +40,55 @@
 >
     @if (!isLoading) {
         <div
-            class="content flex-1 [&_.chorus-section]:bg-gradient-to-r [&_.chorus-section]:from-[#edf1f7] [&_.chorus-section]:to-[#fff] dark:[&_.chorus-section]:from-[#151a30] dark:[&_.chorus-section]:to-[#222b45] [&_.lyrics]:text-black dark:[&_.lyrics]:text-white"
+            class="content flex-1 [&_.lyrics]:text-slate-700 dark:[&_.lyrics]:text-slate-300"
         >
+            @if (chordDiagrams.length) {
+                <details class="mx-6 mt-4 rounded-lg border border-slate-300/40 bg-slate-100/40 px-3 py-2 dark:border-slate-600/40 dark:bg-slate-700/20">
+                    <summary class="cursor-pointer text-sm font-semibold">Diagramas de acordes</summary>
+                    <div class="mt-3 flex flex-wrap gap-3">
+                        @for (diagram of chordDiagrams; track diagram.chord) {
+                            <div class="chord-diagram-card">
+                                <div class="chord-diagram-title">{{ diagram.chord }}</div>
+                                <div class="chord-diagram-subtitle">
+                                    @if (diagram.baseFret > 1) {
+                                        {{ diagram.baseFret }}fr
+                                    } @else {
+                                        &nbsp;
+                                    }
+                                </div>
+
+                                <div class="chord-diagram-markers">
+                                    @for (fret of diagram.frets; track $index) {
+                                        <span class="chord-marker">
+                                            @if (fret < 0) {
+                                                x
+                                            } @else if (fret === 0) {
+                                                o
+                                            } @else {
+                                                &nbsp;
+                                            }
+                                        </span>
+                                    }
+                                </div>
+
+                                <div class="chord-diagram-grid">
+                                    @for (fretRow of [1, 2, 3, 4, 5]; track fretRow) {
+                                        <div class="chord-fret-row">
+                                            @for (fret of diagram.frets; track $index) {
+                                                <div class="chord-cell">
+                                                    @if (fret === fretRow) {
+                                                        <span class="chord-dot"></span>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </details>
+            }
             <div class="content-inner" [innerHtml]="songHtml | safeHtml" [style.font-size.px]="fontSize"></div>
         </div>
         @if (!isPagedColumnsMode) {

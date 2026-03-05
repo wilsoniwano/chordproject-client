@@ -1,0 +1,26 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+:host-context(.dark) .details-shell {
+    --fuse-bg-card-rgb: 15, 23, 42;
+    --fuse-bg-default-rgb: 15, 23, 42;
+}
+
+:host-context(.dark) .details-shell,
+:host-context(.dark) .details-subheader,
+:host-context(.dark) .details-content,
+:host-context(.dark) .details-content chp-viewer .bg-card,
+:host-context(.dark) .details-content chp-viewer .content,
+:host-context(.dark) .details-content chp-viewer .content-inner,
+:host-context(.dark) .details-content chp-viewer .song-content {
+    background-color: #0f172a !important;
+}
+
+/* Force all bg-card descendants in the details pane to match top header dark blue */
+:host-context(.dark) .details-shell .bg-card,
+:host-context(.dark) .details-shell .bg-card.bg-card,
+:host-context(.dark) .details-shell chp-viewer .bg-card {
+    background-color: #0f172a !important;
+}

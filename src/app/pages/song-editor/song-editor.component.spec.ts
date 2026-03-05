@@ -27,8 +27,18 @@ describe('SongEditorComponent', () => {
         viewContainerRef = { clear: vi.fn() };
         songService = { save: vi.fn() };
         editorService = { prepareSongFromContent: vi.fn() };
-        route = { paramMap: of(new Map()) };
-        router = { navigate: vi.fn().mockResolvedValue(true) };
+        route = {
+            paramMap: of(new Map()),
+            snapshot: {
+                queryParamMap: {
+                    get: vi.fn().mockReturnValue(null),
+                },
+            },
+        };
+        router = {
+            navigate: vi.fn().mockResolvedValue(true),
+            navigateByUrl: vi.fn().mockResolvedValue(true),
+        };
 
         component = new SongEditorComponentClass(
             changeDetectorRef,
@@ -61,5 +71,30 @@ describe('SongEditorComponent', () => {
 
         expect(router.navigate).not.toHaveBeenCalled();
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
+    });
+
+    it('closes to reader when song already has uid', () => {
+        component.song = { uid: 'song-1' } as any;
+
+        component.onEditorClose();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/songs/read', 'song-1']);
+    });
+
+    it('closes to library when creating a new song without uid', () => {
+        component.song = { uid: null } as any;
+
+        component.onEditorClose();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/library']);
+    });
+
+    it('closes to returnTo url when provided', () => {
+        component.song = { uid: 'song-1' } as any;
+        route.snapshot.queryParamMap.get.mockReturnValue('/library/(drawer:song-1)');
+
+        component.onEditorClose();
+
+        expect(router.navigateByUrl).toHaveBeenCalledWith('/library/(drawer:song-1)');
     });
 });

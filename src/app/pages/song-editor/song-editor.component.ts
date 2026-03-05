@@ -108,9 +108,18 @@ export class SongEditorComponent implements OnInit, OnDestroy {
     }
 
     onEditorClose() {
+        const returnTo = this._route.snapshot?.queryParamMap?.get?.('returnTo');
+        if (returnTo) {
+            this._router.navigateByUrl(returnTo);
+            return;
+        }
+
         if (this.song?.uid) {
             this._router.navigate(['/songs/read', this.song.uid]);
+            return;
         }
+
+        this._router.navigate(['/library']);
     }
 
     ngOnDestroy(): void {

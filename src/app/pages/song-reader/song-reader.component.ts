@@ -1,5 +1,8 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
@@ -15,7 +18,16 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
     standalone: true,
     templateUrl: './song-reader.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatCardModule, MatSidenavModule, RouterOutlet, JoinPipe, ChpViewerToolbarComponent, ChpViewerComponent],
+    imports: [
+        MatCardModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterOutlet,
+        JoinPipe,
+        ChpViewerToolbarComponent,
+        ChpViewerComponent,
+    ],
 })
 export class SongReaderComponent implements OnInit, OnDestroy {
     @ViewChild('viewer') viewer?: ChpViewerComponent;
@@ -30,6 +42,7 @@ export class SongReaderComponent implements OnInit, OnDestroy {
         private _songService: SongService,
         private route: ActivatedRoute,
         private _router: Router,
+        private _location: Location,
         private _fuseMediaWatcherService: FuseMediaWatcherService
     ) {}
 
@@ -86,6 +99,15 @@ export class SongReaderComponent implements OnInit, OnDestroy {
 
     toggleFullScreen(): void {}
     toggleSettings(): void {}
+
+    goBack(): void {
+        if (typeof window !== 'undefined' && window.history.length > 1) {
+            this._location.back();
+            return;
+        }
+
+        this._router.navigate(['/library']);
+    }
 
     ngOnDestroy(): void {
         this._unsubscribeAll.next(null);

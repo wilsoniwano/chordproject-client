@@ -17,6 +17,11 @@ import { ViewSettings } from 'app/tools/view-customization/view-settings';
 import { Song } from 'chordproject-parser';
 
 type ViewerMode = 'normal' | 'paged';
+type ChordDiagramViewModel = {
+    chord: string;
+    baseFret: number;
+    frets: number[];
+};
 
 @Component({
     selector: 'chp-viewer',
@@ -35,6 +40,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
 
     @Input() isPreview = false;
     @Input() autoColumns = false;
+    @Input() forceDarkHeaderBackground = false;
     @Input() viewMode: ViewerMode = 'normal';
     @Input() pagedColumnWidth = ChpViewerComponent.MIN_PAGED_COLUMN_WIDTH;
     @Input() normalColumnCount = 1;
@@ -64,6 +70,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
         chords: 20,
     };
     songHtml: string;
+    chordDiagrams: ChordDiagramViewModel[] = [];
     fontSize = 16;
     isLoading = true;
     contentElement: HTMLElement;
@@ -119,6 +126,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
             this.currentSong = this._initialSong;
         } else {
             this.songHtml = '';
+            this.chordDiagrams = [];
         }
     }
 
@@ -135,11 +143,36 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
 
         const songHtml = this.parserService.formatToHtml(
             this._currentSong,
-            this.isPreview,
+            true,
             this.isPreview ? true : this.viewSettings.showChords,
             this.isPreview ? true : this.viewSettings.showTabs
         );
-        this.setSongHtml(songHtml);
+        this.chordDiagrams = this.buildChordDiagrams((this._currentSong as any).userDiagrams ?? []);
+        this.setSongHtml(this.stripHiddenMetadata(songHtml));
+    }
+
+    private buildChordDiagrams(diagrams: any[]): ChordDiagramViewModel[] {
+        return diagrams.map((diagram) => {
+            const relative = typeof diagram.getRelativeFrets === 'function' ? diagram.getRelativeFrets() : null;
+            const baseFret = relative?.[0] ?? 1;
+            const frets = (relative?.[1] ?? diagram.frets ?? []).map((fret: number) => Number(fret));
+
+            return {
+                chord: diagram.chord.toString(),
+                baseFret,
+                frets,
+            };
+        });
+    }
+
+    private stripHiddenMetadata(html: string): string {
+        if (!html) {
+            return html;
+        }
+
+        return html
+            .replace(/<h1 class="[^"]*title-metadata[^"]*">[\s\S]*?<\/h1>/gi, '')
+            .replace(/<h3 class="[^"]*artist-metadata[^"]*">[\s\S]*?<\/h3>/gi, '');
     }
 
     zoom(value: number): void {

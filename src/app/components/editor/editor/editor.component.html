@@ -1,5 +1,8 @@
 <chp-editor-toolbar
     [mode]="mode"
+    [title]="songTitle"
+    [artist]="songArtist"
+    [showHelp]="false"
     (saveSongEvent)="onSave()"
     (removeSongEvent)="onRemove()"
     (openFullEditorEvent)="onOpenFullEditor()"

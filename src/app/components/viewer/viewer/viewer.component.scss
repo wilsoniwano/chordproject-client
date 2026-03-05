@@ -5,12 +5,121 @@
 }
 
 .content {
-    padding: 1em 1.5em 4em;
+    padding: 2em 0 6em;
     overflow: auto;
+}
+
+.read-mode .content {
+    padding-left: 32px;
+    padding-right: 32px;
 }
 
 .content-inner {
     min-width: 0;
+}
+
+.chord-diagram-card {
+    width: 96px;
+    border: 1px solid rgba(100, 116, 139, 0.35);
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.4rem 0.5rem;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+:host-context(.dark) .chord-diagram-card {
+    background: rgba(15, 23, 42, 0.45);
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+.chord-diagram-title {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chord-diagram-subtitle {
+    text-align: center;
+    font-size: 0.65rem;
+    line-height: 1;
+    color: rgba(71, 85, 105, 0.95);
+    margin-top: 0.1rem;
+}
+
+:host-context(.dark) .chord-diagram-subtitle {
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.chord-diagram-markers {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin-top: 0.2rem;
+    margin-bottom: 0.12rem;
+}
+
+.chord-marker {
+    text-align: center;
+    font-size: 0.7rem;
+    line-height: 1;
+    color: rgba(51, 65, 85, 0.95);
+    text-transform: lowercase;
+}
+
+:host-context(.dark) .chord-marker {
+    color: rgba(203, 213, 225, 0.95);
+}
+
+.chord-diagram-grid {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(71, 85, 105, 0.75);
+}
+
+:host-context(.dark) .chord-diagram-grid {
+    border-top-color: rgba(203, 213, 225, 0.75);
+}
+
+.chord-fret-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.chord-cell {
+    position: relative;
+    height: 13px;
+    border-right: 1px solid rgba(100, 116, 139, 0.75);
+    border-bottom: 1px solid rgba(100, 116, 139, 0.75);
+}
+
+:host-context(.dark) .chord-cell {
+    border-right-color: rgba(148, 163, 184, 0.75);
+    border-bottom-color: rgba(148, 163, 184, 0.75);
+}
+
+.chord-fret-row .chord-cell:first-child {
+    border-left: 1px solid rgba(100, 116, 139, 0.75);
+}
+
+:host-context(.dark) .chord-fret-row .chord-cell:first-child {
+    border-left-color: rgba(148, 163, 184, 0.75);
+}
+
+.chord-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: #1e293b;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+:host-context(.dark) .chord-dot {
+    background: #e2e8f0;
 }
 
 $colors: (
@@ -22,6 +131,15 @@ $colors: (
     'blue': #1f56d6,
 );
 
+$dark-colors: (
+    'default': #fca5a5,
+    'orange': #fcd34d,
+    'red': #fca5a5,
+    'green': #86efac,
+    'purple': #c4b5fd,
+    'blue': #93c5fd,
+);
+
 @each $name, $value in $colors {
     ::ng-deep {
         [class*='chords-color-#{$name}'] .above-lyrics {
@@ -31,6 +149,14 @@ $colors: (
         [class*='comments-color-#{$name}'] .comment-line,
         [class*='comments-color-#{$name}'] .section-title {
             color: $value;
+        }
+    }
+}
+
+@each $name, $value in $dark-colors {
+    :host-context(.dark) ::ng-deep {
+        [class*='chords-color-#{$name}'] .above-lyrics {
+            color: $value !important;
         }
     }
 }
@@ -121,11 +247,24 @@ $colors: (
     }
 
     .section-title {
-        margin-bottom: 1em;
+        margin-bottom: 0;
+        font-weight: 700;
+        color: #000 !important;
+        display: inline-block;
+    }
+
+    .section-title::before {
+        content: '[';
+        margin-right: 0.2em;
+    }
+
+    .section-title::after {
+        content: ']';
+        margin-left: 0.2em;
     }
 
     .comment-line {
-        margin: 1em 0;
+        margin: 0.6em 0;
     }
 
     .comments-font-style-italic .comment-line,
@@ -150,7 +289,9 @@ $colors: (
     // default style
     .metadata {
         margin: 0;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.2em;
+        font-size: 0.82rem;
+        line-height: 1.2;
         font-style: italic;
     }
 
@@ -159,6 +300,12 @@ $colors: (
     .artist-metadata {
         font-style: normal;
         font-weight: bold;
+    }
+
+    .subtitle-metadata {
+        font-size: 0.9rem;
+        line-height: 1.15;
+        margin-bottom: 0.3em;
     }
 
     .lyrics-line {
@@ -178,6 +325,25 @@ $colors: (
         padding: 0.2em 0.3em 0.1em 0;
     }
 
+    .above-lyrics.chord {
+        font-size: 0.92em;
+        font-weight: 600;
+    }
+
+    .above-lyrics.annotation {
+        font-weight: 400 !important;
+        font-size: 0.88em !important;
+        color: #1f56d6 !important;
+        font-style: italic;
+    }
+
+    .comment-line {
+        font-weight: 400 !important;
+        font-size: 0.88em !important;
+        color: #1f56d6 !important;
+        font-style: italic;
+    }
+
     .word {
         display: flex;
         flex-direction: row;
@@ -189,13 +355,8 @@ $colors: (
         margin-top: 1.5em;
     }
 
-    .chorus-section {
-        border-radius: 1em 0 0 1em;
-        padding: 1em 1.5em;
-    }
-
     .section {
-        margin: 3em 0;
+        margin: 1.4em 0;
         break-inside: auto;
     }
 
@@ -203,4 +364,26 @@ $colors: (
         font-family: 'Courier New', Courier, monospace;
         break-inside: avoid;
     }
+}
+
+:host-context(.dark) ::ng-deep {
+    .section-title,
+    [class*='comments-color-'] .section-title {
+        color: #ffffff !important;
+    }
+
+    .above-lyrics.annotation,
+    [class*='comments-color-'] .comment-line,
+    [class*='comments-color-'] .above-lyrics.annotation {
+        color: #93c5fd !important;
+    }
+}
+
+:host-context(.dark) .force-dark-header-background,
+:host-context(.dark) .force-dark-header-background .content,
+:host-context(.dark) .force-dark-header-background .content-inner,
+:host-context(.dark) .force-dark-header-background .song-content,
+:host-context(.dark) .force-dark-header-background.bg-card {
+    --fuse-bg-card-rgb: 15, 23, 42;
+    background-color: #0f172a !important;
 }

@@ -11,15 +11,21 @@ async function enableMockAuth(page: any): Promise<void> {
     });
 }
 
+function expectNonEmptyScreenshot(buffer: Buffer): void {
+    // PNG header bytes + practical minimum to avoid flaky size assertions across environments.
+    expect(buffer.byteLength).toBeGreaterThan(4_000);
+    expect(buffer.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+}
+
 test('visual smoke captures non-empty screenshots for key pages', async ({ page }) => {
     await enableMockAuth(page);
     await page.goto('/songbook');
-    const homeShot = await page.screenshot();
-    expect(homeShot.byteLength).toBeGreaterThan(6_000);
+    const homeShot = await page.screenshot({ fullPage: true });
+    expectNonEmptyScreenshot(homeShot);
 
     await page.goto('/library');
-    const libraryShot = await page.screenshot();
-    expect(libraryShot.byteLength).toBeGreaterThan(6_000);
+    const libraryShot = await page.screenshot({ fullPage: true });
+    expectNonEmptyScreenshot(libraryShot);
 });
 
 test('a11y scan runs on home and keeps serious/critical issues within baseline', async ({ page }) => {

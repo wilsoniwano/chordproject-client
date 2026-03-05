@@ -8,8 +8,8 @@ body fuse-splash-screen {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #111827;
-    color: #F9FAFB;
+    background-color: #f8fafc;
+    color: #0f172a;
     z-index: 999999;
     pointer-events: none;
     opacity: 1;
@@ -17,16 +17,11 @@ body fuse-splash-screen {
     transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body fuse-splash-screen img {
-    width: 120px;
-    max-width: 120px;
-}
-
 body fuse-splash-screen .spinner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 40px;
+    margin-top: 0;
     width: 56px;
 }
 
@@ -38,6 +33,18 @@ body fuse-splash-screen .spinner > div {
     display: inline-block;
     -webkit-animation: fuse-bouncedelay 1s infinite ease-in-out both;
     animation: fuse-bouncedelay 1s infinite ease-in-out both;
+}
+
+body.dark fuse-splash-screen {
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.light) fuse-splash-screen {
+        background-color: #111827;
+        color: #f9fafb;
+    }
 }
 
 body fuse-splash-screen .spinner .bounce1 {

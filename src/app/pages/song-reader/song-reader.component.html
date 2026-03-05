@@ -17,11 +17,16 @@
                     <div
                         class="flex flex-auto flex-col justify-between border-b px-6 py-8 sm:flex-row md:flex-col md:px-8"
                     >
-                        <!-- Title -->
-                        <div>
-                            <div class="page-title">{{ song.title }}</div>
-                            <div class="text-secondary ml-0.5 font-medium">
-                                {{ song.artists | join: ' - ' }}
+                        <div class="flex items-start gap-3">
+                            <button mat-icon-button type="button" (click)="goBack()" aria-label="Voltar">
+                                <mat-icon [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+                            </button>
+                            <!-- Title -->
+                            <div>
+                                <div class="page-title">{{ song.title }}</div>
+                                <div class="text-secondary ml-0.5 font-medium">
+                                    {{ song.artists | join: ' - ' }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -30,6 +35,8 @@
                         <chp-viewer-toolbar
                             [song]="song"
                             [deviceType]="deviceType"
+                            [showFullscreen]="false"
+                            [showSettings]="false"
                             (editSongEvent)="editSong()"
                             (transposeEvent)="onTranspose($event)"
                             (zoomEvent)="onZoom($event)"

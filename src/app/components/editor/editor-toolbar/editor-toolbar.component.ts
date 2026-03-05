@@ -12,6 +12,9 @@ import { TranslocoModule } from '@jsverse/transloco';
 })
 export class ChpEditorToolbarComponent {
     @Input() mode: 'quick' | 'full' = 'full';
+    @Input() title = '';
+    @Input() artist = '';
+    @Input() showHelp = true;
 
     @Output() saveSongEvent = new EventEmitter<void>();
     @Output() removeSongEvent = new EventEmitter<void>();
