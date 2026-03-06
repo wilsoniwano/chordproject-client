@@ -32,7 +32,11 @@
                         class="font-semibold dark:group-hover:text-primary-900"
                         [innerHTML]="highlightSearchTerm(song.title, searchValue)"
                     ></span>
-                    <div class="text-secondary truncate text-xs">{{ song.lyrics }}</div>
+                    @if (getSongMetaLine(song)) {
+                        <div class="text-secondary truncate text-xs">
+                            {{ getSongMetaLine(song) }}
+                        </div>
+                    }
                 </div>
             </mat-option>
         }
@@ -51,6 +55,11 @@
             >
                 <div>
                     <span class="font-semibold dark:group-hover:text-primary-900">{{ song.title }}</span>
+                    @if (getSongMetaLine(song)) {
+                        <div class="text-secondary truncate text-xs">
+                            {{ getSongMetaLine(song) }}
+                        </div>
+                    }
                     <div
                         class="text-secondary truncate text-xs"
                         [innerHTML]="highlightSearchTerm(song.lyrics, searchValue)"
@@ -101,6 +110,11 @@
                             class="font-semibold dark:group-hover:text-primary-900"
                             [innerHTML]="highlightSearchTerm(song.title, searchValue)"
                         ></span>
+                        @if (getSongMetaLine(song)) {
+                            <div class="text-secondary truncate text-xs">
+                                {{ getSongMetaLine(song) }}
+                            </div>
+                        }
                         <div
                             class="text-secondary truncate text-xs"
                             [innerHTML]="highlightSearchTerm(song.lyrics, searchValue)"

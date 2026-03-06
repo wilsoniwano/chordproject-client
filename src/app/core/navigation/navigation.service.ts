@@ -22,6 +22,7 @@ export class NavigationService {
         return {
             library: this._translocoService.translate('nav.library'),
             songbooks: this._translocoService.translate('nav.songbooks'),
+            settingsLeaders: this._translocoService.translate('nav.settings_leaders'),
         };
     }
 

@@ -37,6 +37,8 @@ const reversePitchClassMap: Record<number, string> = {
     11: 'B',
 };
 
+const chromaticKeyOrder = Object.values(reversePitchClassMap);
+
 export function parseKey(input: string): { root: string; isMinor: boolean } {
     const isMinor = input.includes('m');
     const root = input.replace('m', '');
@@ -70,3 +72,8 @@ export function transposeMusicalKey(input: string, steps: number): string {
     return isMinor ? `${newKey}m` : newKey;
 }
 
+export function getAvailableMusicalKeys(input: string): string[] {
+    const normalized = normalizeMusicalKey(input || 'C');
+    const { isMinor } = parseKey(normalized);
+    return chromaticKeyOrder.map((key) => (isMinor ? `${key}m` : key));
+}

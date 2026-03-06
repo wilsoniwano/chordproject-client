@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import '@angular/compiler';
 import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SongbookListComponent } from './songbook-list.component';
 
@@ -8,7 +9,13 @@ describe('SongbookListComponent', () => {
     let component: SongbookListComponent;
     let dialogRef: { close: ReturnType<typeof vi.fn> };
     let dialog: { open: ReturnType<typeof vi.fn> };
-    let songbookService: { save: ReturnType<typeof vi.fn>; getAll: ReturnType<typeof vi.fn> };
+    let songbookService: {
+        save: ReturnType<typeof vi.fn>;
+        getAll: ReturnType<typeof vi.fn>;
+        getSongsCountBySongbookIds: ReturnType<typeof vi.fn>;
+        delete: ReturnType<typeof vi.fn>;
+    };
+    let leaderService: { getAll: ReturnType<typeof vi.fn> };
     let router: { navigate: ReturnType<typeof vi.fn> };
 
     beforeEach(() => {
@@ -16,12 +23,18 @@ describe('SongbookListComponent', () => {
         dialog = { open: vi.fn().mockReturnValue(dialogRef) };
         songbookService = {
             save: vi.fn().mockResolvedValue('sb-1'),
-            getAll: vi.fn(),
+            getAll: vi.fn().mockReturnValue(of([])),
+            getSongsCountBySongbookIds: vi.fn().mockReturnValue(of({})),
+            delete: vi.fn().mockResolvedValue(true),
+        };
+        leaderService = {
+            getAll: vi.fn().mockReturnValue(of([{ uid: 'l-1', name: 'João' }])),
         };
         router = { navigate: vi.fn().mockResolvedValue(true) };
 
         component = new SongbookListComponent(
             songbookService as any,
+            leaderService as any,
             new FormBuilder(),
             dialog as any,
             router as any
@@ -30,26 +43,27 @@ describe('SongbookListComponent', () => {
     });
 
     it('opens create dialog and resets form', () => {
-        component.form.patchValue({ name: 'Anterior', eventDate: '2026-03-04' });
+        component.form.patchValue({ leaderName: 'João', eventDate: '2026-03-04' });
 
         component.openCreateDialog();
 
-        expect(component.form.getRawValue()).toEqual({ name: '', eventDate: '' });
+        expect(component.form.getRawValue()).toEqual({ leaderName: '', eventDate: '' });
         expect(dialog.open).toHaveBeenCalledWith(component.createSongbookDialog, {
             width: '520px',
             maxWidth: '95vw',
         });
     });
 
-    it('saves from dialog with trimmed name and navigates to created songbook', async () => {
+    it('saves from dialog with generated title and navigates to created songbook', async () => {
         component.openCreateDialog();
-        component.form.patchValue({ name: '  Culto  ', eventDate: '2026-03-10' });
+        component.form.patchValue({ leaderName: 'João', eventDate: '2026-03-10' });
 
         await component.saveFromDialog();
 
         expect(songbookService.save).toHaveBeenCalledWith(
             expect.objectContaining({
-                name: 'Culto',
+                name: 'Terça-feira · 10/03/2026 · João',
+                leaderName: 'João',
                 eventDate: '2026-03-10',
             })
         );
@@ -58,7 +72,7 @@ describe('SongbookListComponent', () => {
     });
 
     it('does not save when form is invalid', async () => {
-        component.form.patchValue({ name: '', eventDate: '' });
+        component.form.patchValue({ leaderName: '', eventDate: '' });
 
         await component.saveFromDialog();
 
@@ -66,8 +80,33 @@ describe('SongbookListComponent', () => {
         expect(router.navigate).not.toHaveBeenCalled();
     });
 
-    it('formats event date as dd/mm/yyyy', () => {
-        expect(component.formatEventDate({ eventDate: '2026-12-05' } as any)).toBe('05/12/2026');
-        expect(component.formatEventDate({ eventDate: '' } as any)).toBe('-');
+    it('formats songs count label', () => {
+        expect(component.formatSongsCount(0)).toBe('0 músicas');
+        expect(component.formatSongsCount(1)).toBe('1 música');
+        expect(component.formatSongsCount(3)).toBe('3 músicas');
+    });
+
+    it('deletes songbook when confirmed', async () => {
+        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+        const event = {
+            preventDefault: vi.fn(),
+            stopPropagation: vi.fn(),
+        } as any;
+
+        await component.deleteSongbook({ uid: 'sb-1', name: 'Culto' } as any, event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(songbookService.delete).toHaveBeenCalledWith('sb-1');
+        confirmSpy.mockRestore();
+    });
+
+    it('does not delete songbook when confirmation is canceled', async () => {
+        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+        await component.deleteSongbook({ uid: 'sb-1', name: 'Culto' } as any);
+
+        expect(songbookService.delete).not.toHaveBeenCalled();
+        confirmSpy.mockRestore();
     });
 });

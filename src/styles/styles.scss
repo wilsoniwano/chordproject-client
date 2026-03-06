@@ -24,3 +24,102 @@ as-split-area {
 .page-title {
     @apply text-2xl font-semibold leading-tight tracking-normal;
 }
+
+@media (max-width: 959px) {
+    .page-title {
+        font-size: 1rem !important;
+        line-height: 1.25rem !important;
+    }
+}
+
+.leader-select-panel.mat-mdc-select-panel {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.leader-select-panel .mat-mdc-option {
+    color: #0f172a !important;
+}
+
+.dark .bg-card {
+    background-color: #0f172a !important;
+    color: #e2e8f0;
+}
+
+/* Icon-only buttons: keep only icon, no circular chrome */
+.mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 32px;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 4px !important;
+    border-radius: 0 !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base .mat-mdc-button-touch-target {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.icon-button-32 {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 4px !important;
+    border-radius: 0 !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base .mat-icon,
+.mat-mdc-icon-button.mat-mdc-button-base .mat-icon svg,
+.icon-button-32 .mat-icon,
+.icon-button-32 .mat-icon svg {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    line-height: 24px !important;
+}
+
+.tone-key-button.mat-mdc-outlined-button {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    line-height: 32px !important;
+    color: var(--fuse-text-secondary) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    position: relative;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.tone-key-button.mat-mdc-outlined-button::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    border: 1px solid var(--fuse-text-secondary);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.tone-key-button.mat-mdc-outlined-button .mdc-button__label {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.mat-mdc-dialog-title {
+    font-weight: 700 !important;
+}

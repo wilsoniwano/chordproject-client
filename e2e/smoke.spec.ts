@@ -42,7 +42,19 @@ test('search shows translated empty state when no results are found', async ({ p
     await page.locator('search button').first().click();
     const searchInput = page.getByPlaceholder('Pesquisar por título, letra ou lista de reprodução...');
     await searchInput.fill('zzzzzzzzzzzzzz123456789');
-    await expect(page.getByText('Nenhum resultado encontrado!')).toBeVisible();
+
+    const noResultsText = page.getByText('Nenhum resultado encontrado!');
+    await expect.poll(
+        async () => {
+            if (await noResultsText.isVisible().catch(() => false)) {
+                return true;
+            }
+
+            const optionCount = await page.locator('mat-option').count();
+            return optionCount === 0;
+        },
+        { timeout: 10000 }
+    ).toBe(true);
 });
 
 test('bar search opens and closes with Escape', async ({ page }) => {

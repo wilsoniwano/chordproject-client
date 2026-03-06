@@ -1,30 +1,44 @@
-<div class="flex flex-auto flex-col p-6 sm:p-10">
-    <div class="mx-auto w-full max-w-5xl">
-        <div class="mb-6 flex items-center justify-between">
+<div class="flex flex-auto flex-col overflow-x-hidden bg-white p-8 dark:bg-transparent">
+    <div class="mx-auto w-full max-w-full sm:max-w-5xl">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">{{ 'songbook_list.title' | transloco }}</h1>
                 <p class="text-secondary mt-1">{{ 'songbook_list.description' | transloco }}</p>
             </div>
-            <button mat-flat-button color="primary" type="button" (click)="openCreateDialog()">
-                {{ 'nav.create_songbook' | transloco }}
+            <button class="self-start sm:self-auto" mat-flat-button color="primary" type="button" (click)="openCreateDialog()">
+                Nova lista
             </button>
         </div>
 
         @if (songbooks$ | async; as songbooks) {
             @if (songbooks.length) {
-                <div class="bg-card divide-y overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                <div class="bg-card w-full divide-y overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
                     @for (songbook of songbooks; track songbook.uid) {
                         <a
                             [routerLink]="['/songbook', songbook.uid]"
                             class="hover:bg-hover flex items-center justify-between gap-4 px-5 py-4 transition"
                         >
                             <div class="min-w-0">
-                                <div class="truncate text-base font-medium">{{ songbook.name }}</div>
+                                <div class="truncate text-base font-medium">{{ formatPrimaryLine(songbook) }}</div>
                                 <div class="text-secondary mt-1 truncate text-sm">
-                                    {{ 'songbook_list.event_date' | transloco }}: {{ formatEventDate(songbook) }}
+                                    {{ formatSecondaryLine(songbook) }}
                                 </div>
                             </div>
-                            <mat-icon class="text-secondary icon-size-5" [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+                            <div class="ml-4 flex items-center gap-1">
+                                <button
+                                    mat-icon-button
+                                    type="button"
+                                    [disabled]="saving"
+                                    (click)="deleteSongbook(songbook, $event)"
+                                    aria-label="Excluir lista"
+                                >
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                </button>
+                                <mat-icon
+                                    class="text-secondary icon-size-5"
+                                    [svgIcon]="'heroicons_outline:chevron-right'"
+                                ></mat-icon>
+                            </div>
                         </a>
                     }
                 </div>
@@ -43,10 +57,16 @@
         <p class="text-secondary mb-4">{{ 'songbook_create.description' | transloco }}</p>
         <form class="grid gap-3 pt-1" [formGroup]="form">
             <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                <mat-label>{{ 'songbook_create.name' | transloco }}</mat-label>
-                <input matInput formControlName="name" maxlength="80" />
-                @if (form.controls.name.hasError('required') && form.controls.name.touched) {
-                    <mat-error>{{ 'songbook_create.name_required' | transloco }}</mat-error>
+                <mat-label>{{ 'songbook_create.leader' | transloco }}</mat-label>
+                <mat-select formControlName="leaderName" panelClass="leader-select-panel">
+                    @if (leaders$ | async; as leaders) {
+                        @for (leader of leaders; track trackByLeader($index, leader)) {
+                            <mat-option [value]="leader.name">{{ leader.name }}</mat-option>
+                        }
+                    }
+                </mat-select>
+                @if (form.controls.leaderName.hasError('required') && form.controls.leaderName.touched) {
+                    <mat-error>{{ 'songbook_create.leader_required' | transloco }}</mat-error>
                 }
             </mat-form-field>
 

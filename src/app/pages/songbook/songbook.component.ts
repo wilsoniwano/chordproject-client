@@ -7,13 +7,18 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { ChpSongItemComponent } from 'app/components/song-item/song-item.component';
 import { ChpSplitLayoutComponent } from 'app/components/split-layout/split-layout.component';
+import { TransposeKeyDialogComponent } from 'app/components/transpose-key-dialog/transpose-key-dialog.component';
 import { ChpViewerComponent } from 'app/components/viewer/viewer/viewer.component';
+import { LeaderService } from 'app/core/firebase/api/leader.service';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
+import { Leader } from 'app/models/leader';
 import { PartialSong } from 'app/models/partialsong';
 import { Songbook } from 'app/models/songbook';
 import { Observable, Subject, firstValueFrom, of, takeUntil } from 'rxjs';
@@ -29,9 +34,11 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
         DragDropModule,
         MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
         MatButtonModule,
         MatDialogModule,
         MatIconModule,
+        MatTooltipModule,
         TranslocoModule,
         RouterLink,
         ChpViewerComponent,
@@ -46,11 +53,13 @@ export class SongbookComponent implements OnInit, OnDestroy {
     songSearchResults: PartialSong[] = [];
     addingSong = false;
     savingHeader = false;
+    removingSongIds = new Set<string>();
     currentSongbook: Songbook | null = null;
     private _editDialogRef: MatDialogRef<unknown> | null = null;
+    readonly leaders$ = this._leaderService.getAll();
 
     readonly headerForm = this._formBuilder.group({
-        name: ['', [Validators.required, Validators.maxLength(80)]],
+        leaderName: ['', [Validators.required]],
         eventDate: ['', [Validators.required]],
     });
 
@@ -61,11 +70,16 @@ export class SongbookComponent implements OnInit, OnDestroy {
     songs$: Observable<PartialSong[]>;
     songsList: PartialSong[] = [];
 
+    get selectedSongKey(): string | null {
+        return this.selectedSong?.customKey || this.selectedSong?.songKey || null;
+    }
+
     constructor(
         private _formBuilder: FormBuilder,
         private _dialog: MatDialog,
         private _route: ActivatedRoute,
         private _router: Router,
+        private _leaderService: LeaderService,
         private _songService: SongService,
         private _songbookService: SongbookService
     ) {}
@@ -85,7 +99,7 @@ export class SongbookComponent implements OnInit, OnDestroy {
         this.songbook$.pipe(takeUntil(this._unsubscribeAll)).subscribe((songbook) => {
             this.currentSongbook = songbook;
             this.headerForm.patchValue({
-                name: songbook.name || '',
+                leaderName: songbook.leaderName || '',
                 eventDate: songbook.eventDate || '',
             });
         });
@@ -191,6 +205,55 @@ export class SongbookComponent implements OnInit, OnDestroy {
         }
     }
 
+    async removeSong(song: PartialSong, event?: Event): Promise<void> {
+        event?.stopPropagation();
+
+        const songbookId = this._route.snapshot.paramMap.get('uid');
+        if (!songbookId || !song?.uid || this.removingSongIds.has(song.uid)) {
+            return;
+        }
+
+        const confirmed = typeof window === 'undefined'
+            ? true
+            : window.confirm(`Remover "${song.title}" desta lista?`);
+        if (!confirmed) {
+            return;
+        }
+
+        this.removingSongIds.add(song.uid);
+        const removed = await this._songbookService.removeSong(songbookId, song.uid);
+        this.removingSongIds.delete(song.uid);
+
+        if (removed) {
+            await this.refreshSongs(songbookId);
+        }
+    }
+
+    async openSelectedSongTonePicker(event?: Event): Promise<void> {
+        event?.stopPropagation();
+        if (!this.selectedSong) {
+            return;
+        }
+
+        const currentKey = this.selectedSongKey;
+        if (!currentKey) {
+            return;
+        }
+
+        const dialogRef = this._dialog.open(TransposeKeyDialogComponent, {
+            width: '420px',
+            maxWidth: '95vw',
+            data: { currentKey },
+        });
+
+        const selectedKey = await firstValueFrom(dialogRef.afterClosed());
+        if (!selectedKey || selectedKey === currentKey) {
+            return;
+        }
+
+        await this.onSongKeyChange(this.selectedSong, selectedKey);
+    }
+
     selectSong(song: PartialSong): void {
         this.selectedSong = song;
 
@@ -204,6 +267,17 @@ export class SongbookComponent implements OnInit, OnDestroy {
         this._router.navigate(['/songs/read', song.uid]);
     }
 
+    openSelectedSongEditor(event?: Event): void {
+        event?.stopPropagation();
+        if (!this.selectedSong?.uid) {
+            return;
+        }
+
+        this._router.navigate(['/songs/create', this.selectedSong.uid], {
+            queryParams: { returnTo: this._router.url },
+        });
+    }
+
     trackByFn(index: number, item: any): any {
         return item.uid || index;
     }
@@ -211,7 +285,7 @@ export class SongbookComponent implements OnInit, OnDestroy {
     openEditHeader(songbook: Songbook): void {
         this.currentSongbook = songbook;
         this.headerForm.patchValue({
-            name: songbook.name || '',
+            leaderName: songbook.leaderName || '',
             eventDate: songbook.eventDate || '',
         });
         this._editDialogRef = this._dialog.open(this.editSongbookDialog, {
@@ -223,7 +297,7 @@ export class SongbookComponent implements OnInit, OnDestroy {
     cancelEditHeader(): void {
         if (this.currentSongbook) {
             this.headerForm.patchValue({
-                name: this.currentSongbook.name || '',
+                leaderName: this.currentSongbook.leaderName || '',
                 eventDate: this.currentSongbook.eventDate || '',
             });
         }
@@ -237,10 +311,13 @@ export class SongbookComponent implements OnInit, OnDestroy {
         }
 
         const value = this.headerForm.getRawValue();
+        const leaderName = (value.leaderName || '').trim();
+        const eventDate = value.eventDate || '';
         const payload = {
             ...songbook,
-            name: (value.name || '').trim(),
-            eventDate: value.eventDate || '',
+            name: this.buildSongbookTitle(eventDate, leaderName),
+            leaderName,
+            eventDate,
         } as Songbook;
 
         this.savingHeader = true;
@@ -249,10 +326,15 @@ export class SongbookComponent implements OnInit, OnDestroy {
 
         if (uid) {
             songbook.name = payload.name;
+            songbook.leaderName = payload.leaderName;
             songbook.eventDate = payload.eventDate;
             this.currentSongbook = { ...songbook };
             this._editDialogRef?.close();
         }
+    }
+
+    trackByLeader(index: number, leader: Leader): string {
+        return leader.uid || `${index}`;
     }
 
     formatEventDate(eventDate?: string): string {
@@ -260,12 +342,46 @@ export class SongbookComponent implements OnInit, OnDestroy {
             return '-';
         }
 
+        return this.formatDate(eventDate);
+    }
+
+    formatSubheaderPrimary(songbook: Songbook): string {
+        return `${songbook?.leaderName || '-'} · ${this.formatDate(songbook?.eventDate || '')}`;
+    }
+
+    formatSubheaderSecondary(songbook: Songbook): string {
+        return `${this.formatWeekday(songbook?.eventDate || '')} · ${this.formatSongsCount(this.songsList.length)}`;
+    }
+
+    private formatDate(eventDate: string): string {
         const [year, month, day] = eventDate.split('-');
         if (!year || !month || !day) {
             return '-';
         }
 
         return `${day}/${month}/${year}`;
+    }
+
+    private formatWeekday(eventDate: string): string {
+        const dateForWeekday = new Date(`${eventDate}T00:00:00`);
+        if (Number.isNaN(dateForWeekday.getTime())) {
+            return '-';
+        }
+
+        const weekdayRaw = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dateForWeekday);
+        return `${weekdayRaw.charAt(0).toUpperCase()}${weekdayRaw.slice(1)}`;
+    }
+
+    private formatSongsCount(count?: number): string {
+        const value = count || 0;
+        return value === 1 ? '1 música' : `${value} músicas`;
+    }
+
+    private buildSongbookTitle(eventDate: string, leaderName: string): string {
+        const formattedDate = this.formatDate(eventDate);
+        const weekday = this.formatWeekday(eventDate);
+
+        return `${weekday} · ${formattedDate} · ${leaderName}`.trim();
     }
 
     private async refreshSongs(songbookId: string, selectedSongId?: string): Promise<void> {

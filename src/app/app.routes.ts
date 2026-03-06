@@ -94,6 +94,10 @@ export const appRoutes: Route[] = [
                 path: 'songbook',
                 loadChildren: () => import('app/pages/songbook/songbook.routes'),
             },
+            {
+                path: 'settings/leaders',
+                loadChildren: () => import('app/pages/settings/leaders/leaders.routes'),
+            },
         ],
     },
     // Fallback redirect to 404

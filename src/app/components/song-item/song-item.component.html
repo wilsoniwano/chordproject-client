@@ -14,7 +14,7 @@
         <div class="flex w-full items-center gap-2">
             <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
                 <a
-                    class="truncate text-base font-bold dark:group-hover:text-primary-900 dark:group-[.bg-primary-50]:text-primary-900"
+                    class="truncate text-base font-medium dark:group-hover:text-primary-900 dark:group-[.bg-primary-50]:text-primary-900"
                     [ngClass]="{ 'text-primary-900': selected }"
                     >{{ song.title }}</a
                 >
@@ -22,23 +22,28 @@
                     <div class="text-secondary truncate text-sm">{{ secondaryMetaLine }}</div>
                 }
             </div>
-            @if (showToneControls && displayedKey) {
+            @if ((showToneControls && displayedKey) || showRemoveButton) {
                 <div class="ml-auto flex flex-shrink-0 items-center gap-2">
-                    <button
-                        type="button"
-                        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-sm leading-none dark:border-gray-600"
-                        (click)="transpose(-1, $event)"
-                    >
-                        <mat-icon class="text-base">remove</mat-icon>
-                    </button>
-                    <span class="rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">{{ displayedKey }}</span>
-                    <button
-                        type="button"
-                        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-sm leading-none dark:border-gray-600"
-                        (click)="transpose(1, $event)"
-                    >
-                        <mat-icon class="text-base">add</mat-icon>
-                    </button>
+                    @if (showToneControls && displayedKey) {
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="tone-key-button font-mono"
+                            (click)="openTonePicker($event)"
+                        >
+                            {{ displayedKey }}
+                        </button>
+                    }
+                    @if (showRemoveButton) {
+                        <button
+                            type="button"
+                            class="icon-button-32 flex items-center justify-center text-sm leading-none text-red-600 dark:text-red-400"
+                            (click)="requestRemove($event)"
+                            aria-label="Remover música"
+                        >
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        </button>
+                    }
                 </div>
             }
         </div>

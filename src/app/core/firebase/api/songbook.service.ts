@@ -108,6 +108,57 @@ export class SongbookService {
         );
     }
 
+    getSongsCountBySongbookIds(songbookIds: string[]): Observable<Record<string, number>> {
+        if (!songbookIds?.length) {
+            return of({});
+        }
+
+        const chunkSize = 30;
+        const chunks = Array.from({ length: Math.ceil(songbookIds.length / chunkSize) }, (_, index) =>
+            songbookIds.slice(index * chunkSize, (index + 1) * chunkSize)
+        );
+
+        const chunkQueries = chunks.map((chunk) =>
+            from(
+                getDocs(
+                    query(
+                        collection(this._firestore, 'songbook_songs'),
+                        where('songbookId', 'in', chunk)
+                    )
+                )
+            ).pipe(
+                map((snapshot) => {
+                    const counts: Record<string, number> = {};
+                    snapshot.docs.forEach((relationDoc) => {
+                        const data = relationDoc.data() || {};
+                        if (data.deleted === true) {
+                            return;
+                        }
+
+                        const id = data.songbookId as string;
+                        if (!id) {
+                            return;
+                        }
+                        counts[id] = (counts[id] || 0) + 1;
+                    });
+                    return counts;
+                })
+            )
+        );
+
+        return combineLatest(chunkQueries).pipe(
+            map((results) =>
+                results.reduce((acc, partial) => {
+                    Object.entries(partial).forEach(([songbookId, count]) => {
+                        acc[songbookId] = (acc[songbookId] || 0) + count;
+                    });
+                    return acc;
+                }, {} as Record<string, number>)
+            ),
+            catchError((error) => this.handleError(error))
+        );
+    }
+
     getContent(songbookId: string): Observable<PartialSong[]> {
         const relationsRef = collection(this._firestore, 'songbook_songs');
         const q = query(relationsRef, where('songbookId', '==', songbookId));
@@ -168,6 +219,11 @@ export class SongbookService {
             return null;
         }
 
+        if (!(songbook.leaderName || '').trim()) {
+            this.showSnackbar('Leader is required');
+            return null;
+        }
+
         try {
             const user = this._auth.currentUser;
 
@@ -181,12 +237,40 @@ export class SongbookService {
 
             await setDoc(doc(this._firestore, 'songbooks', songbook.uid), {
                 ...songbook,
+                leaderName: (songbook.leaderName || '').trim(),
             });
             this.showSnackbar('Songbook saved successfully');
             return songbook.uid;
         } catch (error) {
             this.handleError(error);
             return null;
+        }
+    }
+
+    async delete(songbookId: string): Promise<boolean> {
+        if (!this.verifyAuthentication()) {
+            return false;
+        }
+
+        try {
+            const relationsQuery = query(
+                collection(this._firestore, 'songbook_songs'),
+                where('songbookId', '==', songbookId)
+            );
+            const relationsSnapshot = await getDocs(relationsQuery);
+
+            const batch = writeBatch(this._firestore);
+            relationsSnapshot.docs.forEach((relationDoc) => {
+                batch.delete(relationDoc.ref);
+            });
+            batch.delete(doc(this._firestore, 'songbooks', songbookId));
+
+            await batch.commit();
+            this.showSnackbar('Songbook deleted successfully');
+            return true;
+        } catch (error) {
+            this.handleError(error);
+            return false;
         }
     }
 

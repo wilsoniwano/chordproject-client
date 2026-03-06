@@ -1,0 +1,85 @@
+<div class="flex flex-auto flex-col p-6 sm:p-10">
+    <div class="mx-auto w-full max-w-3xl">
+        <div class="bg-card rounded-2xl p-6 shadow sm:p-8">
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold">{{ 'leaders.title' | transloco }}</h1>
+                <p class="text-secondary mt-1">{{ 'leaders.description' | transloco }}</p>
+            </div>
+
+            <form class="mb-6 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start" [formGroup]="form" (ngSubmit)="saveLeader()">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'leaders.name_label' | transloco }}</mat-label>
+                    <input matInput formControlName="name" maxlength="80" />
+                    @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+                        <mat-error>{{ 'leaders.name_required' | transloco }}</mat-error>
+                    }
+                </mat-form-field>
+
+                <button mat-flat-button color="primary" type="submit" [disabled]="saving" class="sm:mt-8">
+                    {{ 'leaders.add' | transloco }}
+                </button>
+            </form>
+
+            @if (leaders$ | async; as leaders) {
+                @if (leaders.length) {
+                    <div class="divide-y overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                        @for (leader of leaders; track leader.uid) {
+                            <div class="flex items-center justify-between gap-3 px-4 py-3">
+                                <span class="truncate">{{ leader.name }}</span>
+                                <div class="flex items-center gap-1">
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        [disabled]="saving"
+                                        [matTooltip]="'toolbar.edit' | transloco"
+                                        (click)="openEditLeader(leader)"
+                                        aria-label="Editar dirigente"
+                                    >
+                                        <mat-icon [svgIcon]="'heroicons_outline:pencil-square'"></mat-icon>
+                                    </button>
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        [disabled]="saving"
+                                        [matTooltip]="'toolbar.delete' | transloco"
+                                        (click)="removeLeader(leader)"
+                                        aria-label="Excluir dirigente"
+                                    >
+                                        <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <p class="text-secondary">{{ 'leaders.empty' | transloco }}</p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<ng-template #editLeaderDialog>
+    @if (currentLeader) {
+        <h2 mat-dialog-title>{{ 'leaders.edit_title' | transloco }}</h2>
+        <mat-dialog-content>
+            <form class="grid gap-3 pt-1" [formGroup]="editForm">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{ 'leaders.name_label' | transloco }}</mat-label>
+                    <input matInput formControlName="name" maxlength="80" />
+                    @if (editForm.controls.name.hasError('required') && editForm.controls.name.touched) {
+                        <mat-error>{{ 'leaders.name_required' | transloco }}</mat-error>
+                    }
+                </mat-form-field>
+            </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-stroked-button type="button" [disabled]="saving" (click)="cancelEditLeader()">
+                {{ 'common.cancel' | transloco }}
+            </button>
+            <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="saveEditedLeader()">
+                {{ 'common.update' | transloco }}
+            </button>
+        </mat-dialog-actions>
+    }
+</ng-template>

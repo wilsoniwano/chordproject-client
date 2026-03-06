@@ -10,6 +10,7 @@ describe('SongbookViewerComponent', () => {
     beforeEach(() => {
         const route = { paramMap: of(new Map()), queryParamMap: of(new Map()) };
         const router = { navigate: vi.fn().mockResolvedValue(true) };
+        const dialog = { open: vi.fn() };
         const songbookService = {
             get: vi.fn().mockReturnValue(of(null)),
             getContent: vi.fn().mockReturnValue(of([])),
@@ -24,6 +25,7 @@ describe('SongbookViewerComponent', () => {
         component = new SongbookViewerComponent(
             route as any,
             router as any,
+            dialog as any,
             songbookService as any,
             parserService as any,
             userService as any
@@ -61,4 +63,5 @@ describe('SongbookViewerComponent', () => {
 
         expect(component.viewMode).toBe('paged');
     });
+
 });

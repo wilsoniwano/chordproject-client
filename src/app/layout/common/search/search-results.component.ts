@@ -26,4 +26,29 @@ export class SearchResultsComponent {
     trackByUid(index: number, item: any): string {
         return item.uid;
     }
+
+    getSongMetaLine(song: any): string {
+        if (!song) {
+            return '';
+        }
+
+        const parts: string[] = [];
+        const artists = Array.isArray(song.artists) ? song.artists.filter(Boolean) : [];
+        const key = song.customKey || song.songKey;
+        const tempo = typeof song.tempo === 'number' ? song.tempo : null;
+
+        if (artists.length) {
+            parts.push(artists.join(' - '));
+        }
+
+        if (key) {
+            parts.push(`Tom: ${key}`);
+        }
+
+        if (tempo !== null) {
+            parts.push(`Tempo: ${tempo}`);
+        }
+
+        return parts.join(' • ');
+    }
 }

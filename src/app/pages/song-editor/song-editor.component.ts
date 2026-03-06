@@ -87,6 +87,11 @@ export class SongEditorComponent implements OnInit, OnDestroy {
 
         if (res) {
             this.song.uid = res;
+            const returnTo = this._route.snapshot?.queryParamMap?.get?.('returnTo');
+            if (returnTo) {
+                await this._router.navigateByUrl(returnTo);
+                return;
+            }
             await this._router.navigate(['/library']);
             return;
         }

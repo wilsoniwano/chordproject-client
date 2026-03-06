@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { normalizeMusicalKey, transposeMusicalKey } from 'domain/music/transpose-key';
+import { TransposeKeyDialogComponent } from 'app/components/transpose-key-dialog/transpose-key-dialog.component';
+import { normalizeMusicalKey } from 'domain/music/transpose-key';
 
 @Component({
     selector: 'chp-transpose-tool',
     standalone: true,
     templateUrl: './transpose.component.html',
-    imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+    imports: [MatButtonModule, MatTooltipModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransposeToolComponent {
@@ -19,6 +20,8 @@ export class TransposeToolComponent {
 
     private _initialKey: string;
     currentKey: string;
+
+    constructor(private _dialog: MatDialog) {}
 
     @Input()
     set initialKey(value: string) {
@@ -33,14 +36,21 @@ export class TransposeToolComponent {
         return this._initialKey;
     }
 
-    transposeUp(): void {
-        this.currentKey = transposeMusicalKey(this.currentKey, 1);
-        this.transposeEvent.emit(this.currentKey);
-    }
+    openTonePicker(): void {
+        const dialogRef = this._dialog.open(TransposeKeyDialogComponent, {
+            width: '420px',
+            maxWidth: '95vw',
+            data: { currentKey: this.currentKey || this._initialKey || 'C' },
+        });
 
-    transposeDown(): void {
-        this.currentKey = transposeMusicalKey(this.currentKey, -1);
-        this.transposeEvent.emit(this.currentKey);
+        dialogRef.afterClosed().subscribe((selectedKey: string | undefined) => {
+            if (!selectedKey || selectedKey === this.currentKey) {
+                return;
+            }
+
+            this.currentKey = selectedKey;
+            this.transposeEvent.emit(this.currentKey);
+        });
     }
 
     private _updateKeyDisplayAndEmit(): void {

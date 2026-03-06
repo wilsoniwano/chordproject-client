@@ -3,27 +3,47 @@
 
 <ng-template #songList>
     @if (songbook$ | async; as songbook) {
-        <div class="flex h-full flex-col dark:border-[#334155]">
+        <div class="flex h-full flex-col bg-white dark:border-[#334155] dark:bg-transparent">
             <!-- Sección superior -->
             <div
-                class="flex items-center justify-between border-b border-gray-200 bg-accent-50 p-6 dark:border-[#334155] dark:bg-[#273549]"
+                class="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-[#334155] dark:bg-[#0f172a]"
             >
-                <div class="min-w-0 flex-1">
-                    <div>
-                        <h1 class="page-title truncate">
-                            {{ songbook.name }}
-                        </h1>
-                        <p class="text-secondary mt-1 text-sm">
-                            {{ 'songbook_list.event_date' | transloco }}: {{ formatEventDate(songbook.eventDate) }}
-                        </p>
+                <div class="min-w-0 flex flex-1 items-center gap-2">
+                    <a
+                        mat-icon-button
+                        [routerLink]="['/songbook']"
+                        [matTooltip]="'common.back' | transloco"
+                        aria-label="Voltar para listas de reprodução"
+                    >
+                        <mat-icon [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+                    </a>
+                    <div class="min-w-0">
+                        <div class="truncate text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            {{ formatSubheaderPrimary(songbook) }}
+                        </div>
+                        <div class="text-secondary truncate text-sm dark:text-slate-300">
+                            {{ formatSubheaderSecondary(songbook) }}
+                        </div>
                     </div>
                 </div>
                 <div class="ml-4 flex items-center gap-2">
-                    <button mat-stroked-button type="button" (click)="openEditHeader(songbook)">
-                        {{ 'songbook.manage.edit_details' | transloco }}
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="openEditHeader(songbook)"
+                        [matTooltip]="'songbook.manage.edit_details' | transloco"
+                        aria-label="Editar dados da lista"
+                    >
+                        <mat-icon [svgIcon]="'heroicons_outline:pencil-square'"></mat-icon>
                     </button>
-                    <a mat-stroked-button [routerLink]="['/songbook', songbook.uid, 'view']">
-                        {{ 'songbook.viewer.open' | transloco }}
+                    <a
+                        mat-flat-button
+                        color="primary"
+                        [routerLink]="['/songbook', songbook.uid, 'view']"
+                        [matTooltip]="'songbook.viewer.open' | transloco"
+                        aria-label="Abrir modo visualização"
+                    >
+                        <mat-icon [svgIcon]="'heroicons_outline:eye'"></mat-icon>
                     </a>
                 </div>
             </div>
@@ -68,11 +88,11 @@
                                     [song]="song"
                                     (click)="selectSong(song)"
                                     (dblclick)="onDblClick(song)"
-                                    (keyChange)="onSongKeyChange(song, $event)"
+                                    (removeRequested)="removeSong(song, $event)"
                                     class="w-full min-w-0 flex-1"
                                     [selected]="selectedSong?.uid === song.uid"
                                     [showDragHandle]="songbook.isReorderable"
-                                    [showToneControls]="true"
+                                    [showExtendedMetaTags]="true"
                                 >
                                 </chp-song-item>
                             </div>
@@ -90,10 +110,16 @@
         <mat-dialog-content>
             <form class="grid gap-3 pt-1" [formGroup]="headerForm">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                    <mat-label>{{ 'songbook_create.name' | transloco }}</mat-label>
-                    <input matInput formControlName="name" maxlength="80" />
-                    @if (headerForm.controls.name.hasError('required') && headerForm.controls.name.touched) {
-                        <mat-error>{{ 'songbook_create.name_required' | transloco }}</mat-error>
+                    <mat-label>{{ 'songbook_create.leader' | transloco }}</mat-label>
+                    <mat-select formControlName="leaderName" panelClass="leader-select-panel">
+                        @if (leaders$ | async; as leaders) {
+                            @for (leader of leaders; track trackByLeader($index, leader)) {
+                                <mat-option [value]="leader.name">{{ leader.name }}</mat-option>
+                            }
+                        }
+                    </mat-select>
+                    @if (headerForm.controls.leaderName.hasError('required') && headerForm.controls.leaderName.touched) {
+                        <mat-error>{{ 'songbook_create.leader_required' | transloco }}</mat-error>
                     }
                 </mat-form-field>
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
@@ -118,6 +144,53 @@
 
 <ng-template #viewer>
     @if (selectedSong) {
-        <chp-viewer [content]="selectedSong.content" isPreview="true"> </chp-viewer>
+        <div class="bg-card flex h-full flex-col">
+            <div class="flex h-[64px] min-h-[64px] max-h-[64px] items-center justify-between overflow-hidden border-b border-gray-200 px-4 dark:border-[#334155]">
+                <span></span>
+                <div class="ml-4 flex items-center gap-2">
+                    <button
+                        mat-icon-button
+                        type="button"
+                        [disabled]="!selectedSong?.uid"
+                        (click)="openSelectedSongEditor($event)"
+                        [matTooltip]="'toolbar.edit' | transloco"
+                        aria-label="Editar música"
+                    >
+                        <mat-icon [svgIcon]="'heroicons_outline:pencil-square'"></mat-icon>
+                    </button>
+                    @if (selectedSongKey) {
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="tone-key-button font-mono"
+                            (click)="openSelectedSongTonePicker($event)"
+                        >
+                            {{ selectedSongKey }}
+                        </button>
+                    }
+                    <button
+                        type="button"
+                        class="icon-button-32 flex items-center justify-center text-sm leading-none text-red-600 dark:text-red-400"
+                        (click)="removeSong(selectedSong, $event)"
+                        aria-label="Remover música"
+                    >
+                        <mat-icon class="icon-size-4" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                    </button>
+                    <button
+                        mat-icon-button
+                        type="button"
+                        class="md:hidden"
+                        (click)="splitLayout?.togglePreview()"
+                        aria-label="Fechar preview"
+                    >
+                        <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1">
+                <chp-viewer [content]="selectedSong.content" isPreview="true" [forceDarkBackground]="true"> </chp-viewer>
+            </div>
+        </div>
     }
 </ng-template>

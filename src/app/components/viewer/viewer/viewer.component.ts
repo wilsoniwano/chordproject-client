@@ -41,6 +41,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
     @Input() isPreview = false;
     @Input() autoColumns = false;
     @Input() forceDarkHeaderBackground = false;
+    @Input() forceDarkBackground = false;
     @Input() viewMode: ViewerMode = 'normal';
     @Input() pagedColumnWidth = ChpViewerComponent.MIN_PAGED_COLUMN_WIDTH;
     @Input() normalColumnCount = 1;
@@ -81,7 +82,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
             return false;
         }
 
-        return this.isPagedColumnsMode || !!this.viewSettings?.showColumns;
+        return !!this.viewSettings?.showColumns;
     }
 
     get isPagedColumnsMode(): boolean {
@@ -148,7 +149,8 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
             this.isPreview ? true : this.viewSettings.showTabs
         );
         this.chordDiagrams = this.buildChordDiagrams((this._currentSong as any).userDiagrams ?? []);
-        this.setSongHtml(this.stripHiddenMetadata(songHtml));
+        const htmlWithAlbum = this.injectMissingAlbumMetadata(songHtml);
+        this.setSongHtml(this.normalizeMetadataOrder(htmlWithAlbum));
     }
 
     private buildChordDiagrams(diagrams: any[]): ChordDiagramViewModel[] {
@@ -165,14 +167,74 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
         });
     }
 
-    private stripHiddenMetadata(html: string): string {
-        if (!html) {
+    private injectMissingAlbumMetadata(html: string): string {
+        if (!html || !this.currentSong) {
             return html;
         }
 
-        return html
-            .replace(/<h1 class="[^"]*title-metadata[^"]*">[\s\S]*?<\/h1>/gi, '')
-            .replace(/<h3 class="[^"]*artist-metadata[^"]*">[\s\S]*?<\/h3>/gi, '');
+        if (/album-metadata/i.test(html)) {
+            return html;
+        }
+
+        const albums = (this.currentSong as any).albums?.filter((album: string) => !!album?.trim?.()) ?? [];
+        if (!albums.length) {
+            return html;
+        }
+
+        const albumText = this.escapeHtml(albums.join(', '));
+        const albumHtml = `<div class="metadata album-metadata">Album: ${albumText}</div>`;
+
+        return html.replace(
+            /(<div class=?["']?song-metadata["']?[^>]*>[\s\S]*?)(<\/div>)/i,
+            `$1${albumHtml}$2`
+        );
+    }
+
+    private normalizeMetadataOrder(html: string): string {
+        if (!html || typeof DOMParser === 'undefined') {
+            return html;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div id="metadata-root">${html}</div>`, 'text/html');
+        const root = doc.querySelector('#metadata-root');
+        const metadata = root?.querySelector('.song-metadata');
+        if (!root || !metadata) {
+            return html;
+        }
+
+        const orderedClassNames = [
+            'title-metadata',
+            'artist-metadata',
+            'album-metadata',
+            'key-metadata',
+            'tempo-metadata',
+            'time-metadata',
+        ];
+        const orderedNodes: Element[] = [];
+
+        for (const className of orderedClassNames) {
+            const node = metadata.querySelector(`.${className}`);
+            if (!node) {
+                continue;
+            }
+
+            orderedNodes.push(node);
+            node.remove();
+        }
+
+        const remainingNodes = Array.from(metadata.childNodes);
+        metadata.replaceChildren(...orderedNodes, ...remainingNodes);
+        return root.innerHTML;
+    }
+
+    private escapeHtml(value: string): string {
+        return value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     zoom(value: number): void {
@@ -265,7 +327,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
             const pageWidth = this.clampPagedColumnWidth(this.pagedColumnWidth);
             const containerHeight = this.contentElement.clientHeight || 720;
             const columnsPerPage = 1;
-            const columnHost = content || contentInner || songContent!;
+            const columnHost = contentInner || songContent || content!;
             this.contentElement.style.overflowX = 'auto';
             this.contentElement.style.overflowY = 'hidden';
 
@@ -362,7 +424,7 @@ export class ChpViewerComponent implements AfterViewInit, OnChanges {
         }
 
         if (!this.isPreview && normalColumns > 1) {
-            const normalHost = songContent || content;
+            const normalHost = contentInner || songContent || content;
             if (normalHost) {
                 normalHost.style.columnFill = 'balance';
                 normalHost.style.columnGap = `${ChpViewerComponent.PAGED_COLUMN_GAP}px`;

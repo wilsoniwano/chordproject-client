@@ -9,13 +9,15 @@ import {
 const labels: NavigationLabels = {
     library: 'Biblioteca',
     songbooks: 'Listas de reprodução',
+    settingsLeaders: 'Configurações',
 };
 
 describe('navigation use case', () => {
     it('builds base navigation with localized labels', () => {
         const nav = buildBaseNavigation(labels);
-        expect(nav).toHaveLength(1);
+        expect(nav).toHaveLength(2);
         expect(nav[0].title).toBe('Biblioteca');
+        expect(nav[1].title).toBe('Configurações');
     });
 
     it('builds unauthenticated songbooks item', () => {

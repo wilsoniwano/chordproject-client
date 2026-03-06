@@ -10,8 +10,6 @@ import {
     Output,
     TemplateRef,
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { FuseConfigService } from '@fuse/services/config';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { AngularSplitModule } from 'angular-split';
@@ -21,7 +19,7 @@ import { Subject, takeUntil } from 'rxjs';
     selector: 'chp-split-layout',
     standalone: true,
     templateUrl: './split-layout.component.html',
-    imports: [CommonModule, AngularSplitModule, MatIconModule, MatButtonModule],
+    imports: [CommonModule, AngularSplitModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChpSplitLayoutComponent implements OnInit, OnDestroy {

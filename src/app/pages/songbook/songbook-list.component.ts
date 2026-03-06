@@ -6,11 +6,14 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
+import { LeaderService } from 'app/core/firebase/api/leader.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
+import { Leader } from 'app/models/leader';
 import { Songbook } from 'app/models/songbook';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject, map, of, switchMap } from 'rxjs';
 
 @Component({
     selector: 'songbook-list',
@@ -24,6 +27,7 @@ import { BehaviorSubject, switchMap } from 'rxjs';
         MatDialogModule,
         MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
         RouterLink,
         TranslocoModule,
     ],
@@ -32,16 +36,34 @@ export class SongbookListComponent {
     @ViewChild('createSongbookDialog') createSongbookDialog: TemplateRef<unknown>;
     private _createDialogRef: MatDialogRef<unknown> | null = null;
     private _refresh$ = new BehaviorSubject<void>(undefined);
-    readonly songbooks$ = this._refresh$.pipe(switchMap(() => this._songbookService.getAll()));
+    readonly songbooks$ = this._refresh$.pipe(
+        switchMap(() => this._songbookService.getAll()),
+        switchMap((songbooks) => {
+            if (!songbooks.length) {
+                return of([]);
+            }
+
+            return this._songbookService.getSongsCountBySongbookIds(songbooks.map((songbook) => songbook.uid)).pipe(
+                map((counts) =>
+                    songbooks.map((songbook) => ({
+                        ...songbook,
+                        songsCount: counts[songbook.uid] || 0,
+                    }))
+                )
+            );
+        })
+    );
+    readonly leaders$ = this._leaderService.getAll();
     saving = false;
 
     readonly form = this._formBuilder.group({
-        name: ['', [Validators.required, Validators.maxLength(80)]],
+        leaderName: ['', [Validators.required]],
         eventDate: ['', [Validators.required]],
     });
 
     constructor(
         private _songbookService: SongbookService,
+        private _leaderService: LeaderService,
         private _formBuilder: FormBuilder,
         private _dialog: MatDialog,
         private _router: Router
@@ -49,7 +71,7 @@ export class SongbookListComponent {
 
     openCreateDialog(): void {
         this.form.reset({
-            name: '',
+            leaderName: '',
             eventDate: '',
         });
         this._createDialogRef = this._dialog.open(this.createSongbookDialog, {
@@ -69,9 +91,12 @@ export class SongbookListComponent {
         }
 
         const value = this.form.getRawValue();
+        const leaderName = (value.leaderName || '').trim();
+        const eventDate = value.eventDate || '';
         const songbook = {
-            name: (value.name || '').trim(),
-            eventDate: value.eventDate || '',
+            name: this.buildSongbookTitle(eventDate, leaderName),
+            leaderName,
+            eventDate,
             parent: '',
             isReorderable: true,
             badgeText: '',
@@ -89,16 +114,70 @@ export class SongbookListComponent {
         }
     }
 
-    formatEventDate(songbook: Songbook): string {
-        if (!songbook?.eventDate) {
-            return '-';
+    async deleteSongbook(songbook: Songbook, event?: Event): Promise<void> {
+        event?.preventDefault();
+        event?.stopPropagation();
+
+        if (!songbook?.uid || this.saving) {
+            return;
         }
 
-        const [year, month, day] = songbook.eventDate.split('-');
+        const confirmed = typeof window === 'undefined'
+            ? true
+            : window.confirm(`Excluir a lista "${songbook.name}"? Essa ação não pode ser desfeita.`);
+        if (!confirmed) {
+            return;
+        }
+
+        this.saving = true;
+        const deleted = await this._songbookService.delete(songbook.uid);
+        this.saving = false;
+
+        if (deleted) {
+            this._refresh$.next();
+        }
+    }
+
+    trackByLeader(index: number, leader: Leader): string {
+        return leader.uid || `${index}`;
+    }
+
+    formatSongsCount(count?: number): string {
+        const value = count || 0;
+        return value === 1 ? '1 música' : `${value} músicas`;
+    }
+
+    formatPrimaryLine(songbook: Songbook): string {
+        return `${songbook?.leaderName || '-'} · ${this.formatDate(songbook?.eventDate || '')}`;
+    }
+
+    formatSecondaryLine(songbook: Songbook & { songsCount?: number }): string {
+        return `${this.formatWeekday(songbook?.eventDate || '')} · ${this.formatSongsCount(songbook?.songsCount)}`;
+    }
+
+    private formatDate(eventDate: string): string {
+        const [year, month, day] = eventDate.split('-');
         if (!year || !month || !day) {
             return '-';
         }
 
         return `${day}/${month}/${year}`;
+    }
+
+    private formatWeekday(eventDate: string): string {
+        const dateForWeekday = new Date(`${eventDate}T00:00:00`);
+        if (Number.isNaN(dateForWeekday.getTime())) {
+            return '-';
+        }
+
+        const weekdayRaw = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dateForWeekday);
+        return `${weekdayRaw.charAt(0).toUpperCase()}${weekdayRaw.slice(1)}`;
+    }
+
+    private buildSongbookTitle(eventDate: string, leaderName: string): string {
+        const formattedDate = this.formatDate(eventDate);
+        const weekday = this.formatWeekday(eventDate);
+
+        return `${weekday} · ${formattedDate} · ${leaderName}`.trim();
     }
 }

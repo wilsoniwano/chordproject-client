@@ -1,137 +1,150 @@
 {
-    "home": {
-        "about_title": "Sobre este projeto",
-        "about_description": "<strong>ChordProject</strong> é uma lista de reprodução digital que permite a entusiastas da música criar, editar, organizar e descobrir novas músicas usando o formato <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Você também pode compartilhar suas próprias músicas com outros usuários e usar a plataforma como uma ferramenta ideal para ensaios ou apresentações ao vivo. Diferente de uma lista de reprodução impressa, esta plataforma é dinâmica, evolui e cresce com você.",
-        "overview_title": "Visão geral",
-        "overview_description": "Este aplicativo foi projetado para gerenciar <strong>músicas</strong> (com <strong>acordes</strong>) e <strong>listas de reprodução</strong>.",
-        "features": [
-            "Permite escrever e visualizar músicas com acordes de forma clara e organizada usando o formato ChordPro.",
-            "Permite ler, editar ou imprimir músicas com diagramas de acordes.",
-            "Garante que os acordes estejam sempre posicionados corretamente, independentemente do tamanho da fonte ou da tela.",
-            "Armazena músicas online, com atualizações refletidas instantaneamente em todos os dispositivos.",
-            "Inclui um visualizador com ferramentas para apresentações ao vivo, como rolagem automática, ajuste de tamanho da fonte e mais.",
-            "A transposição segue regras musicais, não apenas deslocamentos matemáticos.",
-            "Permite organizar músicas em <strong>listas de reprodução</strong> personalizáveis."
-        ],
-        "platform_description": "ChordProject tem um site irmão, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente à <strong>música cristã</strong>, enquanto o ChordProject é para uso geral."
+  "home": {
+    "about_title": "Sobre este projeto",
+    "about_description": "<strong>ChordProject</strong> é uma lista de reprodução digital que permite a entusiastas da música criar, editar, organizar e descobrir novas músicas usando o formato <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Você também pode compartilhar suas próprias músicas com outros usuários e usar a plataforma como uma ferramenta ideal para ensaios ou apresentações ao vivo. Diferente de uma lista de reprodução impressa, esta plataforma é dinâmica, evolui e cresce com você.",
+    "overview_title": "Visão geral",
+    "overview_description": "Este aplicativo foi projetado para gerenciar <strong>músicas</strong> (com <strong>acordes</strong>) e <strong>listas de reprodução</strong>.",
+    "features": [
+      "Permite escrever e visualizar músicas com acordes de forma clara e organizada usando o formato ChordPro.",
+      "Permite ler, editar ou imprimir músicas com diagramas de acordes.",
+      "Garante que os acordes estejam sempre posicionados corretamente, independentemente do tamanho da fonte ou da tela.",
+      "Armazena músicas online, com atualizações refletidas instantaneamente em todos os dispositivos.",
+      "Inclui um visualizador com ferramentas para apresentações ao vivo, como rolagem automática, ajuste de tamanho da fonte e mais.",
+      "A transposição segue regras musicais, não apenas deslocamentos matemáticos.",
+      "Permite organizar músicas em <strong>listas de reprodução</strong> personalizáveis."
+    ],
+    "platform_description": "ChordProject tem um site irmão, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente à <strong>música cristã</strong>, enquanto o ChordProject é para uso geral."
+  },
+  "common": {
+    "settings": "Configurações",
+    "theme": "TEMA",
+    "language": "IDIOMA",
+    "scheme": "ESQUEMA",
+    "auto": "Automático",
+    "dark": "Escuro",
+    "light": "Claro",
+    "auto_scheme_tooltip": "Define automaticamente o esquema com base na preferência do sistema operacional usando a media query 'prefers-color-scheme'.",
+    "signed_in_as": "Conectado como",
+    "profile": "Perfil",
+    "sign_out": "Sair",
+    "search_songs": "Buscar músicas",
+    "add": "Adicionar",
+    "update": "Atualizar",
+    "cancel": "Cancelar",
+    "recently_added": "Adicionadas recentemente",
+    "error_loading_songs": "Algo deu errado ao carregar as músicas",
+    "refresh_to_try_again": "Atualize a página para tentar novamente"
+  },
+  "nav": {
+    "home": "Início",
+    "library": "Biblioteca",
+    "create": "Criar",
+    "songbooks": "Listas de reprodução",
+    "create_songbook": "Nova lista de reprodução",
+    "settings_leaders": "Configurações"
+  },
+  "search": {
+    "placeholder": "Pesquisar por título, letra ou lista de reprodução",
+    "placeholder_bar": "Pesquisar por título, letra ou lista de reprodução...",
+    "no_results": "Nenhum resultado encontrado!",
+    "songs": "MÚSICAS",
+    "songs_content": "CONTEÚDO DAS MÚSICAS",
+    "songbooks": "LISTAS DE REPRODUÇÃO",
+    "songbooks_content": "CONTEÚDO DAS LISTAS DE REPRODUÇÃO"
+  },
+  "library": {
+    "title": "Biblioteca de músicas",
+    "no_songs": "Nenhuma música",
+    "song": "música",
+    "songs": "músicas"
+  },
+  "shortcuts": {
+    "title": "Atalhos",
+    "add_new": "Adicionar novo",
+    "editing": "Editando",
+    "enter_edit_mode": "Entrar no modo de edição",
+    "add_shortcut": "Adicionar atalho",
+    "exit_edit_mode": "Sair do modo de edição",
+    "no_shortcuts": "Sem atalhos",
+    "no_shortcuts_description": "Quando você tiver atalhos, eles aparecerão aqui.",
+    "label": "Rótulo",
+    "description": "Descrição",
+    "icon": "Ícone",
+    "link": "Link",
+    "use_router": "Usar roteamento interno para o link"
+  },
+  "profile": {
+    "title": "Perfil",
+    "description": "Informações da conta conectada.",
+    "name": "Nome",
+    "email": "E-mail",
+    "uid": "ID do usuário",
+    "email_verified": "E-mail verificado",
+    "yes": "Sim",
+    "no": "Não",
+    "not_informed": "Não informado"
+  },
+  "songbook_create": {
+    "title": "Nova lista de reprodução",
+    "description": "Cadastre uma lista de reprodução para organizar suas músicas.",
+    "name": "Nome da lista",
+    "name_required": "Informe o nome da lista",
+    "event_date": "Data do evento",
+    "event_date_required": "Informe a data do evento",
+    "parent": "ID da lista pai (opcional)",
+    "parent_hint": "Deixe em branco para criar na raiz.",
+    "reorderable": "Permitir reordenação por arrastar e soltar",
+    "save": "Salvar lista",
+    "leader": "Dirigente",
+    "leader_required": "Selecione um dirigente"
+  },
+  "songbook_list": {
+    "title": "Listas de reprodução",
+    "description": "Acesse e gerencie suas listas de reprodução.",
+    "event_date": "Data do evento",
+    "empty": "Nenhuma lista de reprodução cadastrada.",
+    "leader": "Dirigente"
+  },
+  "songbook": {
+    "manage": {
+      "edit_details": "Editar dados",
+      "add_song": "Adicionar música",
+      "search_hint": "Digite ao menos 2 letras para buscar por título."
     },
-    "common": {
-        "settings": "Configurações",
-        "theme": "TEMA",
-        "language": "IDIOMA",
-        "scheme": "ESQUEMA",
-        "auto": "Automático",
-        "dark": "Escuro",
-        "light": "Claro",
-        "auto_scheme_tooltip": "Define automaticamente o esquema com base na preferência do sistema operacional usando a media query 'prefers-color-scheme'.",
-        "signed_in_as": "Conectado como",
-        "profile": "Perfil",
-        "sign_out": "Sair",
-        "search_songs": "Buscar músicas",
-        "add": "Adicionar",
-        "update": "Atualizar",
-        "cancel": "Cancelar",
-        "recently_added": "Adicionadas recentemente",
-        "error_loading_songs": "Algo deu errado ao carregar as músicas",
-        "refresh_to_try_again": "Atualize a página para tentar novamente"
-    },
-    "nav": {
-        "home": "Início",
-        "library": "Biblioteca",
-        "create": "Criar",
-        "songbooks": "Listas de reprodução",
-        "create_songbook": "Nova lista de reprodução"
-    },
-    "search": {
-        "placeholder": "Pesquisar por título, letra ou lista de reprodução",
-        "placeholder_bar": "Pesquisar por título, letra ou lista de reprodução...",
-        "no_results": "Nenhum resultado encontrado!",
-        "songs": "MÚSICAS",
-        "songs_content": "CONTEÚDO DAS MÚSICAS",
-        "songbooks": "LISTAS DE REPRODUÇÃO",
-        "songbooks_content": "CONTEÚDO DAS LISTAS DE REPRODUÇÃO"
-    },
-    "library": {
-        "title": "Biblioteca de músicas",
-        "no_songs": "Nenhuma música",
-        "song": "música",
-        "songs": "músicas"
-    },
-    "shortcuts": {
-        "title": "Atalhos",
-        "add_new": "Adicionar novo",
-        "editing": "Editando",
-        "enter_edit_mode": "Entrar no modo de edição",
-        "add_shortcut": "Adicionar atalho",
-        "exit_edit_mode": "Sair do modo de edição",
-        "no_shortcuts": "Sem atalhos",
-        "no_shortcuts_description": "Quando você tiver atalhos, eles aparecerão aqui.",
-        "label": "Rótulo",
-        "description": "Descrição",
-        "icon": "Ícone",
-        "link": "Link",
-        "use_router": "Usar roteamento interno para o link"
-    },
-    "profile": {
-        "title": "Perfil",
-        "description": "Informações da conta conectada.",
-        "name": "Nome",
-        "email": "E-mail",
-        "uid": "ID do usuário",
-        "email_verified": "E-mail verificado",
-        "yes": "Sim",
-        "no": "Não",
-        "not_informed": "Não informado"
-    },
-    "songbook_create": {
-        "title": "Nova lista de reprodução",
-        "description": "Cadastre uma lista de reprodução para organizar suas músicas.",
-        "name": "Nome da lista",
-        "name_required": "Informe o nome da lista",
-        "event_date": "Data do evento",
-        "event_date_required": "Informe a data do evento",
-        "parent": "ID da lista pai (opcional)",
-        "parent_hint": "Deixe em branco para criar na raiz.",
-        "reorderable": "Permitir reordenação por arrastar e soltar",
-        "save": "Salvar lista"
-    },
-    "songbook_list": {
-        "title": "Listas de reprodução",
-        "description": "Acesse e gerencie suas listas de reprodução.",
-        "event_date": "Data do evento",
-        "empty": "Nenhuma lista de reprodução cadastrada."
-    },
-    "songbook": {
-        "manage": {
-            "edit_details": "Editar dados",
-            "add_song": "Adicionar música",
-            "search_hint": "Digite ao menos 2 letras para buscar por título."
-        },
-        "viewer": {
-            "open": "Modo visualização",
-            "back": "Voltar ao songbook",
-            "reset_key": "Resetar tom",
-            "reset_font": "Resetar fonte",
-            "reset_column_width": "Resetar largura",
-            "options": "Opções",
-            "transpose": "Transposição",
-            "font_size": "Tamanho da fonte",
-            "column_width": "Largura da coluna",
-            "columns_per_page": "Colunas por página",
-            "view_mode": "Modo de visualização",
-            "normal_mode": "Normal",
-            "paged_columns": "Colunas paginadas",
-            "vertical_pages": "Páginas verticais"
-        }
-    },
-    "toolbar": {
-        "settings": "Configurações",
-        "edit": "Editar",
-        "full_screen": "Tela cheia",
-        "save": "Salvar",
-        "delete": "Excluir",
-        "open_full_editor": "Abrir no editor completo",
-        "help": "Ajuda",
-        "close": "Fechar"
+    "viewer": {
+      "open": "Modo visualização",
+      "back": "Voltar ao songbook",
+      "reset_key": "Resetar tom",
+      "reset_font": "Resetar fonte",
+      "reset_column_width": "Resetar largura",
+      "options": "Opções",
+      "transpose": "Transposição",
+      "font_size": "Tamanho da fonte",
+      "column_width": "Largura da coluna",
+      "columns_per_page": "Colunas por página",
+      "view_mode": "Modo de visualização",
+      "normal_mode": "Normal",
+      "paged_columns": "Colunas paginadas",
+      "vertical_pages": "Páginas verticais"
     }
+  },
+  "toolbar": {
+    "settings": "Configurações",
+    "edit": "Editar",
+    "full_screen": "Tela cheia",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "open_full_editor": "Abrir no editor completo",
+    "help": "Ajuda",
+    "close": "Fechar"
+  },
+  "leaders": {
+    "title": "Configurações de dirigentes",
+    "description": "Cadastre os dirigentes disponíveis para vincular nas listas de reprodução.",
+    "edit_title": "Editar dirigente",
+    "name_label": "Nome do dirigente",
+    "name_required": "Informe o nome do dirigente",
+    "add": "Adicionar dirigente",
+    "empty": "Nenhum dirigente cadastrado."
+  }
 }

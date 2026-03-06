@@ -73,6 +73,18 @@ describe('SongEditorComponent', () => {
         expect(changeDetectorRef.markForCheck).toHaveBeenCalled();
     });
 
+    it('redirects to returnTo after successful save when provided', async () => {
+        component.song = { title: 'Teste', content: '{title: Teste}' } as any;
+        editorService.prepareSongFromContent.mockReturnValue({ title: 'Teste' });
+        songService.save.mockResolvedValue('song-123');
+        route.snapshot.queryParamMap.get.mockReturnValue('/songbook/sb-1?song=song-123');
+
+        await component.saveSong();
+
+        expect(router.navigateByUrl).toHaveBeenCalledWith('/songbook/sb-1?song=song-123');
+        expect(router.navigate).not.toHaveBeenCalled();
+    });
+
     it('closes to reader when song already has uid', () => {
         component.song = { uid: 'song-1' } as any;
 

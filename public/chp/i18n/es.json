@@ -1,137 +1,150 @@
 {
-    "home": {
-        "about_title": "Acerca de este proyecto",
-        "about_description": "<strong>ChordProject</strong> es un cancionero digital que permite a músicos entusiastas crear, editar, organizar y descubrir nuevas canciones usando el formato <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Además, puedes compartir tus propias canciones con otros usuarios y utilizar la plataforma como una herramienta ideal para ensayar o acompañar presentaciones en vivo. A diferencia de un cancionero impreso, esta plataforma es dinámica, evoluciona y crece junto contigo.",
-        "overview_title": "Descripción general",
-        "overview_description": "Esta aplicación está diseñada para administrar <strong>canciones</strong> (con <strong>acordes</strong>) y <strong>cancioneros</strong>.",
-        "features": [
-            "Permite escribir y visualizar canciones con acordes de forma clara y ordenada usando el formato ChordPro.",
-            "Permite leer, editar o imprimir canciones con diagramas de acordes.",
-            "Garantiza que los acordes estén siempre posicionados correctamente, independientemente del tamaño de fuente o pantalla.",
-            "Almacena canciones en línea, con actualizaciones reflejadas instantáneamente en todos los dispositivos.",
-            "Incluye un visor con herramientas para actuaciones en vivo, como desplazamiento automático, ajuste de tamaño de fuente y más.",
-            "La transposición sigue reglas musicales, no solo cambios matemáticos.",
-            "Permite organizar canciones en <strong>cancioneros</strong> personalizables."
-        ],
-        "platform_description": "ChordProject tiene un sitio hermano, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente a la <strong>música cristiana</strong>, mientras que ChordProject es para uso general."
+  "home": {
+    "about_title": "Acerca de este proyecto",
+    "about_description": "<strong>ChordProject</strong> es un cancionero digital que permite a músicos entusiastas crear, editar, organizar y descubrir nuevas canciones usando el formato <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Además, puedes compartir tus propias canciones con otros usuarios y utilizar la plataforma como una herramienta ideal para ensayar o acompañar presentaciones en vivo. A diferencia de un cancionero impreso, esta plataforma es dinámica, evoluciona y crece junto contigo.",
+    "overview_title": "Descripción general",
+    "overview_description": "Esta aplicación está diseñada para administrar <strong>canciones</strong> (con <strong>acordes</strong>) y <strong>cancioneros</strong>.",
+    "features": [
+      "Permite escribir y visualizar canciones con acordes de forma clara y ordenada usando el formato ChordPro.",
+      "Permite leer, editar o imprimir canciones con diagramas de acordes.",
+      "Garantiza que los acordes estén siempre posicionados correctamente, independientemente del tamaño de fuente o pantalla.",
+      "Almacena canciones en línea, con actualizaciones reflejadas instantáneamente en todos los dispositivos.",
+      "Incluye un visor con herramientas para actuaciones en vivo, como desplazamiento automático, ajuste de tamaño de fuente y más.",
+      "La transposición sigue reglas musicales, no solo cambios matemáticos.",
+      "Permite organizar canciones en <strong>cancioneros</strong> personalizables."
+    ],
+    "platform_description": "ChordProject tiene un sitio hermano, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dedicado exclusivamente a la <strong>música cristiana</strong>, mientras que ChordProject es para uso general."
+  },
+  "common": {
+    "settings": "Configuración",
+    "theme": "TEMA",
+    "language": "IDIOMA",
+    "scheme": "ESQUEMA",
+    "auto": "Automático",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "auto_scheme_tooltip": "Configura automáticamente el esquema según la preferencia del sistema operativo usando la media query 'prefers-color-scheme'.",
+    "signed_in_as": "Has iniciado sesión como",
+    "profile": "Perfil",
+    "sign_out": "Cerrar sesión",
+    "search_songs": "Buscar canciones",
+    "add": "Agregar",
+    "update": "Actualizar",
+    "cancel": "Cancelar",
+    "recently_added": "Agregadas recientemente",
+    "error_loading_songs": "Ocurrió un error al cargar las canciones",
+    "refresh_to_try_again": "Actualiza la página para volver a intentarlo"
+  },
+  "nav": {
+    "home": "Inicio",
+    "library": "Biblioteca",
+    "create": "Crear",
+    "songbooks": "Cancioneros",
+    "create_songbook": "Nuevo cancionero",
+    "settings_leaders": "Configuración"
+  },
+  "search": {
+    "placeholder": "Buscar por título, letra o cancionero",
+    "placeholder_bar": "Buscar por título, letra o cancionero...",
+    "no_results": "¡No se encontraron resultados!",
+    "songs": "CANCIONES",
+    "songs_content": "CONTENIDO DE CANCIONES",
+    "songbooks": "CANCIONEROS",
+    "songbooks_content": "CONTENIDO DE CANCIONEROS"
+  },
+  "library": {
+    "title": "Biblioteca de canciones",
+    "no_songs": "Sin canciones",
+    "song": "canción",
+    "songs": "canciones"
+  },
+  "shortcuts": {
+    "title": "Atajos",
+    "add_new": "Agregar nuevo",
+    "editing": "Editando",
+    "enter_edit_mode": "Entrar en modo edición",
+    "add_shortcut": "Agregar atajo",
+    "exit_edit_mode": "Salir del modo edición",
+    "no_shortcuts": "Sin atajos",
+    "no_shortcuts_description": "Cuando tengas atajos, aparecerán aquí.",
+    "label": "Etiqueta",
+    "description": "Descripción",
+    "icon": "Ícono",
+    "link": "Enlace",
+    "use_router": "Usar router para el enlace"
+  },
+  "profile": {
+    "title": "Perfil",
+    "description": "Información de la cuenta conectada.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "uid": "ID del usuario",
+    "email_verified": "Correo verificado",
+    "yes": "Sí",
+    "no": "No",
+    "not_informed": "No informado"
+  },
+  "songbook_create": {
+    "title": "Nuevo cancionero",
+    "description": "Crea un cancionero para organizar tus canciones.",
+    "name": "Nombre del cancionero",
+    "name_required": "Ingresa el nombre del cancionero",
+    "event_date": "Fecha del evento",
+    "event_date_required": "Ingresa la fecha del evento",
+    "parent": "ID del cancionero padre (opcional)",
+    "parent_hint": "Déjalo en blanco para crearlo en la raíz.",
+    "reorderable": "Permitir reordenar arrastrando y soltando",
+    "save": "Guardar cancionero",
+    "leader": "Líder",
+    "leader_required": "Seleccione un líder"
+  },
+  "songbook_list": {
+    "title": "Cancioneros",
+    "description": "Accede y administra tus cancioneros.",
+    "event_date": "Fecha del evento",
+    "empty": "Aún no hay cancioneros.",
+    "leader": "Líder"
+  },
+  "songbook": {
+    "manage": {
+      "edit_details": "Editar datos",
+      "add_song": "Agregar canción",
+      "search_hint": "Escribe al menos 2 letras para buscar por título."
     },
-    "common": {
-        "settings": "Configuración",
-        "theme": "TEMA",
-        "language": "IDIOMA",
-        "scheme": "ESQUEMA",
-        "auto": "Automático",
-        "dark": "Oscuro",
-        "light": "Claro",
-        "auto_scheme_tooltip": "Configura automáticamente el esquema según la preferencia del sistema operativo usando la media query 'prefers-color-scheme'.",
-        "signed_in_as": "Has iniciado sesión como",
-        "profile": "Perfil",
-        "sign_out": "Cerrar sesión",
-        "search_songs": "Buscar canciones",
-        "add": "Agregar",
-        "update": "Actualizar",
-        "cancel": "Cancelar",
-        "recently_added": "Agregadas recientemente",
-        "error_loading_songs": "Ocurrió un error al cargar las canciones",
-        "refresh_to_try_again": "Actualiza la página para volver a intentarlo"
-    },
-    "nav": {
-        "home": "Inicio",
-        "library": "Biblioteca",
-        "create": "Crear",
-        "songbooks": "Cancioneros",
-        "create_songbook": "Nuevo cancionero"
-    },
-    "search": {
-        "placeholder": "Buscar por título, letra o cancionero",
-        "placeholder_bar": "Buscar por título, letra o cancionero...",
-        "no_results": "¡No se encontraron resultados!",
-        "songs": "CANCIONES",
-        "songs_content": "CONTENIDO DE CANCIONES",
-        "songbooks": "CANCIONEROS",
-        "songbooks_content": "CONTENIDO DE CANCIONEROS"
-    },
-    "library": {
-        "title": "Biblioteca de canciones",
-        "no_songs": "Sin canciones",
-        "song": "canción",
-        "songs": "canciones"
-    },
-    "shortcuts": {
-        "title": "Atajos",
-        "add_new": "Agregar nuevo",
-        "editing": "Editando",
-        "enter_edit_mode": "Entrar en modo edición",
-        "add_shortcut": "Agregar atajo",
-        "exit_edit_mode": "Salir del modo edición",
-        "no_shortcuts": "Sin atajos",
-        "no_shortcuts_description": "Cuando tengas atajos, aparecerán aquí.",
-        "label": "Etiqueta",
-        "description": "Descripción",
-        "icon": "Ícono",
-        "link": "Enlace",
-        "use_router": "Usar router para el enlace"
-    },
-    "profile": {
-        "title": "Perfil",
-        "description": "Información de la cuenta conectada.",
-        "name": "Nombre",
-        "email": "Correo electrónico",
-        "uid": "ID del usuario",
-        "email_verified": "Correo verificado",
-        "yes": "Sí",
-        "no": "No",
-        "not_informed": "No informado"
-    },
-    "songbook_create": {
-        "title": "Nuevo cancionero",
-        "description": "Crea un cancionero para organizar tus canciones.",
-        "name": "Nombre del cancionero",
-        "name_required": "Ingresa el nombre del cancionero",
-        "event_date": "Fecha del evento",
-        "event_date_required": "Ingresa la fecha del evento",
-        "parent": "ID del cancionero padre (opcional)",
-        "parent_hint": "Déjalo en blanco para crearlo en la raíz.",
-        "reorderable": "Permitir reordenar arrastrando y soltando",
-        "save": "Guardar cancionero"
-    },
-    "songbook_list": {
-        "title": "Cancioneros",
-        "description": "Accede y administra tus cancioneros.",
-        "event_date": "Fecha del evento",
-        "empty": "Aún no hay cancioneros."
-    },
-    "songbook": {
-        "manage": {
-            "edit_details": "Editar datos",
-            "add_song": "Agregar canción",
-            "search_hint": "Escribe al menos 2 letras para buscar por título."
-        },
-        "viewer": {
-            "open": "Modo presentación",
-            "back": "Volver al cancionero",
-            "reset_key": "Restablecer tono",
-            "reset_font": "Restablecer fuente",
-            "reset_column_width": "Restablecer ancho",
-            "options": "Opciones",
-            "transpose": "Transposición",
-            "font_size": "Tamaño de fuente",
-            "column_width": "Ancho de columna",
-            "columns_per_page": "Columnas por página",
-            "view_mode": "Modo de visualización",
-            "normal_mode": "Normal",
-            "paged_columns": "Columnas paginadas",
-            "vertical_pages": "Páginas verticales"
-        }
-    },
-    "toolbar": {
-        "settings": "Configuración",
-        "edit": "Editar",
-        "full_screen": "Pantalla completa",
-        "save": "Guardar",
-        "delete": "Eliminar",
-        "open_full_editor": "Abrir en editor completo",
-        "help": "Ayuda",
-        "close": "Cerrar"
+    "viewer": {
+      "open": "Modo presentación",
+      "back": "Volver al cancionero",
+      "reset_key": "Restablecer tono",
+      "reset_font": "Restablecer fuente",
+      "reset_column_width": "Restablecer ancho",
+      "options": "Opciones",
+      "transpose": "Transposición",
+      "font_size": "Tamaño de fuente",
+      "column_width": "Ancho de columna",
+      "columns_per_page": "Columnas por página",
+      "view_mode": "Modo de visualización",
+      "normal_mode": "Normal",
+      "paged_columns": "Columnas paginadas",
+      "vertical_pages": "Páginas verticales"
     }
+  },
+  "toolbar": {
+    "settings": "Configuración",
+    "edit": "Editar",
+    "full_screen": "Pantalla completa",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "open_full_editor": "Abrir en editor completo",
+    "help": "Ayuda",
+    "close": "Cerrar"
+  },
+  "leaders": {
+    "title": "Configuración de líderes",
+    "description": "Gestiona los líderes disponibles para vincular en las listas de reproducción.",
+    "edit_title": "Editar líder",
+    "name_label": "Nombre del líder",
+    "name_required": "Ingrese el nombre del líder",
+    "add": "Agregar líder",
+    "empty": "No hay líderes registrados."
+  }
 }

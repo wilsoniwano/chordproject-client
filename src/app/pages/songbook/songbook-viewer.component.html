@@ -7,18 +7,11 @@
         </div>
 
         <div class="min-w-0">
-            <div class="text-secondary truncate text-xs font-medium uppercase tracking-wide">
-                {{ songbook?.name }}
-            </div>
-            @if (currentSong) {
-                <div class="truncate text-lg font-semibold">{{ currentSong.title }}</div>
-            }
+            <div class="truncate text-lg font-semibold">{{ viewerHeaderPrimary }}</div>
+            <div class="text-secondary truncate text-xs font-medium">{{ viewerHeaderSecondary }}</div>
         </div>
 
         <div class="flex items-center gap-3">
-            <button mat-stroked-button type="button" (click)="toggleOptionsDrawer()">
-                {{ 'songbook.viewer.options' | transloco }}
-            </button>
             <button mat-icon-button type="button" [disabled]="currentIndex <= 0" (click)="goPrevious()">
                 <mat-icon [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
             </button>
@@ -27,6 +20,15 @@
             </span>
             <button mat-icon-button type="button" [disabled]="currentIndex >= songs.length - 1" (click)="goNext()">
                 <mat-icon [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                type="button"
+                (click)="toggleOptionsDrawer()"
+                [matTooltip]="'songbook.viewer.options' | transloco"
+                aria-label="Abrir opções"
+            >
+                <mat-icon>more_vert</mat-icon>
             </button>
         </div>
     </header>
@@ -124,14 +126,8 @@
                     {{ 'songbook.viewer.transpose' | transloco }}
                 </div>
                 <div class="flex items-center gap-2">
-                    <button mat-icon-button type="button" (click)="transpose(-1)">
-                        <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
-                    </button>
-                    <span class="inline-flex w-16 justify-center rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">
+                    <button mat-stroked-button type="button" class="tone-key-button font-mono" (click)="openTonePicker()">
                         {{ renderedKey || '-' }}
-                    </span>
-                    <button mat-icon-button type="button" (click)="transpose(1)">
-                        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                     </button>
                     <button mat-stroked-button type="button" (click)="resetTranspose()">
                         {{ 'songbook.viewer.reset_key' | transloco }}

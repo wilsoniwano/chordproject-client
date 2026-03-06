@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeMusicalKey, transposeMusicalKey } from './transpose-key';
+import { getAvailableMusicalKeys, normalizeMusicalKey, transposeMusicalKey } from './transpose-key';
 
 describe('transpose-key domain', () => {
     it('normalizes valid keys and keeps minor flag', () => {
@@ -21,5 +21,15 @@ describe('transpose-key domain', () => {
         expect(normalizeMusicalKey('')).toBe('');
         expect(transposeMusicalKey('C', 12)).toBe('C');
         expect(transposeMusicalKey('F#m', -12)).toBe('F#m');
+    });
+
+    it('returns all available keys preserving major/minor mode', () => {
+        const majorKeys = getAvailableMusicalKeys('G');
+        const minorKeys = getAvailableMusicalKeys('Em');
+
+        expect(majorKeys).toHaveLength(12);
+        expect(majorKeys[0]).toBe('C');
+        expect(minorKeys).toHaveLength(12);
+        expect(minorKeys[0]).toBe('Cm');
     });
 });

@@ -1,137 +1,150 @@
 {
-    "home": {
-        "about_title": "À propos de ce projet",
-        "about_description": "<strong>ChordProject</strong> est un carnet de chansons numérique qui permet aux musiciens passionnés de créer, éditer, organiser et découvrir de nouveaux chants en utilisant le format <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Vous pouvez également partager vos propres chansons avec d'autres utilisateurs et utiliser la plateforme comme un outil idéal pour les répétitions ou les prestations en direct. Contrairement à un carnet de chansons imprimé, cette plateforme est dynamique, elle évolue et grandit avec vous.",
-        "overview_title": "Aperçu",
-        "overview_description": "Cette application est conçue pour gérer des <strong>chansons</strong> (avec <strong>accords</strong>) et des <strong>carnets de chansons</strong>.",
-        "features": [
-            "Permet d'écrire et de visualiser des chansons avec des accords de manière claire et ordonnée en utilisant le format ChordPro.",
-            "Permet de lire, éditer ou imprimer des chansons avec des diagrammes d'accords.",
-            "Garantit que les accords sont toujours correctement positionnés, quelle que soit la taille de la police ou de l'écran.",
-            "Stocke les chansons en ligne, avec des mises à jour instantanément reflétées sur tous les appareils.",
-            "Comprend un visualiseur avec des outils pour les performances en direct, comme le défilement automatique, l'ajustement de la taille de la police et plus encore.",
-            "La transposition suit des règles musicales, pas seulement des changements mathématiques.",
-            "Permet d'organiser les chansons dans des <strong>carnets de chansons</strong> personnalisables."
-        ],
-        "platform_description": "ChordProject a un site frère, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dédié exclusivement à la <strong>musique chrétienne</strong>, tandis que ChordProject est destiné à un usage général."
+  "home": {
+    "about_title": "À propos de ce projet",
+    "about_description": "<strong>ChordProject</strong> est un carnet de chansons numérique qui permet aux musiciens passionnés de créer, éditer, organiser et découvrir de nouveaux chants en utilisant le format <a href=\"https://chordpro.org\" target=\"_blank\" rel=\"noopener noreferrer\">ChordPro</a>. Vous pouvez également partager vos propres chansons avec d'autres utilisateurs et utiliser la plateforme comme un outil idéal pour les répétitions ou les prestations en direct. Contrairement à un carnet de chansons imprimé, cette plateforme est dynamique, elle évolue et grandit avec vous.",
+    "overview_title": "Aperçu",
+    "overview_description": "Cette application est conçue pour gérer des <strong>chansons</strong> (avec <strong>accords</strong>) et des <strong>carnets de chansons</strong>.",
+    "features": [
+      "Permet d'écrire et de visualiser des chansons avec des accords de manière claire et ordonnée en utilisant le format ChordPro.",
+      "Permet de lire, éditer ou imprimer des chansons avec des diagrammes d'accords.",
+      "Garantit que les accords sont toujours correctement positionnés, quelle que soit la taille de la police ou de l'écran.",
+      "Stocke les chansons en ligne, avec des mises à jour instantanément reflétées sur tous les appareils.",
+      "Comprend un visualiseur avec des outils pour les performances en direct, comme le défilement automatique, l'ajustement de la taille de la police et plus encore.",
+      "La transposition suit des règles musicales, pas seulement des changements mathématiques.",
+      "Permet d'organiser les chansons dans des <strong>carnets de chansons</strong> personnalisables."
+    ],
+    "platform_description": "ChordProject a un site frère, <strong><a href=\"https://homenajesus.com\" target=\"_blank\" rel=\"noopener noreferrer\">HomenaJesus.com</a></strong>, dédié exclusivement à la <strong>musique chrétienne</strong>, tandis que ChordProject est destiné à un usage général."
+  },
+  "common": {
+    "settings": "Paramètres",
+    "theme": "THÈME",
+    "language": "LANGUE",
+    "scheme": "SCHÉMA",
+    "auto": "Auto",
+    "dark": "Sombre",
+    "light": "Clair",
+    "auto_scheme_tooltip": "Définit automatiquement le schéma selon la préférence du système d'exploitation via la media query 'prefers-color-scheme'.",
+    "signed_in_as": "Connecté en tant que",
+    "profile": "Profil",
+    "sign_out": "Se déconnecter",
+    "search_songs": "Rechercher des chansons",
+    "add": "Ajouter",
+    "update": "Mettre à jour",
+    "cancel": "Annuler",
+    "recently_added": "Ajoutées récemment",
+    "error_loading_songs": "Une erreur s'est produite lors du chargement des chansons",
+    "refresh_to_try_again": "Veuillez actualiser la page pour réessayer"
+  },
+  "nav": {
+    "home": "Accueil",
+    "library": "Bibliothèque",
+    "create": "Créer",
+    "songbooks": "Carnets de chansons",
+    "create_songbook": "Nouveau carnet",
+    "settings_leaders": "Paramètres"
+  },
+  "search": {
+    "placeholder": "Rechercher par titre, paroles ou carnet de chansons",
+    "placeholder_bar": "Rechercher par titre, paroles ou carnet de chansons...",
+    "no_results": "Aucun résultat trouvé !",
+    "songs": "CHANSONS",
+    "songs_content": "CONTENU DES CHANSONS",
+    "songbooks": "CARNETS DE CHANSONS",
+    "songbooks_content": "CONTENU DES CARNETS DE CHANSONS"
+  },
+  "library": {
+    "title": "Bibliothèque de chansons",
+    "no_songs": "Aucune chanson",
+    "song": "chanson",
+    "songs": "chansons"
+  },
+  "shortcuts": {
+    "title": "Raccourcis",
+    "add_new": "Ajouter",
+    "editing": "Édition",
+    "enter_edit_mode": "Entrer en mode édition",
+    "add_shortcut": "Ajouter un raccourci",
+    "exit_edit_mode": "Quitter le mode édition",
+    "no_shortcuts": "Aucun raccourci",
+    "no_shortcuts_description": "Quand vous aurez des raccourcis, ils apparaîtront ici.",
+    "label": "Libellé",
+    "description": "Description",
+    "icon": "Icône",
+    "link": "Lien",
+    "use_router": "Utiliser le routeur pour le lien"
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Informations du compte connecté.",
+    "name": "Nom",
+    "email": "E-mail",
+    "uid": "ID utilisateur",
+    "email_verified": "E-mail vérifié",
+    "yes": "Oui",
+    "no": "Non",
+    "not_informed": "Non renseigné"
+  },
+  "songbook_create": {
+    "title": "Nouveau carnet",
+    "description": "Créez un carnet de chansons pour organiser vos morceaux.",
+    "name": "Nom du carnet",
+    "name_required": "Veuillez renseigner le nom du carnet",
+    "event_date": "Date de l'événement",
+    "event_date_required": "Veuillez renseigner la date de l'événement",
+    "parent": "ID du carnet parent (optionnel)",
+    "parent_hint": "Laissez vide pour créer à la racine.",
+    "reorderable": "Autoriser la réorganisation par glisser-déposer",
+    "save": "Enregistrer le carnet",
+    "leader": "Responsable",
+    "leader_required": "Sélectionnez un responsable"
+  },
+  "songbook_list": {
+    "title": "Carnets de chansons",
+    "description": "Accédez et gérez vos carnets de chansons.",
+    "event_date": "Date de l'événement",
+    "empty": "Aucun carnet pour le moment.",
+    "leader": "Responsable"
+  },
+  "songbook": {
+    "manage": {
+      "edit_details": "Modifier les données",
+      "add_song": "Ajouter une chanson",
+      "search_hint": "Saisissez au moins 2 lettres pour rechercher par titre."
     },
-    "common": {
-        "settings": "Paramètres",
-        "theme": "THÈME",
-        "language": "LANGUE",
-        "scheme": "SCHÉMA",
-        "auto": "Auto",
-        "dark": "Sombre",
-        "light": "Clair",
-        "auto_scheme_tooltip": "Définit automatiquement le schéma selon la préférence du système d'exploitation via la media query 'prefers-color-scheme'.",
-        "signed_in_as": "Connecté en tant que",
-        "profile": "Profil",
-        "sign_out": "Se déconnecter",
-        "search_songs": "Rechercher des chansons",
-        "add": "Ajouter",
-        "update": "Mettre à jour",
-        "cancel": "Annuler",
-        "recently_added": "Ajoutées récemment",
-        "error_loading_songs": "Une erreur s'est produite lors du chargement des chansons",
-        "refresh_to_try_again": "Veuillez actualiser la page pour réessayer"
-    },
-    "nav": {
-        "home": "Accueil",
-        "library": "Bibliothèque",
-        "create": "Créer",
-        "songbooks": "Carnets de chansons",
-        "create_songbook": "Nouveau carnet"
-    },
-    "search": {
-        "placeholder": "Rechercher par titre, paroles ou carnet de chansons",
-        "placeholder_bar": "Rechercher par titre, paroles ou carnet de chansons...",
-        "no_results": "Aucun résultat trouvé !",
-        "songs": "CHANSONS",
-        "songs_content": "CONTENU DES CHANSONS",
-        "songbooks": "CARNETS DE CHANSONS",
-        "songbooks_content": "CONTENU DES CARNETS DE CHANSONS"
-    },
-    "library": {
-        "title": "Bibliothèque de chansons",
-        "no_songs": "Aucune chanson",
-        "song": "chanson",
-        "songs": "chansons"
-    },
-    "shortcuts": {
-        "title": "Raccourcis",
-        "add_new": "Ajouter",
-        "editing": "Édition",
-        "enter_edit_mode": "Entrer en mode édition",
-        "add_shortcut": "Ajouter un raccourci",
-        "exit_edit_mode": "Quitter le mode édition",
-        "no_shortcuts": "Aucun raccourci",
-        "no_shortcuts_description": "Quand vous aurez des raccourcis, ils apparaîtront ici.",
-        "label": "Libellé",
-        "description": "Description",
-        "icon": "Icône",
-        "link": "Lien",
-        "use_router": "Utiliser le routeur pour le lien"
-    },
-    "profile": {
-        "title": "Profil",
-        "description": "Informations du compte connecté.",
-        "name": "Nom",
-        "email": "E-mail",
-        "uid": "ID utilisateur",
-        "email_verified": "E-mail vérifié",
-        "yes": "Oui",
-        "no": "Non",
-        "not_informed": "Non renseigné"
-    },
-    "songbook_create": {
-        "title": "Nouveau carnet",
-        "description": "Créez un carnet de chansons pour organiser vos morceaux.",
-        "name": "Nom du carnet",
-        "name_required": "Veuillez renseigner le nom du carnet",
-        "event_date": "Date de l'événement",
-        "event_date_required": "Veuillez renseigner la date de l'événement",
-        "parent": "ID du carnet parent (optionnel)",
-        "parent_hint": "Laissez vide pour créer à la racine.",
-        "reorderable": "Autoriser la réorganisation par glisser-déposer",
-        "save": "Enregistrer le carnet"
-    },
-    "songbook_list": {
-        "title": "Carnets de chansons",
-        "description": "Accédez et gérez vos carnets de chansons.",
-        "event_date": "Date de l'événement",
-        "empty": "Aucun carnet pour le moment."
-    },
-    "songbook": {
-        "manage": {
-            "edit_details": "Modifier les données",
-            "add_song": "Ajouter une chanson",
-            "search_hint": "Saisissez au moins 2 lettres pour rechercher par titre."
-        },
-        "viewer": {
-            "open": "Mode présentation",
-            "back": "Retour au carnet",
-            "reset_key": "Réinitialiser la tonalité",
-            "reset_font": "Réinitialiser la taille",
-            "reset_column_width": "Réinitialiser la largeur",
-            "options": "Options",
-            "transpose": "Transposition",
-            "font_size": "Taille de police",
-            "column_width": "Largeur de colonne",
-            "columns_per_page": "Colonnes par page",
-            "view_mode": "Mode d'affichage",
-            "normal_mode": "Normal",
-            "paged_columns": "Colonnes paginées",
-            "vertical_pages": "Pages verticales"
-        }
-    },
-    "toolbar": {
-        "settings": "Paramètres",
-        "edit": "Modifier",
-        "full_screen": "Plein écran",
-        "save": "Enregistrer",
-        "delete": "Supprimer",
-        "open_full_editor": "Ouvrir dans l'éditeur complet",
-        "help": "Aide",
-        "close": "Fermer"
+    "viewer": {
+      "open": "Mode présentation",
+      "back": "Retour au carnet",
+      "reset_key": "Réinitialiser la tonalité",
+      "reset_font": "Réinitialiser la taille",
+      "reset_column_width": "Réinitialiser la largeur",
+      "options": "Options",
+      "transpose": "Transposition",
+      "font_size": "Taille de police",
+      "column_width": "Largeur de colonne",
+      "columns_per_page": "Colonnes par page",
+      "view_mode": "Mode d'affichage",
+      "normal_mode": "Normal",
+      "paged_columns": "Colonnes paginées",
+      "vertical_pages": "Pages verticales"
     }
+  },
+  "toolbar": {
+    "settings": "Paramètres",
+    "edit": "Modifier",
+    "full_screen": "Plein écran",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "open_full_editor": "Ouvrir dans l'éditeur complet",
+    "help": "Aide",
+    "close": "Fermer"
+  },
+  "leaders": {
+    "title": "Paramètres des responsables",
+    "description": "Gérez les responsables disponibles pour les listes de lecture.",
+    "edit_title": "Modifier le responsable",
+    "name_label": "Nom du responsable",
+    "name_required": "Renseignez le nom du responsable",
+    "add": "Ajouter un responsable",
+    "empty": "Aucun responsable enregistré."
+  }
 }

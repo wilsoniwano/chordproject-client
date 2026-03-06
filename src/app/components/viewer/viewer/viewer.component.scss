@@ -5,13 +5,16 @@
 }
 
 .content {
-    padding: 2em 0 6em;
+    padding: 24px;
     overflow: auto;
 }
 
+.preview-mode .content {
+    padding: 24px;
+}
+
 .read-mode .content {
-    padding-left: 32px;
-    padding-right: 32px;
+    padding: 24px;
 }
 
 .content-inner {
@@ -168,7 +171,7 @@ $dark-colors: (
     }
 
     .paged-columns .song-content,
-    .paged-columns .content {
+    .paged-columns .content-inner {
         height: 100%;
         column-fill: auto;
         column-gap: 2rem;
@@ -185,19 +188,19 @@ $dark-colors: (
 
     /* Native breakpoints replacing Nebular mixins */
     @media (min-width: 576px) {
-        .show-columns .song-content {
+        .show-columns:not(.paged-columns) .song-content {
             column-count: 2;
         }
     }
 
     @media (min-width: 992px) {
-        .show-columns .song-content {
+        .show-columns:not(.paged-columns) .song-content {
             column-count: 3;
         }
     }
 
     @media (min-width: 1400px) {
-        .show-columns .song-content {
+        .show-columns:not(.paged-columns) .song-content {
             column-count: 4;
         }
     }
@@ -302,10 +305,20 @@ $dark-colors: (
         font-weight: bold;
     }
 
+    .title-metadata {
+        margin: 0 0 0.35rem;
+        font-size: 18px;
+        line-height: 1.25;
+    }
+
     .subtitle-metadata {
         font-size: 0.9rem;
         line-height: 1.15;
         margin-bottom: 0.3em;
+    }
+
+    .artist-metadata {
+        margin-bottom: 1rem;
     }
 
     .lyrics-line {
@@ -386,4 +399,26 @@ $dark-colors: (
 :host-context(.dark) .force-dark-header-background.bg-card {
     --fuse-bg-card-rgb: 15, 23, 42;
     background-color: #0f172a !important;
+}
+
+:host-context(.dark) .force-dark-background,
+:host-context(.dark) .force-dark-background .content,
+:host-context(.dark) .force-dark-background .content-inner,
+:host-context(.dark) .force-dark-background .song-content,
+:host-context(.dark) .force-dark-background.bg-card {
+    --fuse-bg-card-rgb: 15, 23, 42;
+    background-color: #0f172a !important;
+}
+
+:host-context(.dark) .force-dark-background ::ng-deep .lyrics,
+:host-context(.dark) .force-dark-background ::ng-deep .word {
+    color: #cbd5e1 !important;
+}
+
+:host-context(.dark) .force-dark-background ::ng-deep .metadata,
+:host-context(.dark) .force-dark-background ::ng-deep .title-metadata,
+:host-context(.dark) .force-dark-background ::ng-deep .subtitle-metadata,
+:host-context(.dark) .force-dark-background ::ng-deep .artist-metadata,
+:host-context(.dark) .force-dark-background ::ng-deep .section-title {
+    color: #f8fafc !important;
 }

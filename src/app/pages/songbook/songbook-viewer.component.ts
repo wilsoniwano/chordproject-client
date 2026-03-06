@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseDrawerComponent } from '@fuse/components/drawer';
 import { TranslocoModule } from '@jsverse/transloco';
-import { transposeMusicalKey } from 'domain/music/transpose-key';
+import { TransposeKeyDialogComponent } from 'app/components/transpose-key-dialog/transpose-key-dialog.component';
 import { ChpViewerComponent } from 'app/components/viewer/viewer/viewer.component';
 import { ParserService } from 'app/core/chordpro/parser.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
@@ -24,6 +26,7 @@ type SongbookViewerMode = 'normal' | 'paged';
         CommonModule,
         MatButtonModule,
         MatIconModule,
+        MatTooltipModule,
         TranslocoModule,
         ChpViewerComponent,
         FuseDrawerComponent,
@@ -61,6 +64,7 @@ export class SongbookViewerComponent implements OnInit, AfterViewInit, OnDestroy
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
+        private _dialog: MatDialog,
         private _songbookService: SongbookService,
         private _parserService: ParserService,
         private _userService: UserService
@@ -134,6 +138,26 @@ export class SongbookViewerComponent implements OnInit, AfterViewInit, OnDestroy
         return this.viewMode === 'paged';
     }
 
+    get viewerHeaderPrimary(): string {
+        const eventDate = this.songbook?.eventDate;
+        if (!eventDate) {
+            return this.songbook?.name || '-';
+        }
+
+        return this.formatWeekday(eventDate);
+    }
+
+    get viewerHeaderSecondary(): string {
+        const eventDate = this.songbook?.eventDate;
+        const leaderName = this.songbook?.leaderName || '';
+        if (!eventDate) {
+            return leaderName;
+        }
+
+        const dateLabel = this.formatDate(eventDate);
+        return leaderName ? `${dateLabel} · ${leaderName}` : dateLabel;
+    }
+
     goPrevious(): void {
         if (this.currentIndex <= 0) {
             return;
@@ -152,17 +176,28 @@ export class SongbookViewerComponent implements OnInit, AfterViewInit, OnDestroy
         this.applyCurrentSongRendering();
     }
 
-    transpose(step: number): void {
+    openTonePicker(): void {
         const song = this.currentSong;
         if (!song?.songKey) {
             return;
         }
 
-        const baseKey = this._keyOverrides[song.uid] || song.songKey;
-        const nextKey = transposeMusicalKey(baseKey, step);
-        this._keyOverrides[song.uid] = nextKey;
-        this.persistKeyOverrides();
-        this.applyCurrentSongRendering();
+        const currentKey = this._keyOverrides[song.uid] || song.songKey;
+        const dialogRef = this._dialog.open(TransposeKeyDialogComponent, {
+            width: '420px',
+            maxWidth: '95vw',
+            data: { currentKey },
+        });
+
+        dialogRef.afterClosed().subscribe((selectedKey: string | undefined) => {
+            if (!selectedKey || selectedKey === currentKey) {
+                return;
+            }
+
+            this._keyOverrides[song.uid] = selectedKey;
+            this.persistKeyOverrides();
+            this.applyCurrentSongRendering();
+        });
     }
 
     resetTranspose(): void {
@@ -451,5 +486,24 @@ export class SongbookViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
     private clampColumnsPerPage(value: number): number {
         return value === 2 ? 2 : 1;
+    }
+
+    private formatDate(eventDate: string): string {
+        const [year, month, day] = eventDate.split('-');
+        if (!year || !month || !day) {
+            return eventDate;
+        }
+
+        return `${day}/${month}/${year}`;
+    }
+
+    private formatWeekday(eventDate: string): string {
+        const date = new Date(`${eventDate}T12:00:00`);
+        if (Number.isNaN(date.getTime())) {
+            return eventDate;
+        }
+
+        const weekday = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(date);
+        return weekday.charAt(0).toUpperCase() + weekday.slice(1);
     }
 }

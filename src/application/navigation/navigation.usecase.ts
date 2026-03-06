@@ -3,6 +3,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 export interface NavigationLabels {
     library: string;
     songbooks: string;
+    settingsLeaders: string;
 }
 
 export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationItem[] {
@@ -14,6 +15,14 @@ export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationIte
             type: 'basic',
             icon: 'heroicons_outline:musical-note',
             link: '/library',
+        },
+        {
+            id: 'settings-leaders',
+            title: labels.settingsLeaders,
+            tooltip: labels.settingsLeaders,
+            type: 'basic',
+            icon: 'heroicons_outline:cog-6-tooth',
+            link: '/settings/leaders',
         },
     ];
 }

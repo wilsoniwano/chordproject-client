@@ -17,8 +17,8 @@ describe('Songbook viewer template contract', () => {
         expect(template).toContain('!border-primary');
     });
 
-    it('keeps key and font badges with equal width', () => {
-        const matches = template.match(/inline-flex w-16 justify-center/g) ?? [];
-        expect(matches.length).toBeGreaterThanOrEqual(2);
+    it('keeps tone picker button and fixed-width font badge', () => {
+        expect(template).toContain('tone-key-button font-mono');
+        expect(template).toContain('inline-flex w-16 justify-center');
     });
 });

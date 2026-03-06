@@ -1,19 +1,11 @@
 <div class="flex items-center gap-2">
     <button
+        mat-stroked-button
         type="button"
-        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-sm leading-none dark:border-gray-600"
-        [matTooltip]="'Transpose down'"
-        (click)="transposeDown()"
+        class="tone-key-button font-mono"
+        [matTooltip]="'Transpose'"
+        (click)="openTonePicker()"
     >
-        <mat-icon class="text-base">remove</mat-icon>
-    </button>
-    <span class="rounded bg-gray-100 px-3 py-1 font-mono text-sm dark:bg-gray-700">{{ currentKey }}</span>
-    <button
-        type="button"
-        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-sm leading-none dark:border-gray-600"
-        [matTooltip]="'Transpose up'"
-        (click)="transposeUp()"
-    >
-        <mat-icon class="text-base">add</mat-icon>
+        {{ currentKey }}
     </button>
 </div>
