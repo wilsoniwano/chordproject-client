@@ -68,7 +68,11 @@ export class AuthSignUpComponent implements OnInit {
         this.showAlert = false;
 
         this._authService
-            .createUser(this.signUpForm.get('email').value, this.signUpForm.get('password').value)
+            .createUser(
+                this.signUpForm.get('email').value,
+                this.signUpForm.get('password').value,
+                this.signUpForm.get('name').value
+            )
             .subscribe(
                 () => {
                     this.signUpForm.enable();

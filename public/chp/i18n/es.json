@@ -76,13 +76,23 @@
   "profile": {
     "title": "Perfil",
     "description": "Información de la cuenta conectada.",
+    "edit_profile": "Editar",
     "name": "Nombre",
     "email": "Correo electrónico",
     "uid": "ID del usuario",
     "email_verified": "Correo verificado",
     "yes": "Sí",
     "no": "No",
-    "not_informed": "No informado"
+    "not_informed": "No informado",
+    "edit_name_title": "Editar nombre",
+    "save_name": "Guardar nombre",
+    "name_required": "Ingresa el nombre",
+    "edit_email_title": "Editar correo",
+    "edit_email_hint": "Para cambiar el correo, se enviará una confirmación al nuevo correo.",
+    "request_email_change": "Solicitar cambio de correo",
+    "email_required": "Ingresa el correo",
+    "email_invalid": "Ingresa un correo válido",
+    "email_request_sent": "Enviamos el enlace de confirmación al nuevo correo."
   },
   "songbook_create": {
     "title": "Nuevo cancionero",

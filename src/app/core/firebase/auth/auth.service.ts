@@ -9,6 +9,8 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
+    verifyBeforeUpdateEmail,
+    updateProfile,
     User,
 } from 'firebase/auth';
 import { BehaviorSubject, from, Observable } from 'rxjs';
@@ -102,14 +104,18 @@ export class AuthService {
         );
     }
 
-    createUser(email: string, password: string): Observable<User> {
+    createUser(email: string, password: string, name?: string): Observable<User> {
         if (this._mockMode) {
-            return from(this._createUserMock(email, password));
+            return from(this._createUserMock(email, password, name));
         }
 
         return from(
             createUserWithEmailAndPassword(this._auth, email, password)
-                .then((result) => {
+                .then(async (result) => {
+                    const displayName = (name || '').trim();
+                    if (displayName) {
+                        await updateProfile(result.user, { displayName });
+                    }
                     return result.user;
                 })
                 .catch((error) => {
@@ -148,6 +154,55 @@ export class AuthService {
                 .then(() => {})
                 .catch((error) => {
                     this.showSnackbar(`Sign out failed: ${error.message}`);
+                    throw error;
+                })
+        );
+    }
+
+    updateDisplayName(name: string): Observable<void> {
+        if (this._mockMode) {
+            return from(this._updateDisplayNameMock(name));
+        }
+
+        const currentUser = this._auth.currentUser;
+        if (!currentUser) {
+            return from(Promise.reject(new Error('Usuário não autenticado.')));
+        }
+
+        const displayName = (name || '').trim();
+
+        return from(
+            updateProfile(currentUser, { displayName })
+                .then(() => {
+                    this._user.next(currentUser);
+                    this.showSnackbar('Nome atualizado com sucesso.');
+                })
+                .catch((error) => {
+                    this.showSnackbar(`Não foi possível atualizar o nome: ${error.message}`);
+                    throw error;
+                })
+        );
+    }
+
+    requestEmailUpdate(newEmail: string): Observable<void> {
+        if (this._mockMode) {
+            return from(this._requestEmailUpdateMock(newEmail));
+        }
+
+        const currentUser = this._auth.currentUser;
+        if (!currentUser) {
+            return from(Promise.reject(new Error('Usuário não autenticado.')));
+        }
+
+        const email = (newEmail || '').trim();
+
+        return from(
+            verifyBeforeUpdateEmail(currentUser, email)
+                .then(() => {
+                    this.showSnackbar('Enviamos um link de confirmação para o novo e-mail.');
+                })
+                .catch((error) => {
+                    this.showSnackbar(`Não foi possível atualizar o e-mail: ${error.message}`);
                     throw error;
                 })
         );
@@ -195,11 +250,11 @@ export class AuthService {
         }
     }
 
-    private _buildMockUser(email: string): User {
+    private _buildMockUser(email: string, name?: string): User {
         return {
             uid: 'e2e-user-1',
             email,
-            displayName: 'E2E User',
+            displayName: (name || '').trim() || 'E2E User',
             emailVerified: true,
             photoURL: '',
         } as User;
@@ -217,14 +272,43 @@ export class AuthService {
         return Promise.reject(error);
     }
 
-    private _createUserMock(email: string, _password: string): Promise<User> {
-        const user = this._buildMockUser(email);
+    private _createUserMock(email: string, _password: string, name?: string): Promise<User> {
+        const user = this._buildMockUser(email, name);
         this._setMockUser(user);
         return Promise.resolve(user);
     }
 
     private _signOutMock(): Promise<void> {
         this._setMockUser(null);
+        return Promise.resolve();
+    }
+
+    private _updateDisplayNameMock(name: string): Promise<void> {
+        const current = this._user.value;
+        if (!current) {
+            return Promise.reject(new Error('Usuário não autenticado.'));
+        }
+
+        const nextUser = {
+            ...current,
+            displayName: (name || '').trim(),
+        } as User;
+        this._setMockUser(nextUser);
+        return Promise.resolve();
+    }
+
+    private _requestEmailUpdateMock(newEmail: string): Promise<void> {
+        const current = this._user.value;
+        if (!current) {
+            return Promise.reject(new Error('Usuário não autenticado.'));
+        }
+
+        const nextUser = {
+            ...current,
+            email: (newEmail || '').trim(),
+            emailVerified: false,
+        } as User;
+        this._setMockUser(nextUser);
         return Promise.resolve();
     }
 }

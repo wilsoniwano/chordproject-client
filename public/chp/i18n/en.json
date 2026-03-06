@@ -76,13 +76,23 @@
   "profile": {
     "title": "Profile",
     "description": "Signed-in account information.",
+    "edit_profile": "Edit",
     "name": "Name",
     "email": "Email",
     "uid": "User ID",
     "email_verified": "Email verified",
     "yes": "Yes",
     "no": "No",
-    "not_informed": "Not informed"
+    "not_informed": "Not informed",
+    "edit_name_title": "Edit name",
+    "save_name": "Save name",
+    "name_required": "Enter your name",
+    "edit_email_title": "Edit email",
+    "edit_email_hint": "To change your email, a confirmation will be sent to the new address.",
+    "request_email_change": "Request email change",
+    "email_required": "Enter your email",
+    "email_invalid": "Enter a valid email",
+    "email_request_sent": "We sent a confirmation link to the new email."
   },
   "songbook_create": {
     "title": "New songbook",

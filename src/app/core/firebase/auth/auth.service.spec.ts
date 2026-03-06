@@ -47,12 +47,31 @@ describe('AuthService (mock mode)', () => {
 
     it('creates user and signs out in mock mode', async () => {
         const service = createService();
-        const user = await firstValueFrom(service.createUser('new@local.test', 'pass'));
+        const user = await firstValueFrom(service.createUser('new@local.test', 'pass', 'Novo Usuário'));
         expect(user.email).toBe('new@local.test');
+        expect(user.displayName).toBe('Novo Usuário');
         expect(service._authenticated.value).toBe(true);
 
         await firstValueFrom(service.signOut());
         expect(service._authenticated.value).toBe(false);
     });
-});
 
+    it('updates display name in mock mode', async () => {
+        const service = createService();
+        await firstValueFrom(service.createUser('new@local.test', 'pass', 'Nome Antigo'));
+
+        await firstValueFrom(service.updateDisplayName('Nome Novo'));
+
+        expect(service._user.value.displayName).toBe('Nome Novo');
+    });
+
+    it('requests email update in mock mode', async () => {
+        const service = createService();
+        await firstValueFrom(service.createUser('old@local.test', 'pass', 'Nome'));
+
+        await firstValueFrom(service.requestEmailUpdate('new@local.test'));
+
+        expect(service._user.value.email).toBe('new@local.test');
+        expect(service._user.value.emailVerified).toBe(false);
+    });
+});

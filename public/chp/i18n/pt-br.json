@@ -76,13 +76,23 @@
   "profile": {
     "title": "Perfil",
     "description": "Informações da conta conectada.",
+    "edit_profile": "Editar",
     "name": "Nome",
     "email": "E-mail",
     "uid": "ID do usuário",
     "email_verified": "E-mail verificado",
     "yes": "Sim",
     "no": "Não",
-    "not_informed": "Não informado"
+    "not_informed": "Não informado",
+    "edit_name_title": "Editar nome",
+    "save_name": "Salvar nome",
+    "name_required": "Informe o nome",
+    "edit_email_title": "Editar e-mail",
+    "edit_email_hint": "Para alterar o e-mail, será enviada uma confirmação para o novo endereço.",
+    "request_email_change": "Solicitar alteração de e-mail",
+    "email_required": "Informe o e-mail",
+    "email_invalid": "Informe um e-mail válido",
+    "email_request_sent": "Enviamos o link de confirmação para o novo e-mail."
   },
   "songbook_create": {
     "title": "Nova lista de reprodução",

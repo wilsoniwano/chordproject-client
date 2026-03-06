@@ -76,13 +76,23 @@
   "profile": {
     "title": "Profil",
     "description": "Informations du compte connecté.",
+    "edit_profile": "Modifier",
     "name": "Nom",
     "email": "E-mail",
     "uid": "ID utilisateur",
     "email_verified": "E-mail vérifié",
     "yes": "Oui",
     "no": "Non",
-    "not_informed": "Non renseigné"
+    "not_informed": "Non renseigné",
+    "edit_name_title": "Modifier le nom",
+    "save_name": "Enregistrer le nom",
+    "name_required": "Renseignez le nom",
+    "edit_email_title": "Modifier l'e-mail",
+    "edit_email_hint": "Pour changer l'e-mail, une confirmation sera envoyée à la nouvelle adresse.",
+    "request_email_change": "Demander le changement d'e-mail",
+    "email_required": "Renseignez l'e-mail",
+    "email_invalid": "Renseignez un e-mail valide",
+    "email_request_sent": "Nous avons envoyé le lien de confirmation au nouvel e-mail."
   },
   "songbook_create": {
     "title": "Nouveau carnet",
