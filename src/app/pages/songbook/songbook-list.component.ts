@@ -9,11 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
+import { DeleteConfirmationService } from 'app/core/confirmation/delete-confirmation.service';
 import { LeaderService } from 'app/core/firebase/api/leader.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
 import { Leader } from 'app/models/leader';
 import { Songbook } from 'app/models/songbook';
-import { BehaviorSubject, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, of, switchMap } from 'rxjs';
 
 @Component({
     selector: 'songbook-list',
@@ -64,6 +65,7 @@ export class SongbookListComponent {
     constructor(
         private _songbookService: SongbookService,
         private _leaderService: LeaderService,
+        private _deleteConfirmationService: DeleteConfirmationService,
         private _formBuilder: FormBuilder,
         private _dialog: MatDialog,
         private _router: Router
@@ -122,9 +124,7 @@ export class SongbookListComponent {
             return;
         }
 
-        const confirmed = typeof window === 'undefined'
-            ? true
-            : window.confirm(`Excluir a lista "${songbook.name}"? Essa ação não pode ser desfeita.`);
+        const confirmed = await firstValueFrom(this._deleteConfirmationService.confirmDelete(songbook.name));
         if (!confirmed) {
             return;
         }

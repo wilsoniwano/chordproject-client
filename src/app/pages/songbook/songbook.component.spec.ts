@@ -8,6 +8,7 @@ import { SongbookComponent } from './songbook.component';
 describe('SongbookComponent', () => {
     let component: SongbookComponent;
     let router: { navigate: ReturnType<typeof vi.fn>; url: string };
+    let deleteConfirmationService: { confirmDelete: ReturnType<typeof vi.fn> };
     let dialogRef: { close: ReturnType<typeof vi.fn> };
     let dialog: { open: ReturnType<typeof vi.fn> };
     let songbookService: {
@@ -36,12 +37,16 @@ describe('SongbookComponent', () => {
             navigate: vi.fn().mockResolvedValue(true),
             url: '/songbook/sb-1?song=song-1',
         };
+        deleteConfirmationService = {
+            confirmDelete: vi.fn().mockReturnValue(of(true)),
+        };
 
         component = new SongbookComponent(
             new FormBuilder(),
             dialog as any,
             { paramMap: of(new Map()), snapshot: { paramMap: new Map() } } as any,
             router as any,
+            deleteConfirmationService as any,
             { getAll: vi.fn().mockReturnValue(of([])) } as any,
             { searchByTitle: vi.fn().mockReturnValue(of([])) } as any,
             songbookService as any
@@ -109,13 +114,12 @@ describe('SongbookComponent', () => {
     });
 
     it('removes song from songbook when confirmed', async () => {
-        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
         (component as any)._route = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('sb-1') } } };
 
         await component.removeSong({ uid: 'song-1', title: 'Song 1' } as any);
 
+        expect(deleteConfirmationService.confirmDelete).toHaveBeenCalledWith('Song 1');
         expect(songbookService.removeSong).toHaveBeenCalledWith('sb-1', 'song-1');
-        confirmSpy.mockRestore();
     });
 
     it('opens full editor for selected song from preview', () => {

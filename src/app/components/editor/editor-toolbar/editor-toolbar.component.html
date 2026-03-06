@@ -1,6 +1,8 @@
-<div class="flex flex-0 items-center justify-between border-b bg-gray-50 px-4 py-3 dark:bg-transparent">
+<div class="flex flex-0 items-center justify-between border-b bg-white px-4 py-3 dark:bg-[#0f172a]">
     <div class="min-w-0 flex-1 pr-3 text-left">
-        @if (title || artist) {
+        @if (mode === 'full') {
+            <div class="truncate text-[1.25rem] font-semibold leading-tight">Editar</div>
+        } @else if (title || artist) {
             <div class="truncate text-sm font-semibold">{{ title }}</div>
             @if (artist) {
                 <div class="text-secondary truncate text-xs">{{ artist }}</div>
@@ -23,7 +25,7 @@
             [matTooltip]="'toolbar.delete' | transloco"
             (click)="removeSongEvent.emit()"
         >
-            <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+            <mat-icon class="text-warn-500" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
         </button>
         @if (mode === 'quick') {
             <button mat-icon-button [matTooltip]="'toolbar.open_full_editor' | transloco" (click)="openFullEditorEvent.emit()">

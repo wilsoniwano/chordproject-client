@@ -8,9 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
+import { DeleteConfirmationService } from 'app/core/confirmation/delete-confirmation.service';
 import { LeaderService } from 'app/core/firebase/api/leader.service';
 import { Leader } from 'app/models/leader';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-leaders-settings',
@@ -46,6 +47,7 @@ export class LeadersComponent {
 
     constructor(
         private _leaderService: LeaderService,
+        private _deleteConfirmationService: DeleteConfirmationService,
         private _formBuilder: FormBuilder,
         private _dialog: MatDialog
     ) {}
@@ -75,9 +77,7 @@ export class LeadersComponent {
             return;
         }
 
-        const confirmed = typeof window === 'undefined'
-            ? true
-            : window.confirm(`Excluir o dirigente "${leader.name}"?`);
+        const confirmed = await firstValueFrom(this._deleteConfirmationService.confirmDelete(leader.name));
         if (!confirmed) {
             return;
         }

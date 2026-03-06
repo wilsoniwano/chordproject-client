@@ -15,6 +15,7 @@ import { ChpSongItemComponent } from 'app/components/song-item/song-item.compone
 import { ChpSplitLayoutComponent } from 'app/components/split-layout/split-layout.component';
 import { TransposeKeyDialogComponent } from 'app/components/transpose-key-dialog/transpose-key-dialog.component';
 import { ChpViewerComponent } from 'app/components/viewer/viewer/viewer.component';
+import { DeleteConfirmationService } from 'app/core/confirmation/delete-confirmation.service';
 import { LeaderService } from 'app/core/firebase/api/leader.service';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { SongbookService } from 'app/core/firebase/api/songbook.service';
@@ -79,6 +80,7 @@ export class SongbookComponent implements OnInit, OnDestroy {
         private _dialog: MatDialog,
         private _route: ActivatedRoute,
         private _router: Router,
+        private _deleteConfirmationService: DeleteConfirmationService,
         private _leaderService: LeaderService,
         private _songService: SongService,
         private _songbookService: SongbookService
@@ -213,9 +215,9 @@ export class SongbookComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const confirmed = typeof window === 'undefined'
-            ? true
-            : window.confirm(`Remover "${song.title}" desta lista?`);
+        const confirmed = await firstValueFrom(
+            this._deleteConfirmationService.confirmDelete(song.title || 'esta música')
+        );
         if (!confirmed) {
             return;
         }

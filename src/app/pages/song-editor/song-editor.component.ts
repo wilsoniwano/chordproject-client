@@ -20,6 +20,7 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
     selector: 'song-editor',
     standalone: true,
     templateUrl: './song-editor.component.html',
+    styleUrls: ['./song-editor.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatCardModule, ChpSplitLayoutComponent, ChpViewerComponent, ChpEditorComponent],
 })

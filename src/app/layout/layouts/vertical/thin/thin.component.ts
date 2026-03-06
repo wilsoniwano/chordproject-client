@@ -2,13 +2,12 @@ import {
     Component,
     OnDestroy,
     OnInit,
-    ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { FuseDrawerComponent } from '@fuse/components/drawer';
 import { FuseLoadingBarComponent } from '@fuse/components/loading-bar';
 import {
     FuseNavigationItem,
@@ -36,8 +35,6 @@ import { Subject, filter, takeUntil } from 'rxjs';
         ThemeSelectorComponent,
         UserComponent,
         RouterOutlet,
-        SettingsComponent,
-        FuseDrawerComponent,
     ],
 })
 export class ThinLayoutComponent implements OnInit, OnDestroy {
@@ -45,16 +42,16 @@ export class ThinLayoutComponent implements OnInit, OnDestroy {
     navigation: FuseNavigationItem[];
     hideLayoutChrome = false;
     hideNavigationDrawer = false;
+    private _settingsDialogRef: MatDialogRef<SettingsComponent> | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    @ViewChild('settingsDrawer') settingsDrawer: FuseDrawerComponent;
 
     constructor(
         private _navigationService: NavigationService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
         private _router: Router,
-        private _activatedRoute: ActivatedRoute
+        private _activatedRoute: ActivatedRoute,
+        private _matDialog: MatDialog
     ) {}
 
     get currentYear(): number {
@@ -101,11 +98,30 @@ export class ThinLayoutComponent implements OnInit, OnDestroy {
     }
 
     toggleSettingsDrawer(): void {
-        this.settingsDrawer.toggle();
+        if (this._settingsDialogRef) {
+            this._settingsDialogRef.close();
+            return;
+        }
+
+        this._settingsDialogRef = this._matDialog.open(SettingsComponent, {
+            width: '420px',
+            maxWidth: '95vw',
+            maxHeight: '90vh',
+            autoFocus: false,
+            panelClass: 'settings-modal-panel',
+        });
+
+        this._settingsDialogRef.componentInstance.closeSettings
+            .pipe(takeUntil(this._settingsDialogRef.afterClosed()))
+            .subscribe(() => this._settingsDialogRef?.close());
+
+        this._settingsDialogRef.afterClosed().subscribe(() => {
+            this._settingsDialogRef = null;
+        });
     }
 
     closeSettingsDrawer(): void {
-        this.settingsDrawer.close();
+        this._settingsDialogRef?.close();
     }
 
     private updateLayoutChromeVisibility(): void {

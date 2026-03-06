@@ -28,11 +28,12 @@
                                 <button
                                     mat-icon-button
                                     type="button"
+                                    color="warn"
                                     [disabled]="saving"
                                     (click)="deleteSongbook(songbook, $event)"
                                     aria-label="Excluir lista"
                                 >
-                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    <mat-icon class="icon-size-5 text-warn-500" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
                                 </button>
                                 <mat-icon
                                     class="text-secondary icon-size-5"

@@ -1,0 +1,39 @@
+:host {
+    display: block;
+    height: 100%;
+    --song-editor-surface: #ffffff;
+    --song-editor-border: #e2e8f0;
+}
+
+:host-context(.dark) {
+    --song-editor-surface: #0f172a;
+    --song-editor-border: #1e293b;
+}
+
+:host ::ng-deep .song-editor-page .mat-mdc-card {
+    background-color: var(--song-editor-surface) !important;
+}
+
+/* Editor header (toolbar) */
+:host ::ng-deep .song-editor-page chp-editor-toolbar > div {
+    background-color: var(--song-editor-surface) !important;
+    border-bottom-color: var(--song-editor-border) !important;
+}
+
+/* Editor content area */
+:host ::ng-deep .song-editor-page #chordProjectEditor,
+:host ::ng-deep .song-editor-page #chordProjectEditor .cp-editor,
+:host ::ng-deep .song-editor-page #chordProjectEditor .cp-main,
+:host ::ng-deep .song-editor-page #chordProjectEditor .cp-line,
+:host ::ng-deep .song-editor-page #chordProjectEditor textarea,
+:host ::ng-deep .song-editor-page #chordProjectEditor [contenteditable='true'] {
+    background-color: var(--song-editor-surface) !important;
+}
+
+/* Viewer panel background/content */
+:host ::ng-deep .song-editor-page chp-viewer .bg-card,
+:host ::ng-deep .song-editor-page chp-viewer .content,
+:host ::ng-deep .song-editor-page chp-viewer .content-inner,
+:host ::ng-deep .song-editor-page chp-viewer .song-content {
+    background-color: var(--song-editor-surface) !important;
+}

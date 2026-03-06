@@ -59,14 +59,3 @@
         }
     </div>
 </div>
-
-<fuse-drawer
-    class="z-999 w-screen min-w-screen sm:w-100 sm:min-w-100"
-    fixed
-    [position]="'right'"
-    [name]="'settings'"
-    [mode]="'over'"
-    #settingsDrawer
->
-    <settings (closeSettings)="closeSettingsDrawer()"></settings>
-</fuse-drawer>

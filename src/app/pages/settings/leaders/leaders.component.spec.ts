@@ -1,12 +1,14 @@
 // @vitest-environment jsdom
 import '@angular/compiler';
 import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LeadersComponent } from './leaders.component';
 
 describe('LeadersComponent', () => {
     let component: LeadersComponent;
     let leaderService: { save: ReturnType<typeof vi.fn>; delete: ReturnType<typeof vi.fn>; getAll: ReturnType<typeof vi.fn> };
+    let deleteConfirmationService: { confirmDelete: ReturnType<typeof vi.fn> };
     let dialogRef: { close: ReturnType<typeof vi.fn> };
     let dialog: { open: ReturnType<typeof vi.fn> };
 
@@ -16,10 +18,18 @@ describe('LeadersComponent', () => {
             delete: vi.fn(),
             getAll: vi.fn(),
         };
+        deleteConfirmationService = {
+            confirmDelete: vi.fn().mockReturnValue(of(true)),
+        };
         dialogRef = { close: vi.fn() };
         dialog = { open: vi.fn().mockReturnValue(dialogRef) };
 
-        component = new LeadersComponent(leaderService as any, new FormBuilder(), dialog as any);
+        component = new LeadersComponent(
+            leaderService as any,
+            deleteConfirmationService as any,
+            new FormBuilder(),
+            dialog as any
+        );
         component.editLeaderDialog = {} as any;
     });
 
@@ -57,5 +67,12 @@ describe('LeadersComponent', () => {
         await component.saveEditedLeader();
 
         expect(leaderService.save).not.toHaveBeenCalled();
+    });
+
+    it('deletes leader when confirmed', async () => {
+        await component.removeLeader({ uid: 'l-1', name: 'Tamanaka' } as any);
+
+        expect(deleteConfirmationService.confirmDelete).toHaveBeenCalledWith('Tamanaka');
+        expect(leaderService.delete).toHaveBeenCalledWith('l-1');
     });
 });

@@ -36,6 +36,7 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
 
     @Input() style: any = {};
     @Input() mode: 'quick' | 'full' = 'full';
+    @Input() forceLightTheme = false;
 
     @ViewChild('editorDiv', { static: true }) editorDiv!: ElementRef;
 
@@ -99,6 +100,9 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
             if (this._editor && newContent !== undefined) {
                 this.setEditorContent(newContent);
             }
+        }
+        if (changes['forceLightTheme'] && this._editor) {
+            this.themeChanged();
         }
     }
 
@@ -240,6 +244,11 @@ export class ChpEditorComponent implements OnInit, OnDestroy, AfterViewInit, OnC
     themeChanged(): void {
         if (!this._editor) {
             return; // Skip if editor is not initialized yet
+        }
+
+        if (this.forceLightTheme) {
+            ChordProjectEditor.Main.doSetTheme('default');
+            return;
         }
 
         let theme = 'default';

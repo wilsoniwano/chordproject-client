@@ -16,6 +16,7 @@ describe('SongbookListComponent', () => {
         delete: ReturnType<typeof vi.fn>;
     };
     let leaderService: { getAll: ReturnType<typeof vi.fn> };
+    let deleteConfirmationService: { confirmDelete: ReturnType<typeof vi.fn> };
     let router: { navigate: ReturnType<typeof vi.fn> };
 
     beforeEach(() => {
@@ -30,11 +31,15 @@ describe('SongbookListComponent', () => {
         leaderService = {
             getAll: vi.fn().mockReturnValue(of([{ uid: 'l-1', name: 'João' }])),
         };
+        deleteConfirmationService = {
+            confirmDelete: vi.fn().mockReturnValue(of(true)),
+        };
         router = { navigate: vi.fn().mockResolvedValue(true) };
 
         component = new SongbookListComponent(
             songbookService as any,
             leaderService as any,
+            deleteConfirmationService as any,
             new FormBuilder(),
             dialog as any,
             router as any
@@ -87,7 +92,6 @@ describe('SongbookListComponent', () => {
     });
 
     it('deletes songbook when confirmed', async () => {
-        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
         const event = {
             preventDefault: vi.fn(),
             stopPropagation: vi.fn(),
@@ -97,16 +101,15 @@ describe('SongbookListComponent', () => {
 
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
+        expect(deleteConfirmationService.confirmDelete).toHaveBeenCalledWith('Culto');
         expect(songbookService.delete).toHaveBeenCalledWith('sb-1');
-        confirmSpy.mockRestore();
     });
 
     it('does not delete songbook when confirmation is canceled', async () => {
-        const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+        deleteConfirmationService.confirmDelete.mockReturnValue(of(false));
 
         await component.deleteSongbook({ uid: 'sb-1', name: 'Culto' } as any);
 
         expect(songbookService.delete).not.toHaveBeenCalled();
-        confirmSpy.mockRestore();
     });
 });

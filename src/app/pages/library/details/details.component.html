@@ -14,6 +14,15 @@
                 >
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil-square'"></mat-icon>
                 </button>
+                <button
+                    mat-icon-button
+                    color="warn"
+                    class="flex-shrink-0"
+                    (click)="removeSong()"
+                    [matTooltip]="'toolbar.delete' | transloco"
+                >
+                    <mat-icon class="icon-size-5 text-warn-500" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                </button>
                 <button mat-icon-button class="flex-shrink-0" [matTooltip]="'Close'" [routerLink]="['../']">
                     <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
                 </button>

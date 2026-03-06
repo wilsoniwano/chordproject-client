@@ -8,6 +8,7 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
@@ -25,7 +26,34 @@ import { Subject, takeUntil } from 'rxjs';
     selector: 'settings',
     templateUrl: './settings.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [MatIconModule, MatButtonModule, NgClass, MatTooltipModule, TranslocoModule],
+    styles: [
+        `
+            .settings-modal-panel .mat-mdc-dialog-container {
+                padding: 0 !important;
+            }
+
+            .settings-modal-panel .mat-mdc-dialog-surface,
+            .settings-modal-panel .mdc-dialog__surface {
+                padding: 0 !important;
+            }
+
+            .settings-modal-panel .settings-modal-content {
+                max-height: calc(90vh - 88px);
+                overflow-y: auto;
+            }
+
+            .settings-modal-panel .mat-mdc-dialog-title {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .settings-modal-panel .mat-mdc-dialog-content {
+                margin: 0 !important;
+                padding: 24px !important;
+            }
+        `,
+    ],
+    imports: [MatIconModule, MatButtonModule, MatDialogModule, NgClass, MatTooltipModule, TranslocoModule],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @Output() closeSettings = new EventEmitter<void>();

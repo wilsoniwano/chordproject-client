@@ -90,7 +90,8 @@ test('library CRUD baseline (read/update/delete on seeded song)', async ({ page 
 
     await page.goto('/songs/create/song-e2e-1');
     await page.getByLabel('Delete song').click();
-    await page.getByRole('button', { name: 'Delete', exact: true }).click();
+    const confirmationDialog = page.locator('.mat-mdc-dialog-container').last();
+    await confirmationDialog.getByRole('button', { name: /excluir/i }).click();
     await expect(page).toHaveURL(/\/library/);
     await expect
         .poll(async () =>

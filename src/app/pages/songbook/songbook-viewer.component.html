@@ -72,7 +72,7 @@
                         type="button"
                         mat-stroked-button
                         [class.!bg-primary]="viewMode === 'normal'"
-                        [class.!text-primary-contrast]="viewMode === 'normal'"
+                        [class.!text-white]="viewMode === 'normal'"
                         [class.!border-primary]="viewMode === 'normal'"
                         (click)="setViewMode('normal')"
                     >
@@ -82,7 +82,7 @@
                         type="button"
                         mat-stroked-button
                         [class.!bg-primary]="viewMode === 'paged'"
-                        [class.!text-primary-contrast]="viewMode === 'paged'"
+                        [class.!text-white]="viewMode === 'paged'"
                         [class.!border-primary]="viewMode === 'paged'"
                         (click)="setViewMode('paged')"
                     >
@@ -101,7 +101,7 @@
                             type="button"
                             mat-stroked-button
                             [class.!bg-primary]="columnsPerPage === 1"
-                            [class.!text-primary-contrast]="columnsPerPage === 1"
+                            [class.!text-white]="columnsPerPage === 1"
                             [class.!border-primary]="columnsPerPage === 1"
                             (click)="setColumnsPerPage(1)"
                         >
@@ -111,7 +111,7 @@
                             type="button"
                             mat-stroked-button
                             [class.!bg-primary]="columnsPerPage === 2"
-                            [class.!text-primary-contrast]="columnsPerPage === 2"
+                            [class.!text-white]="columnsPerPage === 2"
                             [class.!border-primary]="columnsPerPage === 2"
                             (click)="setColumnsPerPage(2)"
                         >
@@ -125,11 +125,16 @@
                 <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
                     {{ 'songbook.viewer.transpose' | transloco }}
                 </div>
-                <div class="flex items-center gap-2">
-                    <button mat-stroked-button type="button" class="tone-key-button font-mono" (click)="openTonePicker()">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button
+                        mat-stroked-button
+                        type="button"
+                        class="tone-key-button font-mono"
+                        (click)="openTonePicker()"
+                    >
                         {{ renderedKey || '-' }}
                     </button>
-                    <button mat-stroked-button type="button" (click)="resetTranspose()">
+                    <button mat-stroked-button type="button" class="w-full sm:w-auto" (click)="resetTranspose()">
                         {{ 'songbook.viewer.reset_key' | transloco }}
                     </button>
                 </div>
@@ -139,7 +144,7 @@
                 <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
                     {{ 'songbook.viewer.font_size' | transloco }}
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <button mat-icon-button type="button" (click)="decreaseFont()">
                         <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
                     </button>
@@ -149,7 +154,7 @@
                     <button mat-icon-button type="button" (click)="increaseFont()">
                         <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                     </button>
-                    <button mat-stroked-button type="button" (click)="resetFont()">
+                    <button mat-stroked-button type="button" class="w-full sm:w-auto" (click)="resetFont()">
                         {{ 'songbook.viewer.reset_font' | transloco }}
                     </button>
                 </div>
@@ -160,7 +165,7 @@
                     <div class="text-secondary mb-2 text-xs font-medium uppercase tracking-wide">
                         {{ 'songbook.viewer.column_width' | transloco }}
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <button mat-icon-button type="button" (click)="decreaseColumnWidth()">
                             <mat-icon [svgIcon]="'heroicons_outline:minus'"></mat-icon>
                         </button>
@@ -170,7 +175,7 @@
                         <button mat-icon-button type="button" (click)="increaseColumnWidth()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                         </button>
-                        <button mat-stroked-button type="button" (click)="resetColumnWidth()">
+                        <button mat-stroked-button type="button" class="w-full sm:w-auto" (click)="resetColumnWidth()">
                             {{ 'songbook.viewer.reset_column_width' | transloco }}
                         </button>
                     </div>

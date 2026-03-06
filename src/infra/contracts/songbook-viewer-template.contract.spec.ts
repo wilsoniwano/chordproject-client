@@ -13,7 +13,7 @@ describe('Songbook viewer template contract', () => {
 
     it('uses high-contrast active state classes', () => {
         expect(template).toContain('!bg-primary');
-        expect(template).toContain('!text-primary-contrast');
+        expect(template).toContain('!text-white');
         expect(template).toContain('!border-primary');
     });
 

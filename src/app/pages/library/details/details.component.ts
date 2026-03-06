@@ -12,6 +12,7 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { ChpViewerComponent } from 'app/components/viewer/viewer/viewer.component';
+import { EditorService } from 'app/core/chordpro/editor.service';
 import { SongService } from 'app/core/firebase/api/song.service';
 import { Song } from 'app/models/song';
 import { Subject, takeUntil } from 'rxjs';
@@ -41,6 +42,7 @@ export class SongsDetailsComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _libraryComponent: LibraryComponent,
         private _songsService: SongService,
+        private _editorService: EditorService,
         private _router: Router
     ) {}
 
@@ -80,5 +82,18 @@ export class SongsDetailsComponent implements OnInit, OnDestroy {
                 },
             });
         }
+    }
+
+    removeSong(): void {
+        if (!this.song?.uid) {
+            return;
+        }
+
+        this._editorService.confirmAndDelete(this.song).pipe(takeUntil(this._unsubscribeAll)).subscribe((success) => {
+            if (success) {
+                this._router.navigate(['/library']);
+            }
+            this._changeDetectorRef.markForCheck();
+        });
     }
 }

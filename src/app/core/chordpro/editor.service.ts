@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { DeleteConfirmationService } from 'app/core/confirmation/delete-confirmation.service';
 import { Song } from 'app/models/song';
 import { Observable, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { ParserService } from './parser.service';
 export class EditorService {
     constructor(
         private parserService: ParserService,
-        private confirmationService: FuseConfirmationService,
+        private _deleteConfirmationService: DeleteConfirmationService,
         private songService: SongService
     ) {}
 
@@ -68,21 +68,11 @@ export class EditorService {
     }
 
     confirmAndDelete(song: Song): Observable<boolean> {
-        return this.confirmationService
-            .open({
-                title: 'Delete song',
-                message:
-                    'Are you sure you want to delete this song? This action cannot be undone!',
-                actions: {
-                    confirm: {
-                        label: 'Delete',
-                    },
-                },
-            })
-            .afterClosed()
+        return this._deleteConfirmationService
+            .confirmDelete(song?.title || 'esta música')
             .pipe(
                 map(async (result) => {
-                    if (result === 'confirmed' && song.uid) {
+                    if (result && song.uid) {
                         return await this.songService.delete(song.uid);
                     }
                     return false;

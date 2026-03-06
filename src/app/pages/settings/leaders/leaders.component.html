@@ -40,12 +40,13 @@
                                     <button
                                         mat-icon-button
                                         type="button"
+                                        color="warn"
                                         [disabled]="saving"
                                         [matTooltip]="'toolbar.delete' | transloco"
                                         (click)="removeLeader(leader)"
                                         aria-label="Excluir dirigente"
                                     >
-                                        <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                        <mat-icon class="text-warn-500" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
                                     </button>
                                 </div>
                             </div>

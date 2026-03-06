@@ -11,7 +11,6 @@ export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationIte
         {
             id: 'library',
             title: labels.library,
-            tooltip: labels.library,
             type: 'basic',
             icon: 'heroicons_outline:musical-note',
             link: '/library',
@@ -19,7 +18,6 @@ export function buildBaseNavigation(labels: NavigationLabels): FuseNavigationIte
         {
             id: 'settings-leaders',
             title: labels.settingsLeaders,
-            tooltip: labels.settingsLeaders,
             type: 'basic',
             icon: 'heroicons_outline:cog-6-tooth',
             link: '/settings/leaders',
@@ -31,7 +29,6 @@ export function buildUnauthenticatedSongbooks(labels: NavigationLabels): FuseNav
     return {
         id: 'songbooks-signin',
         title: labels.songbooks,
-        tooltip: labels.songbooks,
         type: 'basic',
         icon: 'heroicons_outline:book-open',
         link: '/songbook',
@@ -42,7 +39,6 @@ export function buildAuthenticatedSongbooks(labels: NavigationLabels): FuseNavig
     return {
         id: 'songbooks',
         title: labels.songbooks,
-        tooltip: labels.songbooks,
         type: 'basic',
         icon: 'heroicons_outline:book-open',
         link: '/songbook',
